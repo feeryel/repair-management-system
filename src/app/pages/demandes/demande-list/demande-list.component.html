@@ -1,0 +1,91 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between mb-3">
+
+    <h2>Demandes Réparation</h2>
+
+    <a
+      routerLink="/demandes/add"
+      class="btn btn-primary">
+
+      Ajouter
+
+    </a>
+
+  </div>
+
+  <table class="table table-bordered">
+
+    <thead class="table-dark">
+
+      <tr>
+
+        <th>ID</th>
+        <th>Date dépôt</th>
+        <th>Date prévue</th>
+        <th>Symptômes</th>
+        <th>État</th>
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let d of demandes">
+
+        <td>{{ d.id }}</td>
+
+        <td>{{ d.dateDepot }}</td>
+
+        <td>{{ d.datePrevueRep }}</td>
+
+        <td>{{ d.symptomesPanne }}</td>
+
+     <td>
+
+  <select
+    class="form-select"
+    [ngModel]="d.etat"
+    (ngModelChange)="changeEtat(d,$event)">
+
+    <option value="En attente">
+      En attente
+    </option>
+
+    <option value="En cours">
+      En cours
+    </option>
+
+    <option value="Terminée">
+      Terminée
+    </option>
+
+  </select>
+
+</td>
+
+        <td>
+  <a
+            [routerLink]="['/demandes/edit', d.id]"
+            class="btn btn-warning btn-sm me-2">
+            Modifier
+          </a>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="delete(d.id)">
+
+            Supprimer
+
+          </button>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

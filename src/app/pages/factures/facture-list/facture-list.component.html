@@ -1,0 +1,41 @@
+<div class="container mt-4">
+
+  <h2>Liste des factures</h2>
+
+ <a [routerLink]="['/factures/add']" class="btn btn-primary mb-3">
+  Ajouter
+</a>
+
+  <table class="table table-bordered">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Montant Hors taxe</th>
+        <th>Montant TVA</th>
+          <th>Timbre Fiscale</th>
+        <th>Montant Total</th>
+<th>Reparation Id</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let f of factures">
+
+        <td>{{f.id}}</td>
+        <td>{{f.date}}</td>
+        <td>{{f.montantHT}}</td>
+        <td>{{f.montantTVA}}</td>
+        <td>{{f.timbreFiscale}}</td>
+        <td>{{f.montantTotal}}</td>
+        <td>{{f.ReparationId}}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

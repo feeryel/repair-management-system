@@ -1,0 +1,84 @@
+<div class="login-container">
+
+  <mat-card class="modern-login-card">
+
+    <!-- HEADER -->
+    <div class="login-header">
+
+      <div class="brand-icon">
+        <span class="brand-icon-symbol">🔒</span>
+      </div>
+
+      <h2 class="login-title">Connexion</h2>
+      <p class="login-subtitle">Accédez à votre espace</p>
+
+    </div>
+
+    <!-- FORM -->
+    <mat-card-content>
+
+      <form (ngSubmit)="login()">
+
+        <!-- LOGIN -->
+        <div class="form-field outline full-width">
+
+          <label class="form-label" for="login">Login</label>
+
+          <input
+            id="login"
+            type="text"
+            [(ngModel)]="loginData.login"
+            name="login"
+            required>
+
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="form-field outline full-width">
+
+          <label class="form-label" for="motDePasse">Mot de passe</label>
+
+          <input
+            id="motDePasse"
+            type="password"
+            [(ngModel)]="loginData.motDePasse"
+            name="motDePasse"
+            required>
+
+        </div>
+
+        <!-- ERROR -->
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <!-- BUTTON -->
+        <div class="login-actions">
+
+          <button
+            mat-raised-button
+            color="primary"
+            class="login-button"
+            [disabled]="loading"
+            type="submit">
+
+            <span *ngIf="!loading">Se connecter</span>
+
+            <span *ngIf="loading" class="loading-text">Chargement...</span>
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </mat-card-content>
+
+    <!-- FOOTER -->
+    <div class="login-footer">
+      © 2026 Repair System - Tous droits réservés
+    </div>
+
+  </mat-card>
+
+</div>

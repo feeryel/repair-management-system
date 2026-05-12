@@ -1,0 +1,55 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between mb-3">
+    <h2>Liste des clients</h2>
+
+    <a routerLink="/clients/add" class="btn btn-primary">
+      Ajouter
+    </a>
+  </div>
+
+  <table class="table table-bordered table-hover">
+
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Adresse</th>
+        <th>Téléphone</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let client of clients">
+
+        <td>{{ client.id }}</td>
+        <td>{{ client.nom }}</td>
+        <td>{{ client.adresse }}</td>
+        <td>{{ client.numTel }}</td>
+        <td>{{ client.email }}</td>
+
+        <td>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="deleteClient(client.id!)">
+
+            Supprimer
+
+          </button>
+ <button class="btn btn-warning btn-sm"
+          [routerLink]="['/clients/edit', client.id]">
+    Modifier
+  </button>
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

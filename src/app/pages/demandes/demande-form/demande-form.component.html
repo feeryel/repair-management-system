@@ -1,0 +1,64 @@
+<div class="container mt-5">
+
+  <div class="card shadow">
+
+    <div class="card-header bg-primary text-white">
+
+      Ajouter Demande
+
+    </div>
+
+    <div class="card-body">
+
+      <form (ngSubmit)="save()">
+
+        <div class="mb-3">
+
+          <label>Date Dépôt</label>
+
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="demande.dateDepot"
+            name="dateDepot">
+
+        </div>
+
+        <div class="mb-3">
+
+          <label>Date Prévue</label>
+
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="demande.datePrevueRep"
+            name="datePrevueRep">
+
+        </div>
+
+        <div class="mb-3">
+
+          <label>Symptômes</label>
+
+          <textarea
+            class="form-control"
+            [(ngModel)]="demande.symptomesPanne"
+            name="symptomesPanne">
+
+          </textarea>
+
+        </div>
+
+        <button class="btn btn-success w-100">
+
+          Enregistrer
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

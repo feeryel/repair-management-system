@@ -1,0 +1,91 @@
+<div class="container mt-4">
+
+  <h2>Ajouter Réparation</h2>
+
+  <form (ngSubmit)="save()">
+
+    <div class="mb-3">
+      <label>Description</label>
+
+      <textarea
+        class="form-control"
+        [(ngModel)]="reparation.descriptionReparation"
+        name="descriptionReparation">
+      </textarea>
+    </div>
+
+    <div class="mb-3">
+      <label>Date Fin</label>
+
+      <input
+        type="date"
+        class="form-control"
+        [(ngModel)]="reparation.dateFinRep"
+        name="dateFinRep">
+    </div>
+
+    <div class="mb-3">
+      <label>Temps Main d'oeuvre</label>
+
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="reparation.tempsMainOeuvre"
+        name="tempsMainOeuvre">
+    </div>
+
+    <div class="mb-3">
+      <label>Demande ID</label>
+
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="reparation.demandeId"
+        name="demandeId">
+    </div>
+
+    <div class="mb-3">
+      <label>Technicien ID</label>
+
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="reparation.technicienId"
+        name="technicienId">
+    </div>
+
+    <div class="mb-3">
+      <label>Status</label>
+
+      <select
+        class="form-control"
+        [(ngModel)]="reparation.status"
+        name="status">
+
+        <option value="IN_PROGRESS">IN_PROGRESS</option>
+        <option value="DONE">DONE</option>
+
+      </select>
+    </div>
+
+    <div class="form-check mb-3">
+
+      <input
+        type="checkbox"
+        class="form-check-input"
+        [(ngModel)]="reparation.estReparable"
+        name="estReparable">
+
+      <label class="form-check-label">
+        Réparable
+      </label>
+
+    </div>
+
+    <button class="btn btn-success">
+      Ajouter
+    </button>
+
+  </form>
+
+</div>

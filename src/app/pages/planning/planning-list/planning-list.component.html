@@ -1,0 +1,38 @@
+<div class="container mt-4">
+
+  <h2>Liste Planning</h2>
+
+  <a [routerLink]="['/planning/add']"
+     class="btn btn-primary mb-3">
+     Ajouter
+  </a>
+
+  <table class="table table-bordered">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date Début</th>
+        <th>Date Fin</th>
+        <th>Responsable ID</th>
+        <th>Demande ID</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let p of plannings">
+
+        <td>{{p.id}}</td>
+        <td>{{p.dateDebut}}</td>
+        <td>{{p.dateFin}}</td>
+        <td>{{p.responsableId}}</td>
+        <td>{{p.DemandeReparationId}}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

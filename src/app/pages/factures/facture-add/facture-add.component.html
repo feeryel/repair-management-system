@@ -1,0 +1,83 @@
+<div class="container mt-4">
+
+  <h2>Ajouter Facture</h2>
+
+  <form (ngSubmit)="save()">
+
+    <!-- Numéro -->
+    <div class="mb-3">
+      <label>Numéro facture</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="formData.numero"
+        name="numero">
+    </div>
+
+    <!-- Date -->
+    <div class="mb-3">
+      <label>Date</label>
+      <input
+        type="date"
+        class="form-control"
+        [(ngModel)]="formData.date"
+        name="date">
+    </div>
+
+    <!-- Montant HT -->
+    <div class="mb-3">
+      <label>Montant HT</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="formData.montantHT"
+        name="montantHT">
+    </div>
+
+    <!-- TVA -->
+    <div class="mb-3">
+      <label>TVA</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="formData.montantTVA"
+        name="montantTVA">
+    </div>
+
+    <!-- Timbre -->
+    <div class="mb-3">
+      <label>Timbre fiscal</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="formData.timbreFiscale"
+        name="timbreFiscale">
+    </div>
+
+    <!-- Total -->
+    <div class="mb-3">
+      <label>Montant Total</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="formData.montantTotal"
+        name="montantTotal">
+    </div>
+
+    <!-- Réparation -->
+    <div class="mb-3">
+      <label>Réparation ID</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="formData.ReparationId"
+        name="ReparationId">
+    </div>
+
+    <button class="btn btn-success">
+      Enregistrer
+    </button>
+
+  </form>
+
+</div>

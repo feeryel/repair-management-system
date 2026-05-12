@@ -1,0 +1,65 @@
+<div class="container mt-4">
+
+  <h2>Liste des réparations</h2>
+
+ <button
+  class="btn btn-primary mb-3"
+  [routerLink]="['/reparations/form']">
+
+  Ajouter
+
+</button>
+
+  <table class="table table-bordered table-striped">
+
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Description</th>
+        <th>Date fin</th>
+        <th>Temps Main d'oeuvre</th>
+        <th>Réparable</th>
+        <th>Status</th>
+        <th>Demande ID</th>
+        <th>Technicien ID</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let r of reparations">
+
+        <td>{{ r.id }}</td>
+
+        <td>{{ r.descriptionReparation }}</td>
+
+        <td>{{ r.dateFinRep }}</td>
+
+        <td>{{ r.tempsMainOeuvre }} h</td>
+
+        <td>
+          {{ r.estReparable ? 'Oui' : 'Non' }}
+        </td>
+
+        <td>
+          <span class="badge bg-success" *ngIf="r.status === 'DONE'">
+            DONE
+          </span>
+
+          <span class="badge bg-warning text-dark"
+                *ngIf="r.status === 'IN_PROGRESS'">
+            IN_PROGRESS
+          </span>
+        </td>
+
+        <td>{{ r.demandeId }}</td>
+
+        <td>{{ r.technicienId }}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

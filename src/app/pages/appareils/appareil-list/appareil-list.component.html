@@ -1,0 +1,66 @@
+<div class="container">
+
+  <div class="d-flex justify-content-between mb-3">
+
+    <h2>Appareils</h2>
+
+    <a
+      routerLink="/appareils/add"
+      class="btn btn-primary">
+
+      Ajouter
+
+    </a>
+
+  </div>
+
+  <table class="table table-bordered">
+
+    <thead class="table-dark">
+
+      <tr>
+
+        <th>ID</th>
+        <th>Marque</th>
+        <th>Modèle</th>
+        <th>Num Série</th>
+        <th>Type</th>
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let a of appareils">
+
+        <td>{{ a.id }}</td>
+        <td>{{ a.marque }}</td>
+        <td>{{ a.modele }}</td>
+        <td>{{ a.numSerie }}</td>
+        <td>{{ a.type }}</td>
+
+        <td>
+ <a
+            [routerLink]="['/appareils/edit', a.id]"
+            class="btn btn-warning btn-sm me-2">
+            Modifier
+          </a>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="delete(a.id)">
+
+            Supprimer
+
+          </button>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

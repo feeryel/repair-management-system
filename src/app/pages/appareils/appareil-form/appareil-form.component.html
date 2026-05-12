@@ -1,0 +1,75 @@
+<div class="container mt-5">
+
+  <div class="card shadow">
+
+    <div class="card-header bg-primary text-white">
+
+      Ajouter Appareil
+
+    </div>
+
+    <div class="card-body">
+
+      <form (ngSubmit)="save()">
+
+        <div class="mb-3">
+
+          <label>Marque</label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="appareil.marque"
+            name="marque">
+
+        </div>
+
+        <div class="mb-3">
+
+          <label>Modèle</label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="appareil.modele"
+            name="modele">
+
+        </div>
+
+        <div class="mb-3">
+
+          <label>Num Série</label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="appareil.numSerie"
+            name="numSerie">
+
+        </div>
+
+        <div class="mb-3">
+
+          <label>Type</label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="appareil.type"
+            name="type">
+
+        </div>
+
+        <button class="btn btn-success w-100">
+
+          Enregistrer
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

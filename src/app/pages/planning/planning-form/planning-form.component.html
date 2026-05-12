@@ -1,0 +1,49 @@
+<div class="container mt-4">
+
+  <h2>Ajouter Planning</h2>
+
+  <form (ngSubmit)="save()">
+
+    <div class="mb-3">
+      <label>Date Début</label>
+
+      <input type="date"
+             class="form-control"
+             [(ngModel)]="formData.dateDebut"
+             name="dateDebut">
+    </div>
+
+    <div class="mb-3">
+      <label>Date Fin</label>
+
+      <input type="date"
+             class="form-control"
+             [(ngModel)]="formData.dateFin"
+             name="dateFin">
+    </div>
+
+    <div class="mb-3">
+      <label>Responsable ID</label>
+
+      <input type="number"
+             class="form-control"
+             [(ngModel)]="formData.responsableId"
+             name="responsableId">
+    </div>
+
+    <div class="mb-3">
+      <label>Demande ID</label>
+
+      <input type="number"
+             class="form-control"
+             [(ngModel)]="formData.DemandeReparationId"
+             name="DemandeReparationId">
+    </div>
+
+    <button class="btn btn-success">
+      Ajouter
+    </button>
+
+  </form>
+
+</div>
