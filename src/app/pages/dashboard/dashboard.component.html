@@ -1,22 +1,200 @@
-<div class="container-fluid">
+<div class="dashboard-page">
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
 
-  <h2 class="mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">Dashboard</h2>
+      <p class="text-muted mb-0">Gestion Atelier de Réparation</p>
+    </div>
 
-    Dashboard
+   <div class="position-relative">
 
-  </h2>
 
-  <div class="row">
+  <!-- PANEL NOTIFICATIONS -->
+ <div class="position-relative">
 
+  <button class="btn btn-dark shadow-sm notif-btn" (click)="toggleNotifications()">
+    <i class="bi bi-bell"></i>
+    Notifications
+    <span *ngIf="notifications.length > 0" class="notif-badge">
+      {{ notifications.length }}
+    </span>
+  </button>
+
+  <!-- PANEL -->
+  <div class="notif-panel shadow-lg" *ngIf="showNotifications">
+
+    <!-- HEADER -->
+    <div class="notif-header">
+      <h6>Notifications</h6>
+      <small class="text-muted">{{ notifications.length }} nouvelles</small>
+    </div>
+
+    <!-- BODY -->
+    <div class="notif-body">
+
+      <div *ngFor="let n of notifications" class="notif-item">
+
+        <div class="notif-icon" [ngClass]="n.type">
+          <i class="bi"
+             [ngClass]="{
+               'bi-check-circle': n.type === 'DONE',
+               'bi-clock': n.type === 'IN_PROGRESS'
+             }">
+          </i>
+        </div>
+
+        <div class="notif-content">
+          <p class="title">{{ n.title }}</p>
+          <p class="msg">{{ n.message }}</p>
+        </div>
+
+        <span class="status"
+          [ngClass]="n.type">
+          {{ n.type }}
+        </span>
+
+      </div>
+
+      <div *ngIf="notifications.length === 0" class="empty">
+        Aucune notification
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="row g-4">
+
+    <!-- CLIENTS -->
     <div class="col-md-3">
+      <div class="card dashboard-card border-0 shadow-lg rounded-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
 
-      <div class="card shadow border-0">
+          <div>
+            <p class="text-muted mb-1">Clients</p>
+            <h2 class="fw-bold">{{ totalClients }}</h2>
+          </div>
+
+          <div class="icon-box bg-primary-subtle">
+            <i class="bi bi-people-fill text-primary fs-3"></i>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- REPARATIONS -->
+    <div class="col-md-3">
+      <div class="card dashboard-card border-0 shadow-lg rounded-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+
+          <div>
+            <p class="text-muted mb-1">Réparations</p>
+            <h2 class="fw-bold">{{ totalReparations }}</h2>
+          </div>
+
+          <div class="icon-box bg-success-subtle">
+            <i class="bi bi-tools text-success fs-3"></i>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- FACTURES -->
+    <div class="col-md-3">
+      <div class="card dashboard-card border-0 shadow-lg rounded-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+
+          <div>
+            <p class="text-muted mb-1">Factures</p>
+            <h2 class="fw-bold">{{ totalFactures }}</h2>
+          </div>
+
+          <div class="icon-box bg-warning-subtle">
+            <i class="bi bi-receipt text-warning fs-3"></i>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- PIECES -->
+    <div class="col-md-3">
+      <div class="card dashboard-card border-0 shadow-lg rounded-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+
+          <div>
+            <p class="text-muted mb-1">Pièces</p>
+            <h2 class="fw-bold">{{ totalPieces }}</h2>
+          </div>
+
+          <div class="icon-box bg-danger-subtle">
+            <i class="bi bi-cpu-fill text-danger fs-3"></i>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TABLE + ACTIVITIES -->
+  <div class="row mt-5 g-4">
+
+    <!-- ACTIVITES -->
+    <div class="col-lg-8">
+
+      <div class="card border-0 shadow-lg rounded-4">
 
         <div class="card-body">
 
-          <h5>Clients</h5>
+          <div class="d-flex justify-content-between mb-4">
+            <h4 class="fw-bold">Dernières Activités</h4>
+          </div>
 
-          <h2>120</h2>
+          <table class="table align-middle">
+
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Réparation</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let r of latestReparations">
+
+                <td>{{ r?.demande?.Appareil?.Client?.nom || 'Client' }}</td>
+
+                <td>{{ r.descriptionReparation }}</td>
+
+                <td>
+                  <span class="badge"
+                    [ngClass]="{
+                      'bg-success': r.status === 'DONE',
+                      'bg-warning text-dark': r.status === 'IN_PROGRESS'
+                    }">
+                    {{ r.status }}
+                  </span>
+                </td>
+
+                <td>{{ r.dateFinRep | date:'shortDate' }}</td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
 
         </div>
 
@@ -24,47 +202,36 @@
 
     </div>
 
-    <div class="col-md-3">
+    <!-- RESUME -->
+    <div class="col-lg-4">
 
-      <div class="card shadow border-0">
-
-        <div class="card-body">
-
-          <h5>Réparations</h5>
-
-          <h2>58</h2>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="col-md-3">
-
-      <div class="card shadow border-0">
+      <div class="card border-0 shadow-lg rounded-4">
 
         <div class="card-body">
 
-          <h5>Factures</h5>
+          <h4 class="fw-bold mb-4">Résumé</h4>
 
-          <h2>36</h2>
+          <div class="mb-4">
+            <small class="text-muted">Réparations terminées</small>
+            <h5 class="fw-bold">{{ donePercent }}%</h5>
 
-        </div>
+            <div class="progress">
+              <div class="progress-bar bg-success"
+                   [style.width.%]="donePercent">
+              </div>
+            </div>
+          </div>
 
-      </div>
+          <div>
+            <small class="text-muted">Réparations en attente</small>
+            <h5 class="fw-bold">{{ pendingPercent }}%</h5>
 
-    </div>
-
-    <div class="col-md-3">
-
-      <div class="card shadow border-0">
-
-        <div class="card-body">
-
-          <h5>Pièces</h5>
-
-          <h2>240</h2>
+            <div class="progress">
+              <div class="progress-bar bg-warning"
+                   [style.width.%]="pendingPercent">
+              </div>
+            </div>
+          </div>
 
         </div>
 

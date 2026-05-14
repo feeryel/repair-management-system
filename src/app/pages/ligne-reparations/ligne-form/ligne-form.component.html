@@ -1,0 +1,69 @@
+<div class="container mt-4">
+
+  <h2>Ajouter Ligne Réparation</h2>
+
+  <form (ngSubmit)="save()">
+
+    <div class="mb-3">
+
+      <label>Réparation</label>
+
+      <select
+        class="form-control"
+        [(ngModel)]="formData.ReparationId"
+        name="reparation">
+
+        <option
+          *ngFor="let r of reparations"
+          [value]="r.id">
+
+          Réparation #{{r.id}}
+
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="mb-3">
+
+      <label>Pièce</label>
+
+      <select
+        class="form-control"
+        [(ngModel)]="formData.PieceId"
+        name="piece">
+
+        <option
+          *ngFor="let p of pieces"
+          [value]="p.id">
+
+          {{p.nom}}
+
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="mb-3">
+
+      <label>Quantité</label>
+
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="formData.quantite"
+        name="quantite">
+
+    </div>
+
+    <button class="btn btn-success">
+
+      Ajouter
+
+    </button>
+
+  </form>
+
+</div>

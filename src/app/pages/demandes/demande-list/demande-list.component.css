@@ -1,0 +1,420 @@
+.page{
+  padding:30px;
+  margin-left:260px;
+  background:#f6f7fb;
+  min-height:100vh;
+  font-family:system-ui;
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+/* BTN */
+.btn-primary{
+  background:linear-gradient(135deg,#6366f1,#a855f7);
+  color:white;
+  padding:12px 18px;
+  border-radius:14px;
+  text-decoration:none;
+  transition:.3s;
+}
+
+.btn-primary:hover{
+  transform:translateY(-3px);
+}
+
+/* KPI */
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.kpi{
+  padding:18px;
+  border-radius:16px;
+  color:white;
+}
+
+.kpi h3{
+  font-size:28px;
+  margin:0;
+}
+
+.blue{ background:#9ECDFF; }
+.orange{ background:#659ABD; }
+.green{ background:#427AA1; }
+
+/* TOOLBAR */
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.search{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #ddd;
+}
+
+/* FILTER */
+.filters{
+  display:flex;
+  gap:8px;
+}
+
+.filters button{
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  background:white;
+  cursor:pointer;
+}
+
+.filters button.active{
+  background:#6366f1;
+  color:white;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:18px;
+}
+
+/* CARD */
+.card{
+  background:white;
+  padding:16px;
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+}
+
+/* STATES */
+.En-attente{ border-left:5px solid #9ECDFF; }
+.En-cours{ border-left:5px solid #3b82f6; }
+.Terminée{ border-left:5px solid #22c55e; }
+
+/* TOP */
+.top{
+  display:flex;
+  justify-content:space-between;
+}
+
+.id{
+  background:#eef2ff;
+  padding:5px 10px;
+  border-radius:999px;
+}
+
+/* BADGE */
+.badge{
+  font-size:12px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:#f3f4f6;
+}
+
+/* META */
+.meta{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#6b7280;
+}
+
+/* SELECT */
+select{
+  width:100%;
+  margin:10px 0;
+  padding:8px;
+  border-radius:10px;
+}
+
+/* ACTIONS */
+.actions{
+  display:flex;
+  justify-content:space-between;
+}
+
+.actions a{
+  color:#6366f1;
+}
+
+.actions button{
+  border:none;
+  background:none;
+  color:red;
+}
+
+/* EMPTY */
+.empty{
+  text-align:center;
+  padding:40px;
+  color:#999;
+}
+
+/* LOADING */
+.loading{
+  text-align:center;
+  padding:30px;
+  font-weight:bold;
+}
+
+
+/* CARD */
+.demand-card{
+  background: white;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  transition: all .25s ease;
+  border-left: 5px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.demand-card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+}
+
+/* STATUS COLORS */
+.En-attente{ border-left-color: #f59e0b; }
+.En-cours{ border-left-color: #3b82f6; }
+.Terminée{ border-left-color: #22c55e; }
+
+/* HEADER */
+.card-header{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+}
+
+.left{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.id{
+  background:#eef2ff;
+  color:#4f46e5;
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+}
+
+/* BADGE */
+.badge{
+  font-size:12px;
+  padding:5px 10px;
+  border-radius:999px;
+  font-weight:600;
+}
+
+.badge.En-attente{
+  background:#fef3c7;
+  color:#b45309;
+}
+
+.badge.En-cours{
+  background:#dbeafe;
+  color:#1d4ed8;
+}
+
+.badge.Terminée{
+  background:#dcfce7;
+  color:#15803d;
+}
+
+/* SELECT */
+select{
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  padding:6px 10px;
+  outline:none;
+  cursor:pointer;
+  transition:.2s;
+}
+
+select:focus{
+  border-color:#6366f1;
+  box-shadow:0 0 0 3px rgba(99,102,241,0.2);
+}
+
+/* TITLE */
+.title{
+  font-size:16px;
+  font-weight:700;
+  color:#111827;
+  margin:5px 0;
+}
+
+/* META */
+.meta{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#6b7280;
+}
+
+.meta-item{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+
+/* FOOTER */
+.card-footer{
+  display:flex;
+  justify-content:space-between;
+  margin-top:10px;
+}
+
+.btn-edit{
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:white;
+  padding:8px 12px;
+  border-radius:10px;
+  text-decoration:none;
+  font-size:13px;
+  transition:.3s;
+}
+
+.btn-edit:hover{
+  transform:translateY(-2px);
+}
+
+.btn-delete{
+  border:none;
+  background:#fee2e2;
+  color:#dc2626;
+  padding:8px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.btn-delete:hover{
+  background:#dc2626;
+  color:white;
+}
+/* PAGINATION (IMPORTANT FIX) */
+.pagination{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:25px;
+}
+
+.pagination button{
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  background:white;
+  cursor:pointer;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+  transition:.2s;
+}
+
+.pagination button:hover{
+  transform:translateY(-2px);
+}
+
+.pagination button.active{
+  background:#6366f1;
+  color:white;
+}
+
+/* EMPTY */
+.empty{
+  text-align:center;
+  padding:40px;
+  color:#999;
+}
+
+/* LOADING */
+.loading{
+  text-align:center;
+  padding:30px;
+  font-weight:bold;
+}
+/* PAGINATION CONTAINER (PRO STYLE) */
+.pagination-container{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  margin-top:30px;
+}
+
+/* ARROW BUTTONS */
+.page-btn{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  border:none;
+  background:white;
+  box-shadow:0 6px 15px rgba(0,0,0,0.06);
+  cursor:pointer;
+  font-size:18px;
+  transition:.25s;
+}
+
+.page-btn:hover{
+  transform:translateY(-2px);
+  background:#eef2ff;
+}
+
+.page-btn:disabled{
+  opacity:0.4;
+  cursor:not-allowed;
+}
+
+/* NUMBER BUTTONS */
+.page-number{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  border:none;
+  background:white;
+  box-shadow:0 6px 15px rgba(0,0,0,0.06);
+  cursor:pointer;
+  transition:.25s;
+  font-weight:600;
+}
+
+.page-number:hover{
+  transform:translateY(-2px);
+  background:#f3f4f6;
+}
+
+/* ACTIVE PAGE */
+.active-page{
+  background:linear-gradient(135deg,#6366f1,#a855f7);
+  color:white;
+  box-shadow:0 10px 25px rgba(99,102,241,0.3);
+}
+
+/* OPTIONAL: smooth animation */
+.page-number, .page-btn{
+  transition: all .2s ease;
+}

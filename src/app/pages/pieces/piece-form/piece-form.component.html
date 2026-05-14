@@ -1,1 +1,53 @@
-<p>piece-form works!</p>
+<div class="container mt-4">
+
+  <h2>
+    {{ id ? 'Modifier' : 'Ajouter' }} Pièce
+  </h2>
+
+  <form (ngSubmit)="save()">
+
+    <div class="mb-3">
+
+      <label>Nom</label>
+
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="formData.nom"
+        name="nom">
+
+    </div>
+
+    <div class="mb-3">
+
+      <label>Prix</label>
+
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="formData.prix"
+        name="prix">
+
+    </div>
+
+    <div class="mb-3">
+
+      <label>Stock</label>
+
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="formData.quantiteStock"
+        name="stock">
+
+    </div>
+
+    <button class="btn btn-success">
+
+      Enregistrer
+
+    </button>
+
+  </form>
+
+</div>

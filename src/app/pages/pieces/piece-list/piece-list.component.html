@@ -1,1 +1,64 @@
-<p>piece-list works!</p>
+<div class="container mt-4">
+
+  <h2>Liste des pièces</h2>
+
+  <a routerLink="/pieces/add"
+     class="btn btn-primary mb-3">
+
+    Ajouter
+
+  </a>
+
+  <table class="table table-bordered">
+
+    <thead class="table-dark">
+
+      <tr>
+
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prix</th>
+        <th>Stock</th>
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let p of pieces">
+
+        <td>{{p.id}}</td>
+
+        <td>{{p.nom}}</td>
+
+        <td>{{p.prix}}</td>
+
+        <td>{{p.quantiteStock}}</td>
+
+        <td>
+
+          <a [routerLink]="['/pieces/edit', p.id]"
+             class="btn btn-warning btn-sm me-2">
+
+            Modifier
+
+          </a>
+
+          <button class="btn btn-danger btn-sm"
+                  (click)="delete(p.id)">
+
+            Supprimer
+
+          </button>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

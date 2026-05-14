@@ -1,66 +1,243 @@
-<div class="container">
+<div class="device-page">
 
-  <div class="d-flex justify-content-between mb-3">
+  <!-- TOP HEADER -->
+  <div class="topbar">
 
-    <h2>Appareils</h2>
+    <div>
+      <h1>Appareils</h1>
+      <p>Suivi intelligent des appareils en réparation</p>
+    </div>
 
-    <a
-      routerLink="/appareils/add"
-      class="btn btn-primary">
+    <a routerLink="/appareils/add" class="add-btn">
 
-      Ajouter
+      <i class="bi bi-plus-lg"></i>
+
+      Ajouter appareil
 
     </a>
 
   </div>
 
-  <table class="table table-bordered">
+  <!-- SEARCH -->
+  <div class="search-box">
 
-    <thead class="table-dark">
+    <i class="bi bi-search"></i>
 
-      <tr>
+    <input
+      type="text"
+      placeholder="Rechercher appareil..."
+      [(ngModel)]="searchText">
 
-        <th>ID</th>
-        <th>Marque</th>
-        <th>Modèle</th>
-        <th>Num Série</th>
-        <th>Type</th>
-        <th>Actions</th>
+  </div>
+<!-- FILTERS -->
+<div class="card filters-card">
 
-      </tr>
+  <div class="filters-grid">
 
-    </thead>
+    <!-- TYPE -->
+    <div class="filter-box">
 
-    <tbody>
+      <i class="bi bi-cpu"></i>
 
-      <tr *ngFor="let a of appareils">
+      <select [(ngModel)]="selectedType">
 
-        <td>{{ a.id }}</td>
-        <td>{{ a.marque }}</td>
-        <td>{{ a.modele }}</td>
-        <td>{{ a.numSerie }}</td>
-        <td>{{ a.type }}</td>
+        <option value="">Tous les types</option>
 
-        <td>
- <a
-            [routerLink]="['/appareils/edit', a.id]"
-            class="btn btn-warning btn-sm me-2">
-            Modifier
-          </a>
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="delete(a.id)">
+        <option *ngFor="let t of types" [value]="t">
+          {{ t }}
+        </option>
 
-            Supprimer
+      </select>
 
-          </button>
+    </div>
 
-        </td>
+    <!-- TRI -->
+    <div class="filter-box">
 
-      </tr>
+      <i class="bi bi-sort-alpha-down"></i>
 
-    </tbody>
+      <select [(ngModel)]="sortOrder">
 
-  </table>
+        <option value="">Trier</option>
+        <option value="asc">Modèle A → Z</option>
+        <option value="desc">Modèle Z → A</option>
+
+      </select>
+
+    </div>
+
+    <!-- TOTAL -->
+
+
+  </div>
+
+</div>
+  <!-- STATS -->
+  <div class="stats-grid">
+
+    <div class="stat-card blue">
+
+      <div>
+        <span>Total appareils</span>
+        <h3>{{ filteredAppareils().length }}</h3>
+      </div>
+
+      <i class="bi bi-hdd-network"></i>
+
+    </div>
+
+    <div class="stat-card purple">
+
+      <div>
+        <span>Réparations actives</span>
+        <h3>12</h3>
+      </div>
+
+      <i class="bi bi-tools"></i>
+
+    </div>
+
+    <div class="stat-card orange">
+
+      <div>
+        <span>Urgents</span>
+        <h3>4</h3>
+      </div>
+
+      <i class="bi bi-exclamation-triangle"></i>
+
+    </div>
+
+  </div>
+
+  <!-- DEVICE GRID -->
+  <div class="device-grid">
+
+    <div class="device-card" *ngFor="let a of paginatedAppareils()">
+
+      <!-- TOP -->
+      <div class="device-top">
+
+        <div class="device-icon">
+
+          <i class="bi bi-cpu"></i>
+
+        </div>
+
+        <span class="device-id">
+          #{{ a.id }}
+        </span>
+
+      </div>
+
+      <!-- BODY -->
+      <div class="device-body">
+
+        <h3>{{ a.modele }}</h3>
+
+        <p>{{ a.marque }}</p>
+
+      </div>
+
+      <!-- INFOS -->
+      <div class="device-info">
+
+        <div class="info-item">
+
+          <small>Type</small>
+
+          <span>{{ a.type }}</span>
+
+        </div>
+
+        <div class="info-item">
+
+          <small>Série</small>
+
+          <span>{{ a.numSerie }}</span>
+
+        </div>
+
+      </div>
+
+      <!-- STATUS -->
+      <div class="status-row">
+
+        <span class="status active">
+          Actif
+        </span>
+
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="device-actions">
+
+        <a
+          [routerLink]="['/appareils/edit', a.id]"
+          class="edit-btn">
+
+          <i class="bi bi-pencil-square"></i>
+
+          Modifier
+
+        </a>
+
+        <button
+          class="delete-btn"
+          (click)="delete(a.id)">
+
+          <i class="bi bi-trash"></i>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pagination-box" *ngIf="totalPages > 1">
+
+    <button
+      class="page-btn"
+      (click)="previousPage()"
+      [disabled]="currentPage === 1">
+
+      <i class="bi bi-chevron-left"></i>
+
+    </button>
+
+    <button
+      *ngFor="let page of pagesArray"
+      class="page-number"
+      [class.active-page]="currentPage === page"
+      (click)="goToPage(page)">
+
+      {{ page }}
+
+    </button>
+
+    <button
+      class="page-btn"
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages">
+
+      <i class="bi bi-chevron-right"></i>
+
+    </button>
+
+  </div>
+
+  <!-- EMPTY -->
+  <div class="empty-box" *ngIf="filteredAppareils().length === 0">
+
+    <i class="bi bi-inbox"></i>
+
+    <h4>Aucun appareil</h4>
+
+    <p>Ajoutez votre premier appareil</p>
+
+  </div>
 
 </div>

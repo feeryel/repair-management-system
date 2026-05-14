@@ -17,9 +17,13 @@ export class PieceService {
   add(data: any) {
     return this.http.post(this.apiUrl, data);
   }
-
+ getOne(id:any) {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
   delete(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
-
+update(id:any,data:any) {
+    return this.http.put(`${this.apiUrl}/${id}`, data);
+  }
 }

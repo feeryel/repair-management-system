@@ -20,6 +20,10 @@ import { PlanningListComponent } from './pages/planning/planning-list/planning-l
 import { PlanningFormComponent } from './pages/planning/planning-form/planning-form.component';
 import { FactureListComponent } from './pages/factures/facture-list/facture-list.component';
 import { FactureAddComponent } from './pages/factures/facture-add/facture-add.component';
+import { PieceListComponent } from './pages/pieces/piece-list/piece-list.component';
+import { PieceFormComponent } from './pages/pieces/piece-form/piece-form.component';
+import { LigneListComponent } from './pages/ligne-reparations/ligne-list/ligne-list.component';
+import { LigneFormComponent } from './pages/ligne-reparations/ligne-form/ligne-form.component';
 export const routes: Routes = [
 
   {
@@ -98,6 +102,30 @@ export const routes: Routes = [
 {
   path:'planning/add',
   component: PlanningFormComponent
+},{
+  path:'planning/edit/:id',
+  component: PlanningFormComponent
+},{
+  path:'pieces',
+  component: PieceListComponent
+},
+
+{
+  path:'pieces/add',
+  component: PieceFormComponent
+},
+
+{
+  path:'pieces/edit/:id',
+  component: PieceFormComponent
+},{
+  path:'ligne-reparations',
+  component:LigneListComponent
+},
+
+{
+  path:'ligne-reparations/add',
+  component:LigneFormComponent
 }
     ]
   }

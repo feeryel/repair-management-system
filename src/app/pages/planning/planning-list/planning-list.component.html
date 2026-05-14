@@ -2,21 +2,27 @@
 
   <h2>Liste Planning</h2>
 
-  <a [routerLink]="['/planning/add']"
-     class="btn btn-primary mb-3">
-     Ajouter
+  <a
+    routerLink="/planning/add"
+    class="btn btn-primary mb-3">
+    Ajouter
   </a>
 
-  <table class="table table-bordered">
+  <table class="table table-bordered table-striped">
 
-    <thead>
+    <thead class="table-dark">
+
       <tr>
+
         <th>ID</th>
-        <th>Date Début</th>
-        <th>Date Fin</th>
-        <th>Responsable ID</th>
-        <th>Demande ID</th>
+        <th>Date début</th>
+        <th>Date fin</th>
+        <th>Responsable</th>
+        <th>Demande</th>
+        <th>Actions</th>
+
       </tr>
+
     </thead>
 
     <tbody>
@@ -28,6 +34,22 @@
         <td>{{p.dateFin}}</td>
         <td>{{p.responsableId}}</td>
         <td>{{p.DemandeReparationId}}</td>
+
+        <td>
+
+          <a
+            [routerLink]="['/planning/edit', p.id]"
+            class="btn btn-warning btn-sm me-2">
+            Modifier
+          </a>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="deletePlanning(p.id)">
+            Supprimer
+          </button>
+
+        </td>
 
       </tr>
 

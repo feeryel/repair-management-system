@@ -1,74 +1,139 @@
-<div class="container mt-5">
+<div class="page">
 
-  <div class="card shadow">
+  <!-- HEADER -->
+  <div class="header">
 
-    <div class="card-header bg-primary text-white">
+    <div>
+      <h2>
+        {{ id ? 'Modifier Appareil' : 'Ajouter Appareil' }}
+      </h2>
 
-      Ajouter Appareil
-
+      <p>
+        Gestion intelligente des appareils Repair System
+      </p>
     </div>
 
-    <div class="card-body">
+    <div class="header-icon">
+      <i class="bi bi-cpu-fill"></i>
+    </div>
 
-      <form (ngSubmit)="save()">
+  </div>
 
-        <div class="mb-3">
+  <!-- FORM CARD -->
+  <div class="form-card">
 
-          <label>Marque</label>
+    <form (ngSubmit)="save()">
 
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="appareil.marque"
-            name="marque">
+      <div class="row g-4">
 
-        </div>
+        <!-- MARQUE -->
+        <div class="col-md-6">
 
-        <div class="mb-3">
+          <div class="input-group-custom">
 
-          <label>Modèle</label>
+            <label>Marque</label>
 
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="appareil.modele"
-            name="modele">
+            <div class="input-box">
 
-        </div>
+              <i class="bi bi-building"></i>
 
-        <div class="mb-3">
+              <input
+                type="text"
+                [(ngModel)]="appareil.marque"
+                name="marque"
+                placeholder="Entrer la marque">
 
-          <label>Num Série</label>
+            </div>
 
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="appareil.numSerie"
-            name="numSerie">
+          </div>
 
         </div>
 
-        <div class="mb-3">
+        <!-- MODELE -->
+        <div class="col-md-6">
 
-          <label>Type</label>
+          <div class="input-group-custom">
 
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="appareil.type"
-            name="type">
+            <label>Modèle</label>
+
+            <div class="input-box">
+
+              <i class="bi bi-pc-display"></i>
+
+              <input
+                type="text"
+                [(ngModel)]="appareil.modele"
+                name="modele"
+                placeholder="Entrer le modèle">
+
+            </div>
+
+          </div>
 
         </div>
 
-        <button class="btn btn-success w-100">
+        <!-- NUM SERIE -->
+        <div class="col-md-6">
 
-          Enregistrer
+          <div class="input-group-custom">
+
+            <label>Numéro Série</label>
+
+            <div class="input-box">
+
+              <i class="bi bi-upc-scan"></i>
+
+              <input
+                type="text"
+                [(ngModel)]="appareil.numSerie"
+                name="numSerie"
+                placeholder="Entrer le numéro série">
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- TYPE -->
+        <div class="col-md-6">
+
+          <div class="input-group-custom">
+
+            <label>Type Appareil</label>
+
+            <div class="input-box">
+
+              <i class="bi bi-tools"></i>
+
+              <input
+                type="text"
+                [(ngModel)]="appareil.type"
+                name="type"
+                placeholder="Entrer le type appareil">
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="actions">
+
+        <button type="submit" class="save-btn">
+
+          <i class="bi bi-check-circle-fill"></i>
+
+          {{ id ? 'Modifier Appareil' : 'Ajouter Appareil' }}
 
         </button>
 
-      </form>
+      </div>
 
-    </div>
+    </form>
 
   </div>
 

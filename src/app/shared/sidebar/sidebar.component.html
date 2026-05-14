@@ -1,90 +1,150 @@
-<div class="sidebar bg-dark text-white vh-100 p-3">
+<div class="sidebar d-flex flex-column p-3">
 
-  <h3 class="mb-4">
+  <div class="logo-section text-center mb-4">
 
-    Repair System
+    <div class="logo-circle mb-2">
+      <i class="bi bi-tools"></i>
+    </div>
 
-  </h3>
+    <h4 class="title">
+      Repair Manager
+    </h4>
+
+    <small class="subtitle">
+      Atelier de Réparation
+    </small>
+
+  </div>
 
   <ul class="nav flex-column">
 
-    <li class="nav-item mb-2">
+    <li class="nav-item">
 
-      <a routerLink="/dashboard" class="nav-link text-white">
+      <a routerLink="/dashboard"
+         routerLinkActive="active-link"
+         class="nav-link">
 
-        <i class="bi bi-speedometer2"></i>
-        Dashboard
+        <i class="bi bi-grid-1x2-fill"></i>
 
-      </a>
-
-    </li>
-
-    <li class="nav-item mb-2">
-
-      <a routerLink="/clients" class="nav-link text-white">
-
-        <i class="bi bi-people"></i>
-        Clients
+        <span>Dashboard</span>
 
       </a>
 
     </li>
 
-    <li class="nav-item mb-2">
+    <li class="nav-item">
 
-      <a routerLink="/appareils" class="nav-link text-white">
+      <a routerLink="/clients"
+         routerLinkActive="active-link"
+         class="nav-link">
 
-        <i class="bi bi-laptop"></i>
-        Appareils
+        <i class="bi bi-people-fill"></i>
 
-      </a>
-
-    </li>
-
-    <li class="nav-item mb-2">
-
-      <a routerLink="/demandes" class="nav-link text-white">
-
-        <i class="bi bi-tools"></i>
-        Demandes
+        <span>Clients</span>
 
       </a>
 
     </li>
 
-    <li class="nav-item mb-2">
+    <li class="nav-item">
 
-      <a routerLink="/reparations" class="nav-link text-white">
+      <a routerLink="/appareils"
+         routerLinkActive="active-link"
+         class="nav-link">
 
-        <i class="bi bi-wrench"></i>
-        Réparations
+        <i class="bi bi-laptop-fill"></i>
 
-      </a>
-
-    </li>
-
-    <li class="nav-item mb-2">
-
-      <a routerLink="/factures" class="nav-link text-white">
-
-        <i class="bi bi-receipt"></i>
-        Factures
+        <span>Appareils</span>
 
       </a>
 
     </li>
 
-    <li class="nav-item mb-2">
+    <li class="nav-item">
 
-      <a routerLink="/pieces" class="nav-link text-white">
+      <a routerLink="/demandes"
+         routerLinkActive="active-link"
+         class="nav-link">
 
-        <i class="bi bi-box"></i>
-        Pièces
+        <i class="bi bi-clipboard-check-fill"></i>
+
+        <span>Demandes</span>
+
+      </a>
+
+    </li>
+
+    <li class="nav-item">
+
+      <a routerLink="/planning"
+         routerLinkActive="active-link"
+         class="nav-link">
+
+        <i class="bi bi-calendar-event-fill"></i>
+
+        <span>Planning</span>
+
+      </a>
+
+    </li>
+
+    <li class="nav-item">
+
+      <a routerLink="/reparations"
+         routerLinkActive="active-link"
+         class="nav-link">
+
+        <i class="bi bi-wrench-adjustable-circle-fill"></i>
+
+        <span>Réparations</span>
+
+      </a>
+
+    </li>
+
+    <li class="nav-item">
+
+      <a routerLink="/factures"
+         routerLinkActive="active-link"
+         class="nav-link">
+
+        <i class="bi bi-receipt-cutoff"></i>
+
+        <span>Factures</span>
+
+      </a>
+
+    </li>
+
+    <li class="nav-item">
+
+      <a routerLink="/pieces"
+         routerLinkActive="active-link"
+         class="nav-link">
+
+        <i class="bi bi-box-seam-fill"></i>
+
+        <span>Pièces</span>
 
       </a>
 
     </li>
 
   </ul>
+
+ <div class="mt-auto pt-4">
+
+  <div class="logout-box">
+
+    <button class="btn logout-btn w-100" (click)="logout()">
+
+      <i class="bi bi-box-arrow-right"></i>
+
+      Déconnexion
+
+    </button>
+
+  </div>
+
 
 </div>

@@ -1,43 +1,80 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { PlanningService } from '../../../core/services/planning.service';
 
 @Component({
-  selector: 'app-planning-form',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './planning-form.component.html'
+  selector:'app-planning-form',
+  standalone:true,
+  imports:[FormsModule],
+  templateUrl:'./planning-form.component.html'
 })
-export class PlanningFormComponent {
+export class PlanningFormComponent implements OnInit {
 
-  formData = {
+  planning:any = {
+
     dateDebut:'',
     dateFin:'',
-    responsableId:null,
-    DemandeReparationId:null
+    responsableId:'',
+    DemandeReparationId:''
+
   };
 
+  id:any;
+
   constructor(
-    private service: PlanningService,
-    private router: Router
+    private service:PlanningService,
+    private router:Router,
+    private route:ActivatedRoute
   ) {}
 
-  save() {
+  ngOnInit(): void {
 
-    this.service.create(this.formData).subscribe({
-      next:()=>{
+    this.id = this.route.snapshot.paramMap.get('id');
 
-        alert("Planning ajouté");
+    if(this.id){
 
-        this.router.navigate(['/planning']);
-      },
+      this.service.getOne(this.id).subscribe({
+        next:(res:any)=>{
+          this.planning = res;
+        }
+      });
 
-      error:(err)=>{
-        console.log(err);
-      }
-    });
+    }
+
   }
+
+  save(){
+
+    if(this.id){
+
+      this.service.update(this.id,this.planning).subscribe({
+        next:()=>{
+
+          alert('Planning modifié');
+
+          this.router.navigate(['/planning']);
+
+        }
+      });
+
+    }
+
+    else{
+
+      this.service.create(this.planning).subscribe({
+        next:()=>{
+
+          alert('Planning ajouté');
+
+          this.router.navigate(['/planning']);
+
+        }
+      });
+
+    }
+
+  }
+
 }

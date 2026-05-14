@@ -1,0 +1,65 @@
+<div class="container mt-4">
+
+  <h2>Lignes Réparation</h2>
+
+  <a
+    routerLink="/ligne-reparations/add"
+    class="btn btn-primary mb-3">
+
+    Ajouter
+
+  </a>
+
+  <table class="table table-bordered">
+
+    <thead class="table-dark">
+
+      <tr>
+
+        <th>ID</th>
+        <th>Réparation</th>
+        <th>Pièce</th>
+        <th>Quantité</th>
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let l of lignes">
+
+        <td>{{l.id}}</td>
+
+        <td>
+          {{l.ReparationId}}
+        </td>
+
+        <td>
+          {{l.Piece?.nom}}
+        </td>
+
+        <td>
+          {{l.quantite}}
+        </td>
+
+        <td>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="delete(l.id)">
+
+            Supprimer
+
+          </button>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

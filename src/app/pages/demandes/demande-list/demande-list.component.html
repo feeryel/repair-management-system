@@ -1,91 +1,156 @@
-<div class="container mt-4">
+<div class="page">
 
-  <div class="d-flex justify-content-between mb-3">
+  <!-- HEADER -->
+  <div class="header">
 
-    <h2>Demandes Réparation</h2>
+    <div>
+      <h2>Demandes Réparation</h2>
+      <p>Gestion intelligente des interventions</p>
+    </div>
 
-    <a
-      routerLink="/demandes/add"
-      class="btn btn-primary">
-
-      Ajouter
-
+    <a routerLink="/demandes/add" class="btn-primary">
+      + Nouvelle demande
     </a>
 
   </div>
 
-  <table class="table table-bordered">
+  <!-- KPI -->
+  <div class="kpis">
 
-    <thead class="table-dark">
+    <div class="kpi blue">
+      <h3>{{ count('En attente') }}</h3>
+      <p>En attente</p>
+    </div>
 
-      <tr>
+    <div class="kpi orange">
+      <h3>{{ count('En cours') }}</h3>
+      <p>En cours</p>
+    </div>
 
-        <th>ID</th>
-        <th>Date dépôt</th>
-        <th>Date prévue</th>
-        <th>Symptômes</th>
-        <th>État</th>
-        <th>Actions</th>
+    <div class="kpi green">
+      <h3>{{ count('Terminée') }}</h3>
+      <p>Terminées</p>
+    </div>
 
-      </tr>
+  </div>
 
-    </thead>
+  <!-- SEARCH + FILTER -->
+  <div class="toolbar">
 
-    <tbody>
+    <input
+      type="text"
+      placeholder="🔎 Rechercher..."
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange()"
+      class="search">
 
-      <tr *ngFor="let d of demandes">
+    <div class="filters">
 
-        <td>{{ d.id }}</td>
+      <button (click)="setFilter('all')" [class.active]="filter==='all'">Toutes</button>
+      <button (click)="setFilter('En attente')" [class.active]="filter==='En attente'">En attente</button>
+      <button (click)="setFilter('En cours')" [class.active]="filter==='En cours'">En cours</button>
+      <button (click)="setFilter('Terminée')" [class.active]="filter==='Terminée'">Terminées</button>
 
-        <td>{{ d.dateDepot }}</td>
+    </div>
 
-        <td>{{ d.datePrevueRep }}</td>
+  </div>
 
-        <td>{{ d.symptomesPanne }}</td>
+  <!-- LOADING -->
+  <div *ngIf="loading" class="loading">
+    Chargement...
+  </div>
 
-     <td>
+  <!-- GRID -->
+  <div class="grid" *ngIf="!loading">
 
-  <select
-    class="form-select"
-    [ngModel]="d.etat"
-    (ngModelChange)="changeEtat(d,$event)">
+    <div class="card demand-card"
+         *ngFor="let d of paginatedDemandes"
+         [ngClass]="d.etat?.replace(' ', '-')">
 
-    <option value="En attente">
-      En attente
-    </option>
+      <!-- HEADER -->
+      <div class="card-header">
 
-    <option value="En cours">
-      En cours
-    </option>
+        <div class="left">
+          <span class="id">#{{ d.id }}</span>
+          <span class="badge" [ngClass]="d.etat?.replace(' ', '-')">
+            {{ d.etat }}
+          </span>
+        </div>
 
-    <option value="Terminée">
-      Terminée
-    </option>
+        <select [(ngModel)]="d.etat"
+                (ngModelChange)="changeEtat(d,$event)">
 
-  </select>
+          <option>En attente</option>
+          <option>En cours</option>
+          <option>Terminée</option>
 
-</td>
+        </select>
 
-        <td>
-  <a
-            [routerLink]="['/demandes/edit', d.id]"
-            class="btn btn-warning btn-sm me-2">
-            Modifier
-          </a>
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="delete(d.id)">
+      </div>
 
-            Supprimer
+      <!-- BODY -->
+      <div class="card-body">
 
-          </button>
+        <h3 class="title">{{ d.symptomesPanne }}</h3>
 
-        </td>
+        <div class="meta">
+          <span>📅 {{ d.dateDepot }}</span>
+          <span>⏳ {{ d.datePrevueRep }}</span>
+        </div>
 
-      </tr>
+      </div>
 
-    </tbody>
+      <!-- FOOTER -->
+      <div class="card-footer">
 
-  </table>
+        <a class="btn-edit" [routerLink]="['/demandes/edit', d.id]">
+          ✏
+        </a>
+
+        <button class="btn-delete" (click)="delete(d.id)">
+          🗑
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- PAGINATION -->
+<div class="pagination-container" *ngIf="totalPages > 1">
+
+  <!-- PREV -->
+  <button class="page-btn"
+          (click)="prevPage()"
+          [disabled]="currentPage === 1">
+
+    ‹
+  </button>
+
+  <!-- NUMBERS -->
+  <button class="page-number"
+          *ngFor="let p of pagesArray"
+          (click)="goToPage(p)"
+          [class.active-page]="p === currentPage">
+
+    {{ p }}
+
+  </button>
+
+  <!-- NEXT -->
+  <button class="page-btn"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages">
+
+    ›
+  </button>
+
+</div>
+
+  <!-- EMPTY -->
+  <div *ngIf="!loading && paginatedDemandes.length === 0" class="empty">
+    Aucun résultat trouvé
+  </div>
 
 </div>

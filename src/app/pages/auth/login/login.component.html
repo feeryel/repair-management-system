@@ -1,84 +1,74 @@
-<div class="login-container">
+<div class="login-page">
 
-  <mat-card class="modern-login-card">
+  <div class="login-card">
 
-    <!-- HEADER -->
-    <div class="login-header">
+    <!-- LEFT DESIGN PANEL -->
+    <div class="login-left">
 
-      <div class="brand-icon">
-        <span class="brand-icon-symbol">🔒</span>
+      <div class="icon-box">
+        <i class="bi bi-tools"></i>
       </div>
 
-      <h2 class="login-title">Connexion</h2>
-      <p class="login-subtitle">Accédez à votre espace</p>
+      <h2>Repair System</h2>
+
+      <p>Gestion des réparations, clients et factures</p>
 
     </div>
 
-    <!-- FORM -->
-    <mat-card-content>
+    <!-- RIGHT FORM -->
+    <div class="login-right">
+
+      <h3>Connexion</h3>
+
+      <p class="subtitle">Accédez à votre espace</p>
 
       <form (ngSubmit)="login()">
 
-        <!-- LOGIN -->
-        <div class="form-field outline full-width">
+        <div class="input-group">
 
-          <label class="form-label" for="login">Login</label>
+          <label>Login</label>
 
           <input
-            id="login"
             type="text"
             [(ngModel)]="loginData.login"
             name="login"
+            placeholder="Entrer votre login"
             required>
 
         </div>
 
-        <!-- PASSWORD -->
-        <div class="form-field outline full-width">
+        <div class="input-group">
 
-          <label class="form-label" for="motDePasse">Mot de passe</label>
+          <label>Mot de passe</label>
 
           <input
-            id="motDePasse"
             type="password"
             [(ngModel)]="loginData.motDePasse"
             name="motDePasse"
+            placeholder="••••••••"
             required>
 
         </div>
 
-        <!-- ERROR -->
-        <div *ngIf="errorMessage" class="error-message">
+        <div *ngIf="errorMessage" class="error">
           {{ errorMessage }}
         </div>
 
-        <!-- BUTTON -->
-        <div class="login-actions">
+        <button class="login-btn" [disabled]="loading">
 
-          <button
-            mat-raised-button
-            color="primary"
-            class="login-button"
-            [disabled]="loading"
-            type="submit">
+          <span *ngIf="!loading">Se connecter</span>
+          <span *ngIf="loading">Chargement...</span>
 
-            <span *ngIf="!loading">Se connecter</span>
-
-            <span *ngIf="loading" class="loading-text">Chargement...</span>
-
-          </button>
-
-        </div>
+        </button>
 
       </form>
 
-    </mat-card-content>
+      <div class="footer">
+        © 2026 Repair System
+      </div>
 
-    <!-- FOOTER -->
-    <div class="login-footer">
-      © 2026 Repair System - Tous droits réservés
     </div>
 
-  </mat-card>
+  </div>
 
 </div>

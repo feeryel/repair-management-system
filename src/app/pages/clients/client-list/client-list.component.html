@@ -1,55 +1,193 @@
-<div class="container mt-4">
+<div class="page">
 
-  <div class="d-flex justify-content-between mb-3">
-    <h2>Liste des clients</h2>
+  <!-- HEADER -->
+  <div class="header">
 
-    <a routerLink="/clients/add" class="btn btn-primary">
-      Ajouter
+    <div>
+      <h2>Clients</h2>
+      <p>Gestion intelligente des clients</p>
+    </div>
+
+    <a routerLink="/clients/add" class="btn-primary">
+      + Nouveau client
     </a>
+
   </div>
 
-  <table class="table table-bordered table-hover">
+  <!-- SEARCH CARD -->
+  <div class="card search-card">
 
-    <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Adresse</th>
-        <th>Téléphone</th>
-        <th>Email</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+    <input
+      type="text"
+      placeholder="Rechercher client (nom, email, téléphone...)"
+      [(ngModel)]="searchText"
+      class="search-input">
 
-    <tbody>
+  </div>
+<!-- FILTERS -->
+<div class="card filters-card">
 
-      <tr *ngFor="let client of clients">
+  <div class="filters-grid">
 
-        <td>{{ client.id }}</td>
-        <td>{{ client.nom }}</td>
-        <td>{{ client.adresse }}</td>
-        <td>{{ client.numTel }}</td>
-        <td>{{ client.email }}</td>
+    <!-- VILLE -->
+    <div class="filter-box">
 
-        <td>
+      <i class="bi bi-geo-alt"></i>
 
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="deleteClient(client.id!)">
+      <select [(ngModel)]="selectedVille">
 
-            Supprimer
+        <option value="">
+          Toutes les villes
+        </option>
 
-          </button>
- <button class="btn btn-warning btn-sm"
-          [routerLink]="['/clients/edit', client.id]">
-    Modifier
+        <option *ngFor="let ville of villes" [value]="ville">
+          {{ ville }}
+        </option>
+
+      </select>
+
+    </div>
+
+    <!-- TRI -->
+    <div class="filter-box">
+
+      <i class="bi bi-sort-alpha-down"></i>
+
+      <select [(ngModel)]="sortOrder">
+
+        <option value="">
+          Trier
+        </option>
+
+        <option value="asc">
+          Nom A → Z
+        </option>
+
+        <option value="desc">
+          Nom Z → A
+        </option>
+
+      </select>
+
+    </div>
+
+    <!-- TOTAL -->
+    <div class="total-box">
+
+      <i class="bi bi-people-fill"></i>
+
+      <span>
+        {{ filteredClients().length }} Clients
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+  <!-- TABLE CARD -->
+  <div class="card table-card">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>#ID</th>
+          <th>Client</th>
+          <th>Adresse</th>
+          <th>Téléphone</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+<tr *ngFor="let client of paginatedClients">
+<td>
+  <span class="id-badge">#{{ client.id }}</span>
+</td>
+          <td>
+            <div class="user">
+              <div class="avatar">
+                {{ client.nom.charAt(0).toUpperCase() }}
+              </div>
+              <div>
+                <span class="name">{{ client.nom }}</span>
+                <small>Client actif</small>
+              </div>
+            </div>
+          </td>
+
+          <td>{{ client.adresse }}</td>
+
+          <td>
+            <span class="chip">
+              {{ client.numTel }}
+            </span>
+          </td>
+
+          <td>{{ client.email }}</td>
+
+          <td class="actions">
+
+            <button class="btn danger" (click)="deleteClient(client.id!)">
+              🗑
+            </button>
+
+      <button
+  class="btn warn"
+  (click)="editAlert()"
+  [routerLink]="['/clients/edit', client.id]">
+
+  ✏️
+
+</button>
+
+          </td>
+
+        </tr>
+
+<tr *ngIf="filteredClients().length === 0">          <td colspan="6" class="empty">
+            Aucun client trouvé
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+<!-- PAGINATION -->
+<div class="pagination-container">
+
+  <button
+    class="page-btn"
+    (click)="changePage(currentPage - 1)"
+    [disabled]="currentPage === 1">
+
+    <i class="bi bi-chevron-left"></i>
+
   </button>
-        </td>
 
-      </tr>
+  <button
+    *ngFor="let page of [].constructor(totalPages); let i = index"
+    class="page-number"
+    [class.active-page]="currentPage === i + 1"
+    (click)="changePage(i + 1)">
 
-    </tbody>
+    {{ i + 1 }}
 
-  </table>
+  </button>
+
+  <button
+    class="page-btn"
+    (click)="changePage(currentPage + 1)"
+    [disabled]="currentPage === totalPages">
+
+    <i class="bi bi-chevron-right"></i>
+
+  </button>
+
+</div>
+  </div>
 
 </div>

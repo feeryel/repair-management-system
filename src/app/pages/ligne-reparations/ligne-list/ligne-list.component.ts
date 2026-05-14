@@ -1,23 +1,30 @@
 import { Component, OnInit } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { PlanningService } from '../../../core/services/planning.service';
+import { LigneReparationService }
+from '../../../core/services/ligne-reparation.service';
 
 @Component({
-  selector:'app-planning-list',
-  standalone:true,
-  imports:[CommonModule, RouterModule],
-  templateUrl:'./planning-list.component.html'
+  selector: 'app-ligne-list',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './ligne-list.component.html'
 })
-export class PlanningListComponent implements OnInit {
+export class LigneListComponent
+implements OnInit {
 
-  plannings:any[] = [];
+  lignes:any[] = [];
 
-  constructor(private service:PlanningService) {}
+  constructor(
+    private service:LigneReparationService
+  ) {}
 
   ngOnInit(): void {
+
     this.loadData();
+
   }
 
   loadData(){
@@ -26,7 +33,7 @@ export class PlanningListComponent implements OnInit {
 
       next:(res:any)=>{
 
-        this.plannings = res;
+        this.lignes = res;
 
       },
 
@@ -38,15 +45,13 @@ export class PlanningListComponent implements OnInit {
 
   }
 
-  deletePlanning(id:number){
+  delete(id:any){
 
-    if(confirm('Supprimer planning ?')){
+    if(confirm('Supprimer ?')){
 
       this.service.delete(id).subscribe({
 
         next:()=>{
-
-          alert('Planning supprimé');
 
           this.loadData();
 
@@ -57,5 +62,4 @@ export class PlanningListComponent implements OnInit {
     }
 
   }
-
 }
