@@ -1,6 +1,6 @@
 [build]
   command = "ng build --configuration production"
-  publish = "dist/reparation_management_frontend"
+  publish = "dist/reparation_management_frontend/browser"
 
 [[redirects]]
   from = "/*"
