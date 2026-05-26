@@ -1,60 +1,161 @@
-<div class="container mt-4">
+<div class="page">
 
-  <h2>Liste Planning</h2>
+  <!-- HEADER -->
+  <div class="header">
 
-  <a
-    routerLink="/planning/add"
-    class="btn btn-primary mb-3">
-    Ajouter
-  </a>
+    <div>
+      <h2>Planning Réparation</h2>
+      <p>Gestion intelligente des interventions et réparations</p>
+    </div>
 
-  <table class="table table-bordered table-striped">
+    <a
+      routerLink="/planning/add"
+      class="btn-add">
 
-    <thead class="table-dark">
+      + Ajouter Planning
 
-      <tr>
+    </a>
 
-        <th>ID</th>
-        <th>Date début</th>
-        <th>Date fin</th>
-        <th>Responsable</th>
-        <th>Demande</th>
-        <th>Actions</th>
+  </div>
 
-      </tr>
+  <!-- LOADING -->
+  <div *ngIf="loading" class="loading">
 
-    </thead>
+    Chargement...
 
-    <tbody>
+  </div>
 
-      <tr *ngFor="let p of plannings">
+  <!-- EMPTY -->
+  <div *ngIf="!loading && plannings.length === 0" class="empty">
 
-        <td>{{p.id}}</td>
-        <td>{{p.dateDebut}}</td>
-        <td>{{p.dateFin}}</td>
-        <td>{{p.responsableId}}</td>
-        <td>{{p.DemandeReparationId}}</td>
+    Aucun planning trouvé
 
-        <td>
+  </div>
 
-          <a
-            [routerLink]="['/planning/edit', p.id]"
-            class="btn btn-warning btn-sm me-2">
-            Modifier
-          </a>
+  <!-- GRID -->
+  <div class="planning-grid" *ngIf="!loading">
 
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="deletePlanning(p.id)">
-            Supprimer
-          </button>
+    <div
+      class="planning-card"
+      *ngFor="let p of paginatedPlannings">
 
-        </td>
+      <!-- TOP -->
+      <div class="card-top">
 
-      </tr>
+        <div class="badge-id">
+          #{{ p.id }}
+        </div>
 
-    </tbody>
+        <div class="status">
+          Planning
+        </div>
 
-  </table>
+      </div>
+
+      <!-- BODY -->
+      <div class="card-body">
+
+        <div class="info">
+
+          <span class="icon">📅</span>
+
+          <div>
+            <small>Date début</small>
+            <h4>{{ p.dateDebut }}</h4>
+          </div>
+
+        </div>
+
+        <div class="info">
+
+          <span class="icon">⏳</span>
+
+          <div>
+            <small>Date fin</small>
+            <h4>{{ p.dateFin }}</h4>
+          </div>
+
+        </div>
+
+        <div class="info">
+
+          <span class="icon">👨‍🔧</span>
+
+          <div>
+            <small>Responsable</small>
+            <h4>ID : {{ p.responsableId }}</h4>
+          </div>
+
+        </div>
+
+        <div class="info">
+
+          <span class="icon">🛠</span>
+
+          <div>
+            <small>Demande</small>
+            <h4>ID : {{ p.DemandeReparationId }}</h4>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="card-footer">
+
+        <a
+          [routerLink]="['/planning/edit', p.id]"
+          class="btn-edit">
+
+          ✏ Modifier
+
+        </a>
+
+        <button
+          class="btn-delete"
+          (click)="deletePlanning(p.id)">
+
+          🗑 Supprimer
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+<!-- PAGINATION -->
+<div class="pagination-container" *ngIf="totalPages > 1">
+
+  <!-- PREV -->
+  <button class="page-btn"
+          (click)="changePage(currentPage - 1)"
+          [disabled]="currentPage === 1">
+
+    ‹
+  </button>
+
+  <!-- NUMBERS -->
+  <button class="page-number"
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          (click)="changePage(i + 1)"
+          [class.active-page]="currentPage === i + 1">
+
+    {{ i + 1 }}
+
+  </button>
+
+  <!-- NEXT -->
+  <button class="page-btn"
+          (click)="changePage(currentPage + 1)"
+          [disabled]="currentPage === totalPages">
+
+    ›
+
+  </button>
+
+</div>
 
 </div>

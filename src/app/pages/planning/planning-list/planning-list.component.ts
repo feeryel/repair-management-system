@@ -2,58 +2,145 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import Swal from 'sweetalert2';
 import { PlanningService } from '../../../core/services/planning.service';
 
 @Component({
-  selector:'app-planning-list',
-  standalone:true,
-  imports:[CommonModule, RouterModule],
-  templateUrl:'./planning-list.component.html'
+  selector: 'app-planning-list',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './planning-list.component.html',
+  styleUrls: ['./planning-list.component.scss']
 })
 export class PlanningListComponent implements OnInit {
 
-  plannings:any[] = [];
+  plannings: any[] = [];
 
-  constructor(private service:PlanningService) {}
+  loading: boolean = false;
+
+  // 👉 PAGINATION
+  currentPage: number = 1;
+  itemsPerPage: number = 7;
+
+  constructor(private service: PlanningService) {}
 
   ngOnInit(): void {
     this.loadData();
   }
 
-  loadData(){
+  // =========================
+  // LOAD DATA
+  // =========================
+  loadData() {
+
+    this.loading = true;
 
     this.service.getAll().subscribe({
 
-      next:(res:any)=>{
-
+      next: (res: any) => {
         this.plannings = res;
-
+        this.loading = false;
+        this.currentPage = 1; // reset page
       },
 
-      error:(err)=>{
+      error: (err) => {
+
+        this.loading = false;
+
         console.log(err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'Impossible de charger les plannings',
+          confirmButtonColor: '#6366f1'
+        });
+
       }
 
     });
 
   }
 
-  deletePlanning(id:number){
+  // =========================
+  // DELETE WITH SWEETALERT
+  // =========================
+  deletePlanning(id: number) {
 
-    if(confirm('Supprimer planning ?')){
+    Swal.fire({
 
-      this.service.delete(id).subscribe({
+      title: 'Supprimer ce planning ?',
+      text: 'Cette action est irréversible',
+      icon: 'warning',
 
-        next:()=>{
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
 
-          alert('Planning supprimé');
+      confirmButtonText: 'Oui, supprimer',
+      cancelButtonText: 'Annuler'
 
-          this.loadData();
+    }).then((result) => {
 
-        }
+      if (result.isConfirmed) {
 
-      });
+        this.service.delete(id).subscribe({
 
+          next: () => {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Supprimé',
+              text: 'Planning supprimé avec succès',
+              timer: 2000,
+              showConfirmButton: false
+            });
+
+            this.loadData();
+
+          },
+
+          error: () => {
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Erreur',
+              text: 'Suppression impossible',
+              confirmButtonColor: '#6366f1'
+            });
+
+          }
+
+        });
+
+      }
+
+    });
+
+  }
+
+  // =========================
+  // PAGINATION GETTERS
+  // =========================
+
+  get paginatedPlannings() {
+
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+
+    return this.plannings.slice(start, start + this.itemsPerPage);
+
+  }
+
+  get totalPages(): number {
+
+    return Math.ceil(this.plannings.length / this.itemsPerPage);
+
+  }
+
+  changePage(page: number) {
+
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
     }
 
   }

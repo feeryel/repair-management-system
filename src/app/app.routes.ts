@@ -24,6 +24,7 @@ import { PieceListComponent } from './pages/pieces/piece-list/piece-list.compone
 import { PieceFormComponent } from './pages/pieces/piece-form/piece-form.component';
 import { LigneListComponent } from './pages/ligne-reparations/ligne-list/ligne-list.component';
 import { LigneFormComponent } from './pages/ligne-reparations/ligne-form/ligne-form.component';
+import { GarantieComponent } from './pages/garantie/garantie.component';
 export const routes: Routes = [
 
   {
@@ -126,7 +127,9 @@ export const routes: Routes = [
 {
   path:'ligne-reparations/add',
   component:LigneFormComponent
-}
+},
+  { path: 'garantie', component: GarantieComponent }
+
     ]
   }
 

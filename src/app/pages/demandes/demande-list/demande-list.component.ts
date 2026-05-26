@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DemandeService } from '../../../core/services/demande.service';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-demande-list',
   standalone: true,
@@ -29,20 +31,39 @@ export class DemandeListComponent implements OnInit {
   }
 
   loadData() {
+
     this.loading = true;
 
     this.demandeService.getAll().subscribe({
+
       next: (res) => {
+
         this.demandes = res;
         this.loading = false;
         this.currentPage = 1;
+
       },
-      error: () => this.loading = false
+
+      error: () => {
+
+        this.loading = false;
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'Impossible de charger les demandes',
+          confirmButtonColor: '#6366f1'
+        });
+
+      }
+
     });
+
   }
 
   // FILTER + SEARCH
   get filteredDemandes() {
+
     return this.demandes.filter(d => {
 
       const matchFilter =
@@ -53,13 +74,21 @@ export class DemandeListComponent implements OnInit {
         d.id?.toString().includes(this.searchText);
 
       return matchFilter && matchSearch;
+
     });
+
   }
 
   // PAGINATION
   get paginatedDemandes() {
+
     const start = (this.currentPage - 1) * this.itemsPerPage;
-    return this.filteredDemandes.slice(start, start + this.itemsPerPage);
+
+    return this.filteredDemandes.slice(
+      start,
+      start + this.itemsPerPage
+    );
+
   }
 
   get totalPages(): number {
@@ -67,7 +96,10 @@ export class DemandeListComponent implements OnInit {
   }
 
   get pagesArray(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    return Array.from(
+      { length: this.totalPages },
+      (_, i) => i + 1
+    );
   }
 
   goToPage(p: number) {
@@ -75,11 +107,13 @@ export class DemandeListComponent implements OnInit {
   }
 
   nextPage() {
-    if (this.currentPage < this.totalPages) this.currentPage++;
+    if (this.currentPage < this.totalPages)
+      this.currentPage++;
   }
 
   prevPage() {
-    if (this.currentPage > 1) this.currentPage--;
+    if (this.currentPage > 1)
+      this.currentPage--;
   }
 
   // FILTER BUTTON
@@ -94,24 +128,106 @@ export class DemandeListComponent implements OnInit {
 
   // STATS
   count(etat: string) {
-    return this.demandes.filter(d => d.etat === etat).length;
+    return this.demandes.filter(
+      d => d.etat === etat
+    ).length;
   }
 
   // CHANGE STATUS
   changeEtat(demande: any, newEtat: string) {
-    const updated = { ...demande, etat: newEtat };
 
-    this.demandeService.update(demande.id, updated).subscribe({
-      next: () => demande.etat = newEtat
+    const updated = {
+      ...demande,
+      etat: newEtat
+    };
+
+    this.demandeService.update(
+      demande.id,
+      updated
+    ).subscribe({
+
+      next: () => {
+
+        demande.etat = newEtat;
+
+        Swal.fire({
+          icon: 'success',
+          title: 'État modifié',
+          text: 'Le statut a été mis à jour',
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+      },
+
+      error: () => {
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'Modification impossible',
+          confirmButtonColor: '#6366f1'
+        });
+
+      }
+
     });
+
   }
 
   // DELETE
   delete(id: number) {
-    if (confirm('Supprimer cette demande ?')) {
-      this.demandeService.delete(id).subscribe({
-        next: () => this.loadData()
-      });
-    }
+
+    Swal.fire({
+
+      title: 'Supprimer cette demande ?',
+      text: 'Cette action est irréversible !',
+      icon: 'warning',
+
+      showCancelButton: true,
+
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+
+      confirmButtonText: 'Oui, supprimer',
+      cancelButtonText: 'Annuler'
+
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+
+        this.demandeService.delete(id).subscribe({
+
+          next: () => {
+
+            this.loadData();
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Supprimée',
+              text: 'La demande a été supprimée avec succès',
+              confirmButtonColor: '#22c55e'
+            });
+
+          },
+
+          error: () => {
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Erreur',
+              text: 'Suppression impossible',
+              confirmButtonColor: '#6366f1'
+            });
+
+          }
+
+        });
+
+      }
+
+    });
+
   }
+
 }

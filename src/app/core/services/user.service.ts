@@ -21,5 +21,8 @@ export class UserService {
   delete(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+  getTechniciens() {
+  return this.http.get<any[]>('http://localhost:3000/users/techniciens/list');
+}
 
 }

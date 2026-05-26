@@ -1,61 +1,125 @@
-<div class="container mt-4">
+<div class="page">
 
-  <h2>Ajouter Planning</h2>
+  <div class="form-container">
 
-  <form (ngSubmit)="save()">
+    <!-- HEADER -->
+    <div class="form-header">
 
-    <div class="mb-3">
+      <div>
+        <h2>{{ id ? 'Modifier Planning' : 'Ajouter Planning' }}</h2>
+        <p>Gestion intelligente des plannings de réparation</p>
+      </div>
 
-      <label>Date début</label>
-
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="planning.dateDebut"
-        name="dateDebut">
+      <div class="header-icon">📅</div>
 
     </div>
 
-    <div class="mb-3">
+    <!-- FORM CARD -->
+    <div class="form-card">
 
-      <label>Date fin</label>
+      <form #f="ngForm" (ngSubmit)="save(f)" novalidate>
 
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="planning.dateFin"
-        name="dateFin">
+        <!-- DATES -->
+        <div class="grid-2">
+
+          <!-- DATE DEBUT -->
+          <div class="input-group-custom">
+            <label>Date début</label>
+
+            <div class="input-box">
+              <input type="date"
+                     [(ngModel)]="planning.dateDebut"
+                     name="dateDebut"
+                     required
+                     #dateDebut="ngModel">
+            </div>
+
+            <div class="error" *ngIf="dateDebut.invalid && dateDebut.touched">
+              <small>Champ obligatoire</small>
+            </div>
+          </div>
+
+          <!-- DATE FIN -->
+          <div class="input-group-custom">
+            <label>Date fin</label>
+
+            <div class="input-box">
+              <input type="date"
+                     [(ngModel)]="planning.dateFin"
+                     name="dateFin"
+                     required
+                     #dateFin="ngModel">
+            </div>
+
+            <div class="error" *ngIf="dateFin.invalid && dateFin.touched">
+              <small>Champ obligatoire</small>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- IDS -->
+        <div class="extra-grid">
+
+          <!-- RESPONSABLE -->
+          <div class="field-card">
+            <label>Responsable ID</label>
+
+            <input type="number"
+                   [(ngModel)]="planning.responsableId"
+                   name="responsableId"
+                   required
+                   min="1"
+                   #responsableId="ngModel">
+
+            <div class="error" *ngIf="responsableId.invalid && responsableId.touched">
+              <small *ngIf="responsableId.errors?.['required']">Champ obligatoire</small>
+              <small *ngIf="responsableId.errors?.['min']">Doit être > 0</small>
+            </div>
+          </div>
+
+          <!-- DEMANDE -->
+          <div class="field-card">
+            <label>Demande ID</label>
+
+            <input type="number"
+                   [(ngModel)]="planning.DemandeReparationId"
+                   name="DemandeReparationId"
+                   required
+                   min="1"
+                   #demandeId="ngModel">
+
+            <div class="error" *ngIf="demandeId.invalid && demandeId.touched">
+              <small *ngIf="demandeId.errors?.['required']">Champ obligatoire</small>
+              <small *ngIf="demandeId.errors?.['min']"> l'id doit être supérieur à 0</small>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+
+          <button type="button"
+                  class="btn-cancel"
+                  routerLink="/planning">
+            Annuler
+          </button>
+
+          <button type="submit"
+                  class="btn-save"
+                  [disabled]="f.invalid || loading">
+
+            {{ id ? 'Modifier' : 'Enregistrer' }}
+
+          </button>
+
+        </div>
+
+      </form>
 
     </div>
 
-    <div class="mb-3">
-
-      <label>Responsable ID</label>
-
-      <input
-        type="number"
-        class="form-control"
-        [(ngModel)]="planning.responsableId"
-        name="responsableId">
-
-    </div>
-
-    <div class="mb-3">
-
-      <label>Demande ID</label>
-
-      <input
-        type="number"
-        class="form-control"
-        [(ngModel)]="planning.DemandeReparationId"
-        name="DemandeReparationId">
-
-    </div>
-
-    <button class="btn btn-success">
-      Enregistrer
-    </button>
-
-  </form>
+  </div>
 
 </div>

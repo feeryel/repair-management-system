@@ -1,0 +1,388 @@
+.page{
+  padding:30px;
+  margin-left:260px;
+  min-height:100vh;
+  background:
+  linear-gradient(135deg,#eef2ff,#f8fafc);
+  font-family:system-ui;
+}
+
+/* HEADER */
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.header h2{
+  font-size:32px;
+  font-weight:800;
+  color:#111827;
+}
+
+.header p{
+  color:#6b7280;
+  margin-top:5px;
+}
+
+.icon{
+  width:70px;
+  height:70px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:34px;
+  box-shadow:0 10px 25px rgba(99,102,241,.3);
+}
+
+/* CARD */
+
+.form-card{
+  background:white;
+  border-radius:28px;
+  padding:30px;
+  box-shadow:
+  0 15px 40px rgba(0,0,0,.08);
+}
+
+/* INPUTS */
+
+.input-group{
+  margin-bottom:22px;
+}
+
+label{
+  display:block;
+  margin-bottom:8px;
+  font-weight:700;
+  color:#374151;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:14px;
+  border-radius:16px;
+  border:1.5px solid #e5e7eb;
+  outline:none;
+  font-size:14px;
+  transition:.25s;
+}
+
+textarea{
+  min-height:120px;
+  resize:none;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#6366f1;
+  box-shadow:
+  0 0 0 4px rgba(99,102,241,.12);
+}
+
+/* GRID */
+
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+/* CHECKBOX */
+
+.checkbox{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:18px 0;
+}
+
+/* BUTTON */
+
+.btn-save{
+  width:100%;
+  border:none;
+  padding:16px;
+  border-radius:18px;
+  background:
+  linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:white;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.btn-save:hover{
+  transform:translateY(-3px);
+  box-shadow:
+  0 15px 30px rgba(99,102,241,.25);
+}
+
+.btn-save:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+/* ERRORS */
+
+small{
+  color:#ef4444;
+  font-size:12px;
+}
+
+/* =========================
+   NG SELECT DESIGN
+========================= */
+
+::ng-deep .ng-select{
+  width:100%;
+}
+
+::ng-deep .ng-select .ng-select-container{
+  min-height:58px;
+  border-radius:18px;
+  border:1.5px solid #e5e7eb;
+  padding:8px 12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.03);
+}
+
+::ng-deep .ng-select.ng-select-focused .ng-select-container{
+  border-color:#6366f1;
+  box-shadow:
+  0 0 0 4px rgba(99,102,241,.12);
+}
+
+/* placeholder */
+
+::ng-deep .ng-placeholder{
+  color:#9ca3af !important;
+  font-weight:500;
+}
+
+/* dropdown */
+
+::ng-deep .ng-dropdown-panel{
+  border:none;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:10px;
+  box-shadow:
+  0 15px 40px rgba(0,0,0,.12);
+}
+
+/* option */
+
+::ng-deep .ng-option{
+  padding:14px !important;
+}
+
+::ng-deep .ng-option:hover{
+  background:#eef2ff !important;
+}
+
+::ng-deep .ng-option.ng-option-selected{
+  background:#e0e7ff !important;
+}
+
+/* MULTI SELECT TAG */
+
+::ng-deep .ng-value{
+  background:#eef2ff !important;
+  border-radius:999px !important;
+  padding:4px 10px !important;
+  color:#4338ca !important;
+  font-weight:600;
+}
+
+/* OPTION STYLE */
+
+.tech-option{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:
+  linear-gradient(135deg,#6366f1,#8b5cf6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-weight:800;
+  box-shadow:
+  0 6px 16px rgba(99,102,241,.25);
+}
+
+.avatar.small{
+  width:28px;
+  height:28px;
+  font-size:12px;
+}
+
+.info{
+  display:flex;
+  flex-direction:column;
+}
+
+.name{
+  font-weight:700;
+  color:#111827;
+}
+
+.info small{
+  color:#6b7280;
+}
+
+.selected-tech{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .page{
+    margin-left:0;
+    padding:20px;
+  }
+
+  .grid-2{
+    grid-template-columns:1fr;
+  }
+
+}
+/* SWITCH STYLE */
+.switch-box{
+  display:flex;
+  flex-direction:column;
+}
+
+.switch-wrapper{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:8px;
+}
+
+/* hide checkbox */
+.switch-wrapper input{
+  display:none;
+}
+
+/* switch design */
+.switch{
+  width:48px;
+  height:26px;
+  background:#e5e7eb;
+  border-radius:999px;
+  position:relative;
+  cursor:pointer;
+  transition:.3s;
+}
+
+/* circle */
+.switch::after{
+  content:"";
+  width:20px;
+  height:20px;
+  background:white;
+  border-radius:50%;
+  position:absolute;
+  top:3px;
+  left:3px;
+  transition:.3s;
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+/* checked */
+.switch-wrapper input:checked + .switch{
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+}
+
+.switch-wrapper input:checked + .switch::after{
+  transform:translateX(22px);
+}
+
+/* text */
+.switch-text{
+  font-weight:600;
+  color:#374151;
+}
+/* hide placeholder when value selected */
+::ng-deep .ng-select.ng-select-single.ng-select-opened .ng-placeholder,
+::ng-deep .ng-select.ng-select-single.ng-has-value .ng-placeholder {
+  display: none !important;
+}
+/* ACTIONS CONTAINER */
+.actions{
+  margin-top:30px;
+  display:flex;
+  justify-content:flex-end;
+  gap:15px;
+}
+
+/* SAVE BUTTON */
+.btn-save{
+  border:none;
+  padding:14px 24px;
+  border-radius:14px;
+  width: 120px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:.25s;
+  box-shadow:0 10px 20px rgba(99,102,241,0.25);
+}
+
+.btn-save:hover{
+  transform:translateY(-2px);
+}
+
+.btn-save:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* CANCEL */
+.btn-cancel{
+  border:none;
+  padding:14px 24px;
+  border-radius:14px;
+  background:#eef2ff;
+  color:#4f46e5;
+  font-weight:600;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.btn-cancel:hover{
+  background:#dbeafe;
+}
+
+/* ERROR */
+.error{
+  margin-top:8px;
+}
+
+.error small{
+  color:#dc2626;
+  font-size:12px;
+  font-weight:600;
+}

@@ -1,91 +1,160 @@
-<div class="container mt-4">
+<div class="page">
 
-  <h2>Ajouter Réparation</h2>
-
-  <form (ngSubmit)="save()">
-
-    <div class="mb-3">
-      <label>Description</label>
-
-      <textarea
-        class="form-control"
-        [(ngModel)]="reparation.descriptionReparation"
-        name="descriptionReparation">
-      </textarea>
+  <div class="header">
+    <div>
+      <h2>Nouvelle Réparation</h2>
+      <p>Créer une intervention technique</p>
     </div>
 
-    <div class="mb-3">
-      <label>Date Fin</label>
+    <div class="icon">🛠</div>
+  </div>
 
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="reparation.dateFinRep"
-        name="dateFinRep">
+  <div class="form-card">
+
+    <form #f="ngForm" (ngSubmit)="save(f)" novalidate>
+
+      <!-- Description -->
+      <div class="input-group">
+        <label>Description</label>
+
+        <textarea
+          [(ngModel)]="reparation.descriptionReparation"
+          name="descriptionReparation"
+          required
+          #desc="ngModel">
+        </textarea>
+
+        <small *ngIf="desc.invalid && desc.touched">
+          Champ obligatoire
+        </small>
+      </div>
+
+      <!-- Grid -->
+      <div class="grid-2">
+
+        <div class="input-group">
+          <label>Date Fin</label>
+          <input type="date"
+                 [(ngModel)]="reparation.dateFinRep"
+                 name="dateFinRep"
+                 required>
+        </div>
+
+        <div class="input-group">
+          <label>Temps (h)</label>
+          <input type="number"
+                 [(ngModel)]="reparation.tempsMainOeuvre"
+                 name="tempsMainOeuvre"
+                 min="1"
+                 required>
+        </div>
+
+      </div>
+
+      <!-- Demande -->
+      <div class="input-group">
+        <label>Demande ID</label>
+        <input type="number"
+               [(ngModel)]="reparation.demandeId"
+               name="demandeId"
+               required>
+      </div>
+
+      <!-- Technicien -->
+<!-- Technicien -->
+<div class="input-group">
+  <label>Technicien</label>
+
+  <ng-select
+    [items]="techniciens"
+    bindLabel="login"
+    bindValue="id"
+    [(ngModel)]="reparation.technicienId"
+    name="technicienId"
+    placeholder="Choisir un technicien"
+    [searchable]="true"
+    [clearable]="false"
+    required>
+
+    <!-- OPTION -->
+    <ng-template ng-option-tmp let-item="item">
+      <div class="tech-option">
+        <div class="avatar">
+          {{ item.login?.charAt(0) | uppercase }}
+        </div>
+
+        <div class="info">
+          <div class="name">{{ item.login }}</div>
+          <small>#{{ item.id }}</small>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- SELECTED (IMPORTANT FIX) -->
+    <ng-template ng-label-tmp let-item="item">
+      <div class="selected-tech">
+        <span class="avatar small">
+          {{ item.login?.charAt(0) | uppercase }}
+        </span>
+        {{ item.login }}
+      </div>
+    </ng-template>
+
+  </ng-select>
+</div>
+      <!-- Status -->
+    <!-- STATUS + REPARABLE -->
+<div class="grid-2">
+
+  <!-- Status -->
+  <div class="input-group">
+    <label>Status</label>
+
+    <select [(ngModel)]="reparation.status" name="status">
+      <option value="PENDING">🟡 PENDING</option>
+      <option value="IN_PROGRESS">🟠 IN PROGRESS</option>
+      <option value="DONE">🟢 DONE</option>
+      <option value="FAILED">🔴 FAILED</option>
+    </select>
+  </div>
+
+  <!-- Réparable -->
+  <div class="input-group switch-box">
+
+    <label>Réparable</label>
+
+    <div class="switch-wrapper">
+      <input type="checkbox"
+             [(ngModel)]="reparation.estReparable"
+             name="estReparable"
+             id="repSwitch">
+
+      <label for="repSwitch" class="switch"></label>
+
+      <span class="switch-text">
+        {{ reparation.estReparable ? 'Oui' : 'Non' }}
+      </span>
     </div>
 
-    <div class="mb-3">
-      <label>Temps Main d'oeuvre</label>
+  </div>
+<!-- ACTION BUTTONS -->
+<div class="actions">
 
-      <input
-        type="number"
-        class="form-control"
-        [(ngModel)]="reparation.tempsMainOeuvre"
-        name="tempsMainOeuvre">
-    </div>
+  <button
+    type="button"
+    class="btn-cancel"
+    (click)="cancel()">
 
-    <div class="mb-3">
-      <label>Demande ID</label>
+    Annuler
+  </button>
 
-      <input
-        type="number"
-        class="form-control"
-        [(ngModel)]="reparation.demandeId"
-        name="demandeId">
-    </div>
+  <button
+    type="submit"
+    class="btn-save"
+    [disabled]="f.invalid || loading">
 
-    <div class="mb-3">
-      <label>Technicien ID</label>
+    {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
+  </button>
 
-      <input
-        type="number"
-        class="form-control"
-        [(ngModel)]="reparation.technicienId"
-        name="technicienId">
-    </div>
-
-    <div class="mb-3">
-      <label>Status</label>
-
-      <select
-        class="form-control"
-        [(ngModel)]="reparation.status"
-        name="status">
-
-        <option value="IN_PROGRESS">IN_PROGRESS</option>
-        <option value="DONE">DONE</option>
-
-      </select>
-    </div>
-
-    <div class="form-check mb-3">
-
-      <input
-        type="checkbox"
-        class="form-check-input"
-        [(ngModel)]="reparation.estReparable"
-        name="estReparable">
-
-      <label class="form-check-label">
-        Réparable
-      </label>
-
-    </div>
-
-    <button class="btn btn-success">
-      Ajouter
-    </button>
-
-  </form>
-
+</div>
 </div>

@@ -25,4 +25,7 @@ export class FactureService {
   delete(id:number) {
     return this.http.delete(`${this.api}/${id}`);
   }
+  getFactureById(id: number) {
+  return this.http.get(`${this.api}/factures/${id}`);
+}
 }

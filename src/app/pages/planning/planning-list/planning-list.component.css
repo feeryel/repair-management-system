@@ -1,0 +1,527 @@
+.page{
+  padding:30px;
+  margin-left:260px;
+  min-height:100vh;
+  background:#f6f7fb;
+  font-family:system-ui;
+}
+
+/* HEADER */
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
+}
+
+.header h2{
+  font-size:32px;
+  font-weight:700;
+  color:#111827;
+  margin:0;
+}
+
+.header p{
+  color:#6b7280;
+  margin-top:6px;
+}
+
+/* ADD BUTTON */
+
+.btn-add{
+  text-decoration:none;
+  padding:14px 22px;
+  border-radius:16px;
+
+  background:linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  color:white;
+  font-weight:600;
+
+  box-shadow:
+  0 10px 25px rgba(99,102,241,0.25);
+
+  transition:.25s;
+}
+
+.btn-add:hover{
+  transform:translateY(-3px);
+}
+
+/* GRID */
+
+.planning-grid{
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(320px,1fr));
+
+  gap:24px;
+}
+
+/* CARD */
+
+.planning-card{
+
+  background:white;
+
+  border-radius:24px;
+
+  overflow:hidden;
+
+  box-shadow:
+  0 12px 35px rgba(0,0,0,0.06);
+
+  transition:.3s;
+}
+
+.planning-card:hover{
+
+  transform:translateY(-6px);
+
+  box-shadow:
+  0 20px 45px rgba(0,0,0,0.12);
+}
+
+/* TOP */
+
+.card-top{
+
+  padding:18px 22px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  background:linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  color:white;
+}
+
+.badge-id{
+
+  background:rgba(255,255,255,0.2);
+
+  padding:8px 14px;
+
+  border-radius:12px;
+
+  font-weight:700;
+}
+
+.status{
+
+  background:white;
+  color:#6366f1;
+
+  padding:6px 12px;
+
+  border-radius:10px;
+
+  font-size:13px;
+  font-weight:700;
+}
+
+/* BODY */
+
+.card-body{
+  padding:24px;
+}
+
+.info{
+
+  display:flex;
+  align-items:center;
+
+  gap:14px;
+
+  margin-bottom:20px;
+}
+
+.icon{
+
+  width:50px;
+  height:50px;
+
+  border-radius:14px;
+
+  background:#eef2ff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:22px;
+}
+
+.info small{
+  color:#6b7280;
+  display:block;
+  margin-bottom:4px;
+}
+
+.info h4{
+  margin:0;
+  font-size:16px;
+  color:#111827;
+}
+
+/* FOOTER */
+
+.card-footer{
+
+  padding:20px 24px;
+
+  display:flex;
+  gap:14px;
+
+  border-top:1px solid #f3f4f6;
+}
+
+/* BUTTONS */
+
+.btn-edit,
+.btn-delete{
+
+  flex:1;
+
+  border:none;
+
+  padding:12px;
+
+  border-radius:14px;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:.25s;
+
+  text-align:center;
+
+  text-decoration:none;
+}
+
+.btn-edit{
+
+  background:#eef2ff;
+  color:#4f46e5;
+}
+
+.btn-edit:hover{
+  background:#dbeafe;
+}
+
+.btn-delete{
+
+  background:#fef2f2;
+  color:#dc2626;
+}
+
+.btn-delete:hover{
+  background:#fee2e2;
+}
+
+/* EMPTY */
+
+.empty{
+
+  background:white;
+
+  padding:40px;
+
+  text-align:center;
+
+  border-radius:24px;
+
+  color:#6b7280;
+
+  font-weight:600;
+}
+
+/* LOADING */
+
+.loading{
+
+  padding:40px;
+
+  text-align:center;
+
+  color:#6366f1;
+
+  font-weight:700;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .page{
+    margin-left:0;
+    padding:20px;
+  }
+
+  .header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+  }
+
+}
+
+/* ========================= */
+/* PAGINATION MODERNE */
+/* ========================= */
+
+.pagination-container {
+
+  margin-top: 35px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 20px;
+
+}
+
+/* BUTTON BASE */
+.page-btn,
+.page-number {
+
+  border: none;
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition: all 0.25s ease;
+
+  border-radius: 12px;
+
+}
+
+/* ARROWS */
+.page-btn {
+
+  width: 42px;
+  height: 42px;
+
+  background: white;
+
+  color: #6366f1;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+
+}
+
+.page-btn:hover {
+
+  background: #6366f1;
+  color: white;
+
+  transform: translateY(-2px);
+
+}
+
+.page-btn:disabled {
+
+  opacity: 0.4;
+  cursor: not-allowed;
+
+  transform: none;
+
+}
+
+/* NUMBERS */
+.page-number {
+
+  width: 42px;
+  height: 42px;
+
+  background: white;
+
+  color: #374151;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+
+}
+
+.page-number:hover {
+
+  background: #eef2ff;
+  color: #6366f1;
+
+  transform: translateY(-2px);
+
+}
+
+/* ACTIVE PAGE */
+.active-page {
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  ) !important;
+
+  color: white !important;
+
+  box-shadow: 0 10px 25px rgba(99,102,241,0.35);
+
+}
+
+/* RESPONSIVE */
+@media(max-width: 768px) {
+
+  .pagination-container {
+    gap: 6px;
+  }
+
+  .page-btn,
+  .page-number {
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+  }
+
+}/* ========================= */
+/* PAGINATION MODERNE */
+/* ========================= */
+
+.pagination-container {
+
+  margin-top: 35px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 20px;
+
+}
+
+/* BUTTON BASE */
+.page-btn,
+.page-number {
+
+  border: none;
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition: all 0.25s ease;
+
+  border-radius: 12px;
+
+}
+
+/* ARROWS */
+.page-btn {
+
+  width: 42px;
+  height: 42px;
+
+  background: white;
+
+  color: #6366f1;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+
+}
+
+.page-btn:hover {
+
+  background: #6366f1;
+  color: white;
+
+  transform: translateY(-2px);
+
+}
+
+.page-btn:disabled {
+
+  opacity: 0.4;
+  cursor: not-allowed;
+
+  transform: none;
+
+}
+
+/* NUMBERS */
+.page-number {
+
+  width: 42px;
+  height: 42px;
+
+  background: white;
+
+  color: #374151;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+
+}
+
+.page-number:hover {
+
+  background: #eef2ff;
+  color: #6366f1;
+
+  transform: translateY(-2px);
+
+}
+
+/* ACTIVE PAGE */
+.active-page {
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  ) !important;
+
+  color: white !important;
+
+  box-shadow: 0 10px 25px rgba(99,102,241,0.35);
+
+}
+
+/* RESPONSIVE */
+@media(max-width: 768px) {
+
+  .pagination-container {
+    gap: 6px;
+  }
+
+  .page-btn,
+  .page-number {
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+  }
+
+}

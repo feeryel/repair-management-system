@@ -1,41 +1,103 @@
-<div class="container mt-4">
+<div class="page">
 
-  <h2>Liste des factures</h2>
+  <!-- HEADER -->
+  <div class="header">
 
- <a [routerLink]="['/factures/add']" class="btn btn-primary mb-3">
-  Ajouter
-</a>
+    <div>
+      <h2>Factures Dashboard</h2>
+      <p>Gestion avancée des factures de réparation</p>
+    </div>
 
-  <table class="table table-bordered">
+    <div class="actions">
 
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Montant Hors taxe</th>
-        <th>Montant TVA</th>
-          <th>Timbre Fiscale</th>
-        <th>Montant Total</th>
-<th>Reparation Id</th>
-      </tr>
-    </thead>
+      <a [routerLink]="['/factures/add']" class="btn-add">
+        + Nouvelle facture
+      </a>
 
-    <tbody>
 
-      <tr *ngFor="let f of factures">
 
-        <td>{{f.id}}</td>
-        <td>{{f.date}}</td>
-        <td>{{f.montantHT}}</td>
-        <td>{{f.montantTVA}}</td>
-        <td>{{f.timbreFiscale}}</td>
-        <td>{{f.montantTotal}}</td>
-        <td>{{f.ReparationId}}</td>
+    </div>
 
-      </tr>
+  </div>
 
-    </tbody>
+  <!-- STATS -->
+  <div class="stats">
 
-  </table>
+    <div class="stat-card">
+      <h3>{{ factures.length }}</h3>
+      <p>Total Factures</p>
+    </div>
+
+    <div class="stat-card green">
+      <h3>{{ getTotal() }} TND</h3>
+      <p>Montant global</p>
+    </div>
+
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-box">
+    <input type="text"
+           placeholder="🔎 Rechercher une facture..."
+           [(ngModel)]="searchText">
+  </div>
+
+  <!-- TABLE -->
+  <div class="card">
+
+    <table class="table">
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>HT</th>
+          <th>TVA</th>
+          <th>Timbre</th>
+          <th>Total</th>
+          <th>Réparation ID</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+<tr *ngFor="let f of filteredFactures()"
+    [hidden]="!isValidFacture(f)">
+          <td><span class="id">{{ f.id }}</span></td>
+
+          <td>{{ f.date | date:'dd/MM/yyyy' }}</td>
+
+          <td>{{ f.montantHT }} TND</td>
+          <td>{{ f.montantTVA }} TND</td>
+          <td>{{ f.timbreFiscale }} TND</td>
+
+          <td>
+            <span class="badge total">
+              {{ f.montantTotal }} TND
+            </span>
+          </td>
+
+          <td>{{ f.ReparationId }}</td>
+
+          <!-- PDF per facture -->
+          <td>
+            <button class="btn-pdf-small" (click)="exportPDF(f)">
+              PDF
+            </button>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <!-- EMPTY -->
+    <div class="empty" *ngIf="factures.length === 0">
+      📭 Aucune facture trouvée
+    </div>
+
+  </div>
 
 </div>

@@ -25,4 +25,7 @@ export class ReparationService {
   delete(id:number) {
     return this.http.delete(`${this.api}/${id}`);
   }
+  getTechniciens() {
+  return this.http.get<any[]>('http://localhost:3000/utilisateurs/techniciens');
+}
 }

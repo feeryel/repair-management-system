@@ -1,59 +1,174 @@
-<div class="container mt-5">
+<div class="page">
 
-  <div class="card shadow">
+  <div class="form-container">
 
-    <div class="card-header bg-primary text-white">
+    <!-- HEADER -->
+    <div class="form-header">
 
-      Ajouter Demande
+      <div>
+        <h2>{{ id ? 'Modifier Demande' : 'Nouvelle Demande' }}</h2>
+        <p>Gestion intelligente des demandes de réparation</p>
+      </div>
+
+      <div class="header-icon">🛠</div>
 
     </div>
 
-    <div class="card-body">
+    <!-- FORM -->
+    <div class="form-card">
 
-      <form (ngSubmit)="save()">
+<form #f="ngForm" (ngSubmit)="save(f)">
+        <!-- DATES -->
+        <div class="grid-2">
 
-        <div class="mb-3">
+          <!-- DATE DEPOT -->
+          <div class="input-group-custom">
+            <label>Date Dépôt</label>
 
-          <label>Date Dépôt</label>
+            <div class="input-box">
+              <input type="date"
+                     [(ngModel)]="demande.dateDepot"
+                     name="dateDepot"
+                     required
+                     #dateDepot="ngModel">
+            </div>
 
-          <input
-            type="date"
-            class="form-control"
-            [(ngModel)]="demande.dateDepot"
-            name="dateDepot">
+            <div class="error" *ngIf="dateDepot.invalid && dateDepot.touched">
+              <small>Champ obligatoire</small>
+            </div>
+          </div>
+
+          <!-- DATE PREVUE -->
+          <div class="input-group-custom">
+            <label>Date Prévue</label>
+
+            <div class="input-box">
+              <input type="date"
+                     [(ngModel)]="demande.datePrevueRep"
+                     name="datePrevueRep"
+                     required
+                     #datePrevue="ngModel">
+            </div>
+
+            <div class="error" *ngIf="datePrevue.invalid && datePrevue.touched">
+              <small>Champ obligatoire</small>
+            </div>
+          </div>
 
         </div>
 
-        <div class="mb-3">
-
-          <label>Date Prévue</label>
-
-          <input
-            type="date"
-            class="form-control"
-            [(ngModel)]="demande.datePrevueRep"
-            name="datePrevueRep">
-
-        </div>
-
-        <div class="mb-3">
-
+        <!-- SYMPTOMES -->
+        <div class="input-group-custom">
           <label>Symptômes</label>
 
-          <textarea
-            class="form-control"
-            [(ngModel)]="demande.symptomesPanne"
-            name="symptomesPanne">
+          <div class="input-box">
+            <textarea rows="5"
+                      [(ngModel)]="demande.symptomesPanne"
+                      name="symptomesPanne"
+                      required
+                      #symptomes="ngModel"></textarea>
+          </div>
 
-          </textarea>
-
+          <div class="error" *ngIf="symptomes.invalid && symptomes.touched">
+            <small>Champ obligatoire</small>
+          </div>
         </div>
 
-        <button class="btn btn-success w-100">
+        <!-- EXTRA -->
+        <div class="extra-grid">
 
-          Enregistrer
+ <!-- APPAREIL ID -->
+<div class="field-card">
 
-        </button>
+  <label>Appareil ID</label>
+
+  <input
+    type="number"
+    [(ngModel)]="demande.appareilId"
+    name="appareilId"
+    required
+    min="1"
+    #appareilId="ngModel">
+
+  <div class="error" *ngIf="appareilId.invalid && appareilId.touched">
+
+    <small *ngIf="appareilId.errors?.['required']">
+      L'id de l'appareil est obligatoire
+    </small>
+
+    <small *ngIf="appareilId.errors?.['min']">
+      L'id ne peut pas être négatif ou 0
+    </small>
+
+  </div>
+
+</div>
+
+<!-- ETIQUETTE ID -->
+<div class="field-card">
+
+  <label>Étiquette ID</label>
+
+  <input
+    type="number"
+    [(ngModel)]="demande.idEtiquette"
+    name="idEtiquette"
+    required
+    min="1"
+    #idEtiquette="ngModel">
+
+  <div class="error" *ngIf="idEtiquette.invalid && idEtiquette.touched">
+
+    <small *ngIf="idEtiquette.errors?.['required']">
+      L'id étiquette est obligatoire
+    </small>
+
+    <small *ngIf="idEtiquette.errors?.['min']">
+      L'id ne peut pas être négatif ou 0
+    </small>
+
+  </div>
+
+</div>
+        </div>
+
+        <!-- ETAT -->
+        <div class="input-group-custom">
+          <label>État</label>
+
+          <div class="input-box">
+            <select [(ngModel)]="demande.etat"
+                    name="etat"
+                    required
+                    #etat="ngModel">
+
+              <option value="En attente">En attente</option>
+              <option value="En cours">En cours</option>
+              <option value="Terminée">Terminée</option>
+
+            </select>
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+
+          <button type="button"
+                  class="btn-cancel"
+                  routerLink="/demandes">
+            Annuler
+          </button>
+
+        <button
+  type="submit"
+  class="btn-save"
+  [disabled]="f.invalid || loading">
+
+  {{ id ? 'Modifier' : 'Enregistrer' }}
+
+</button>
+
+        </div>
 
       </form>
 

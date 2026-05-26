@@ -1,65 +1,139 @@
-<div class="container mt-4">
+<div class="page">
 
-  <h2>Liste des réparations</h2>
+  <!-- HEADER -->
+  <div class="header">
 
- <button
-  class="btn btn-primary mb-3"
-  [routerLink]="['/reparations/form']">
+    <div>
+      <h2>Centre de Réparations</h2>
+      <p>Suivi technique des interventions et diagnostics</p>
+    </div>
 
-  Ajouter
+    <button class="btn-add" [routerLink]="['/reparations/form']">
+      + Nouvelle réparation
+    </button>
 
-</button>
+  </div>
 
-  <table class="table table-bordered table-striped">
+  <!-- SEARCH + FILTER -->
+  <div class="toolbar">
 
-    <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Description</th>
-        <th>Date fin</th>
-        <th>Temps Main d'oeuvre</th>
-        <th>Réparable</th>
-        <th>Status</th>
-        <th>Demande ID</th>
-        <th>Technicien ID</th>
-      </tr>
-    </thead>
+    <input
+      type="text"
+      placeholder="🔎 Rechercher réparation..."
+      [(ngModel)]="searchText"
+      (ngModelChange)="currentPage = 1"
+      class="search">
 
-    <tbody>
+    <div class="filters">
 
-      <tr *ngFor="let r of reparations">
+      <button (click)="setFilter('all')" [class.active]="filter==='all'">
+        Toutes
+      </button>
 
-        <td>{{ r.id }}</td>
+      <button (click)="setFilter('PENDING')" [class.active]="filter==='PENDING'">
+        PENDING
+      </button>
 
-        <td>{{ r.descriptionReparation }}</td>
+      <button (click)="setFilter('IN_PROGRESS')" [class.active]="filter==='IN_PROGRESS'">
+        IN PROGRESS
+      </button>
 
-        <td>{{ r.dateFinRep }}</td>
+      <button (click)="setFilter('DONE')" [class.active]="filter==='DONE'">
+        DONE
+      </button>
 
-        <td>{{ r.tempsMainOeuvre }} h</td>
+      <button (click)="setFilter('FAILED')" [class.active]="filter==='FAILED'">
+        FAILED
+      </button>
 
-        <td>
-          {{ r.estReparable ? 'Oui' : 'Non' }}
-        </td>
+    </div>
 
-        <td>
-          <span class="badge bg-success" *ngIf="r.status === 'DONE'">
-            DONE
-          </span>
+  </div>
 
-          <span class="badge bg-warning text-dark"
-                *ngIf="r.status === 'IN_PROGRESS'">
-            IN_PROGRESS
-          </span>
-        </td>
+  <!-- GRID -->
+  <div class="repair-grid">
 
-        <td>{{ r.demandeId }}</td>
+    <div class="repair-card"
+         *ngFor="let r of paginatedReparations">
 
-        <td>{{ r.technicienId }}</td>
+      <div class="status-bar" [ngClass]="r.status"></div>
 
-      </tr>
+      <div class="card-header">
 
-    </tbody>
+        <div class="id-box">#{{ r.id }}</div>
 
-  </table>
+        <div class="status-pill" [ngClass]="r.status">
+          {{ r.status }}
+        </div>
+
+      </div>
+
+      <div class="card-body">
+
+        <div class="title">
+          {{ r.descriptionReparation }}
+        </div>
+
+        <div class="grid-info">
+
+          <div>
+            <span>📅 Fin</span>
+            <strong>{{ r.dateFinRep }}</strong>
+          </div>
+
+          <div>
+            <span>⏱ Temps</span>
+            <strong>{{ r.tempsMainOeuvre }}h</strong>
+          </div>
+
+          <div>
+            <span>🔧 Réparable</span>
+            <strong>{{ r.estReparable ? 'Oui' : 'Non' }}</strong>
+          </div>
+
+          <div>
+            <span>📌 Demande</span>
+            <strong>#{{ r.demandeId }}</strong>
+          </div>
+
+          <div>
+            <span>👨‍🔧 Tech</span>
+            <strong>#{{ r.technicienId }}</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pagination-container" *ngIf="totalPages > 1">
+
+    <button class="page-btn"
+            (click)="changePage(currentPage - 1)"
+            [disabled]="currentPage === 1">
+      ‹
+    </button>
+
+    <button class="page-number"
+            *ngFor="let page of [].constructor(totalPages); let i = index"
+            (click)="changePage(i + 1)"
+            [class.active-page]="currentPage === i + 1">
+
+      {{ i + 1 }}
+
+    </button>
+
+    <button class="page-btn"
+            (click)="changePage(currentPage + 1)"
+            [disabled]="currentPage === totalPages">
+      ›
+
+    </button>
+
+  </div>
 
 </div>
