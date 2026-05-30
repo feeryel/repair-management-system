@@ -1,32 +1,23 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
- @Component({
+
+import { AuthService, Role } from '../../../core/services/auth.service';
+
+@Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule,
-    CommonModule,
-
-    MatCardModule,
-    MatProgressSpinnerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule],
+  imports: [
+    FormsModule,
+    CommonModule
+  ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
 
-  loading: boolean = false;
+  loading = false;
 
   loginData = {
     login: '',
@@ -35,12 +26,25 @@ export class LoginComponent {
 
   errorMessage = '';
 
+  /** Contrôle la visibilité du mot de passe */
+  showPassword = false;
+
   constructor(
     private authService: AuthService,
     private router: Router
   ) {}
 
-  login() {
+  // ─────────────────────────────────────────
+  // Soumission du formulaire
+  // ─────────────────────────────────────────
+
+  login(): void {
+
+    // Validation basique côté client
+    if (!this.loginData.login.trim() || !this.loginData.motDePasse.trim()) {
+      this.errorMessage = 'Veuillez remplir tous les champs.';
+      return;
+    }
 
     this.loading = true;
     this.errorMessage = '';
@@ -51,21 +55,59 @@ export class LoginComponent {
 
         this.loading = false;
 
-        this.authService.saveToken(res.token);
+        // ✅ CORRECTION : sauvegarde token + rôle + userId + login
+        // en une seule opération atomique via saveSession()
+        //
+        // Cas couverts :
+        //   • Backend renvoie { token, role, userId, login }  → tout sauvegardé directement
+        //   • Backend renvoie { token } seulement             → rôle extrait du payload JWT
+        this.authService.saveSession(
+          res.token,
+          res.role,
+          res.userId,
+          res.login ?? this.loginData.login,
+          res.clientId
+        );
 
-        this.router.navigate(['/dashboard']);
-
+        // Redirection selon le rôle persisté
+        this.redirectByRole();
       },
 
-      error: (err) => {
+      error: () => {
 
         this.loading = false;
-
-        this.errorMessage = "Login incorrect ❌";
+        this.errorMessage = 'Login ou mot de passe incorrect ❌';
 
       }
 
     });
 
   }
+
+  // ─────────────────────────────────────────
+  // Redirection selon le rôle
+  // ─────────────────────────────────────────
+
+  private redirectByRole(): void {
+    const destinations: Record<string, string> = {
+      [Role.ADMIN]:                  '/admin/dashboard',
+      [Role.CLIENT]:                 '/client/dashboard',
+      [Role.RECEPTION]:  '/reception/dashboard',
+      [Role.TECHNICIEN]:             '/technicien/dashboard',
+      [Role.RESPONSABLE_REPARATION]: '/reparation/dashboard',
+      [Role.ACHAT_STOCK]:'/stock/dashboard',
+    };
+    const role = this.authService.getRole() ?? '';
+    const dest = destinations[role] ?? '/dashboard';
+    this.router.navigate([dest]);
+  }
+
+  // ─────────────────────────────────────────
+  // Toggle visibilité mot de passe
+  // ─────────────────────────────────────────
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+
 }

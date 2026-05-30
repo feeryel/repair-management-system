@@ -1,31 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FactureService } from '../../core/services/facture.service';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-garantie',
-    standalone: true,
-
-    imports: [CommonModule],
-
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './garantie.component.html',
   styleUrls: ['./garantie.component.css']
 })
 export class GarantieComponent implements OnInit {
 
   facture: any;
+  apiUrl = 'https://bountiful-emphases-phantom.ngrok-free.dev';
 
   constructor(
     private route: ActivatedRoute,
-    private service: FactureService
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
-
-    this.service.getFactureById(id).subscribe(res => {
-      this.facture = res;
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
+      if (!isNaN(id)) {
+        this.http.get<any>(`${this.apiUrl}/public/garantie/${id}`).subscribe({
+          next: (res) => {
+            this.facture = res;
+          },
+          error: (err) => console.error('Erreur chargement garantie:', err)
+        });
+      }
     });
   }
 
@@ -33,3 +38,5 @@ export class GarantieComponent implements OnInit {
     return this.facture?.Reparation?.estReparable === true;
   }
 }
+
+

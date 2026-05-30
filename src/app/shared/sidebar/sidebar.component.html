@@ -1,150 +1,44 @@
 <div class="sidebar d-flex flex-column p-3">
 
+  <!-- LOGO + BRAND -->
   <div class="logo-section text-center mb-4">
-
     <div class="logo-circle mb-2">
       <i class="bi bi-tools"></i>
     </div>
-
-    <h4 class="title">
-      Repair Manager
-    </h4>
-
-    <small class="subtitle">
-      Atelier de Réparation
-    </small>
-
+    <h4 class="title">TechDoctor</h4>
+    <small class="subtitle">Atelier de Réparation</small>
   </div>
 
-  <ul class="nav flex-column">
+  <!-- USER CHIP -->
+  <div class="user-chip mb-4">
+    <div class="user-av">{{ (userLogin || '?').charAt(0).toUpperCase() }}</div>
+    <div class="user-info">
+      <span class="user-name">{{ userLogin }}</span>
+      <span class="user-role">{{ roleLabel }}</span>
+    </div>
+  </div>
 
-    <li class="nav-item">
-
-      <a routerLink="/dashboard"
+  <!-- NAV LINKS -->
+  <ul class="nav flex-column flex-grow-1">
+    <li class="nav-item" *ngFor="let item of navItems">
+      <a [routerLink]="item.route"
          routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{ exact: item.route.endsWith('dashboard') }"
          class="nav-link">
-
-        <i class="bi bi-grid-1x2-fill"></i>
-
-        <span>Dashboard</span>
-
+        <i class="bi {{ item.icon }}"></i>
+        <span>{{ item.label }}</span>
       </a>
-
     </li>
-
-    <li class="nav-item">
-
-      <a routerLink="/clients"
-         routerLinkActive="active-link"
-         class="nav-link">
-
-        <i class="bi bi-people-fill"></i>
-
-        <span>Clients</span>
-
-      </a>
-
-    </li>
-
-    <li class="nav-item">
-
-      <a routerLink="/appareils"
-         routerLinkActive="active-link"
-         class="nav-link">
-
-        <i class="bi bi-laptop-fill"></i>
-
-        <span>Appareils</span>
-
-      </a>
-
-    </li>
-
-    <li class="nav-item">
-
-      <a routerLink="/demandes"
-         routerLinkActive="active-link"
-         class="nav-link">
-
-        <i class="bi bi-clipboard-check-fill"></i>
-
-        <span>Demandes</span>
-
-      </a>
-
-    </li>
-
-    <li class="nav-item">
-
-      <a routerLink="/planning"
-         routerLinkActive="active-link"
-         class="nav-link">
-
-        <i class="bi bi-calendar-event-fill"></i>
-
-        <span>Planning</span>
-
-      </a>
-
-    </li>
-
-    <li class="nav-item">
-
-      <a routerLink="/reparations"
-         routerLinkActive="active-link"
-         class="nav-link">
-
-        <i class="bi bi-wrench-adjustable-circle-fill"></i>
-
-        <span>Réparations</span>
-
-      </a>
-
-    </li>
-
-    <li class="nav-item">
-
-      <a routerLink="/factures"
-         routerLinkActive="active-link"
-         class="nav-link">
-
-        <i class="bi bi-receipt-cutoff"></i>
-
-        <span>Factures</span>
-
-      </a>
-
-    </li>
-
-    <li class="nav-item">
-
-      <a routerLink="/pieces"
-         routerLinkActive="active-link"
-         class="nav-link">
-
-        <i class="bi bi-box-seam-fill"></i>
-
-        <span>Pièces</span>
-
-      </a>
-
-    </li>
-
   </ul>
 
- <div class="mt-auto pt-4">
-
-  <div class="logout-box">
-
-    <button class="btn logout-btn w-100" (click)="logout()">
-
-      <i class="bi bi-box-arrow-right"></i>
-
-      Déconnexion
-
-    </button>
-
+  <!-- LOGOUT -->
+  <div class="mt-auto pt-4">
+    <div class="logout-box">
+      <button class="btn logout-btn w-100" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        Déconnexion
+      </button>
+    </div>
   </div>
-
 
 </div>

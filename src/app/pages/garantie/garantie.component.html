@@ -11,25 +11,54 @@
     <!-- TITLE -->
     <h1>Certificat de Garantie</h1>
 
-    <p class="intro">
+    <p class="intro" *ngIf="facture">
       Ce document certifie que votre appareil bénéficie d’une garantie de réparation.
     </p>
 
-    <!-- MAIN BOX -->
-    <div class="card">
+    <!-- INFO CLIENT -->
+    <div class="card" *ngIf="facture?.Reparation?.Demande?.Appareil?.Client">
+      <h3>Informations Client</h3>
+      <div class="row">
+        <span class="label">Nom</span>
+        <span class="value">{{ facture.Reparation.Demande.Appareil.Client.nom }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Téléphone</span>
+        <span class="value">{{ facture.Reparation.Demande.Appareil.Client.numTel }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Email</span>
+        <span class="value">{{ facture.Reparation.Demande.Appareil.Client.email }}</span>
+      </div>
+    </div>
+
+    <!-- INFO APPAREIL -->
+    <div class="card" *ngIf="facture?.Reparation?.Demande?.Appareil">
+      <h3>Appareil</h3>
+      <div class="row">
+        <span class="label">Marque & Modèle</span>
+        <span class="value">{{ facture.Reparation.Demande.Appareil.marque }} {{ facture.Reparation.Demande.Appareil.modele }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Numéro de série</span>
+        <span class="value">{{ facture.Reparation.Demande.Appareil.numSerie }}</span>
+      </div>
+    </div>
+
+    <!-- GARANTIE -->
+    <div class="card" *ngIf="isValidGarantie()">
+      <h3>Détails de Garantie</h3>
       <div class="row">
         <span class="label">✔ Durée de garantie</span>
         <span class="value highlight">30 JOURS</span>
       </div>
-
       <div class="row">
         <span class="label">✔ Type de garantie</span>
         <span class="value">Réparation et pièces remplacées</span>
       </div>
-
       <div class="row">
         <span class="label">✔ Validité</span>
-        <span class="value">À partir de la date de réparation</span>
+        <span class="value">À partir du {{ facture.date | date: ‘dd/MM/yyyy’ }}</span>
       </div>
     </div>
 
@@ -45,7 +74,7 @@
 
     <!-- FOOTER -->
     <div class="footer">
-      TECHDOCTOR © 2026 - Tous droits réservés
+      Facture #{{ facture?.id }} - TECHDOCTOR © 2026 - Tous droits réservés
     </div>
 
   </div>

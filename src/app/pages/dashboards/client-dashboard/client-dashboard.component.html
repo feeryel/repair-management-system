@@ -1,0 +1,356 @@
+<div class="dash-page">
+
+  <!-- ── HEADER ───────────────────────────────────────────────────────────── -->
+  <div class="dash-header">
+    <div class="dash-header-left">
+      <div class="dash-avatar client-av"><i class="bi bi-person-circle"></i></div>
+      <div>
+        <h2 class="dash-title">Mon Espace</h2>
+        <p class="dash-sub">Bienvenue, <strong>{{ login }}</strong></p>
+      </div>
+    </div>
+    <!-- Badge notifications -->
+    <div class="notif-badge-wrap" *ngIf="notifications.length > 0" (click)="setTab('notifications')">
+      <i class="bi bi-bell-fill notif-bell"></i>
+      <span class="notif-badge">{{ notifications.length }}</span>
+    </div>
+  </div>
+
+  <!-- ── ERREUR ────────────────────────────────────────────────────────────── -->
+  <div class="alert-box" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+  </div>
+
+  <!-- ── CHARGEMENT ────────────────────────────────────────────────────────── -->
+  <div class="loading-row" *ngIf="loading && !error">
+    <div class="spinner"></div><span>Chargement…</span>
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <!-- ── KPI ──────────────────────────────────────────────────────────────── -->
+    <div class="kpi-row">
+
+      <div class="kpi-card kpi-blue" (click)="setTab('reparations')" [class.kpi-active]="activeTab==='reparations'">
+        <div class="kpi-icon"><i class="bi bi-tools"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-label">En cours</span>
+          <span class="kpi-value">{{ enCours + enAttente }}</span>
+        </div>
+        <div class="kpi-glow"></div>
+      </div>
+
+      <div class="kpi-card kpi-green" (click)="setTab('historique')" [class.kpi-active]="activeTab==='historique'">
+        <div class="kpi-icon"><i class="bi bi-check-circle-fill"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-label">Terminées</span>
+          <span class="kpi-value">{{ terminees }}</span>
+        </div>
+        <div class="kpi-glow"></div>
+      </div>
+
+      <div class="kpi-card kpi-purple" (click)="setTab('factures')" [class.kpi-active]="activeTab==='factures'">
+        <div class="kpi-icon"><i class="bi bi-receipt-cutoff"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-label">Factures</span>
+          <span class="kpi-value">{{ totalFac }}</span>
+        </div>
+        <div class="kpi-glow"></div>
+      </div>
+
+      <div class="kpi-card kpi-orange" (click)="setTab('notifications')" [class.kpi-active]="activeTab==='notifications'">
+        <div class="kpi-icon"><i class="bi bi-bell-fill"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-label">Notifications</span>
+          <span class="kpi-value">{{ notifications.length }}</span>
+        </div>
+        <div class="kpi-glow"></div>
+      </div>
+
+    </div>
+
+    <!-- ── TABS ──────────────────────────────────────────────────────────────── -->
+    <div class="tabs-bar">
+      <button class="tab-btn" [class.active]="activeTab==='reparations'"  (click)="setTab('reparations')">
+        <i class="bi bi-tools me-1"></i> État réparation
+      </button>
+      <button class="tab-btn" [class.active]="activeTab==='historique'"   (click)="setTab('historique')">
+        <i class="bi bi-clock-history me-1"></i> Historique
+      </button>
+      <button class="tab-btn" [class.active]="activeTab==='factures'"     (click)="setTab('factures')">
+        <i class="bi bi-receipt-cutoff me-1"></i> Devis & Factures
+      </button>
+      <button class="tab-btn" [class.active]="activeTab==='notifications'" (click)="setTab('notifications')">
+        <i class="bi bi-bell me-1"></i> Notifications
+        <span class="tab-badge" *ngIf="notifications.length > 0">{{ notifications.length }}</span>
+      </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- UC2 — ÉTAT DES RÉPARATIONS EN COURS                                  -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <div class="dash-card" *ngIf="activeTab === 'reparations'">
+      <div class="dash-card-header">
+        <h5><i class="bi bi-tools me-2"></i>État de mes réparations</h5>
+        <span class="badge-count">{{ reparationsEnCours.length }}</span>
+      </div>
+      <div class="rep-list">
+        <div class="rep-item" *ngFor="let r of reparationsEnCours">
+          <div class="rep-icon-wrap">
+            <div class="rep-icon"><i class="bi bi-laptop"></i></div>
+          </div>
+          <div class="rep-info">
+            <p class="rep-title">{{ getAppareil(r) }}</p>
+            <p class="rep-desc">{{ r.descriptionReparation || '—' }}</p>
+            <p class="rep-date" *ngIf="r.dateFinRep">
+              <i class="bi bi-calendar3 me-1"></i>Fin prévue : {{ r.dateFinRep | date:'dd/MM/yyyy' }}
+            </p>
+          </div>
+          <div class="rep-status">
+            <span class="status-chip large" [ngClass]="statusClass(r.status)">
+              <i class="bi" [class.bi-clock-history]="r.status==='IN_PROGRESS'"
+                            [class.bi-hourglass-split]="r.status!=='IN_PROGRESS'"></i>
+              {{ statusLabel(r.status) }}
+            </span>
+          </div>
+        </div>
+        <div *ngIf="reparationsEnCours.length === 0" class="empty-msg">
+          <i class="bi bi-check-circle-fill text-success fs-2"></i>
+          <span>Aucune réparation en cours</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- UC3 — HISTORIQUE RÉPARATIONS TERMINÉES                               -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <div class="dash-card" *ngIf="activeTab === 'historique'">
+      <div class="dash-card-header">
+        <h5><i class="bi bi-clock-history me-2"></i>Historique réparations</h5>
+        <span class="badge-count">{{ historiqueReparations.length }}</span>
+      </div>
+      <div class="rep-list">
+        <div class="rep-item" *ngFor="let r of historiqueReparations">
+          <div class="rep-icon-wrap">
+            <div class="rep-icon done-icon"><i class="bi bi-check-circle-fill"></i></div>
+          </div>
+          <div class="rep-info">
+            <p class="rep-title">{{ getAppareil(r) }}</p>
+            <p class="rep-desc">{{ r.descriptionReparation || '—' }}</p>
+            <p class="rep-date">
+              <i class="bi bi-calendar-check me-1"></i>
+              Terminée le {{ r.dateFinRep | date:'dd/MM/yyyy' }}
+            </p>
+          </div>
+          <span class="status-chip large st-done">
+            <i class="bi bi-check2-circle me-1"></i>Terminée
+          </span>
+        </div>
+        <div *ngIf="historiqueReparations.length === 0" class="empty-msg">
+          <i class="bi bi-inbox fs-2"></i>
+          <span>Aucun historique disponible</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- UC4 — DEVIS ET FACTURES                                              -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <div class="dash-card" *ngIf="activeTab === 'factures'">
+      <div class="dash-card-header">
+        <h5><i class="bi bi-receipt-cutoff me-2"></i>Devis & Factures</h5>
+        <div class="header-right">
+          <span class="badge-count">{{ totalFac }}</span>
+          <span class="total-tag" *ngIf="montantTotal > 0">
+            Total : <strong>{{ montantTotal | number:'1.2-2' }} DT</strong>
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="loadingFactures" class="loading-row">
+        <div class="spinner small"></div><span>Chargement…</span>
+      </div>
+
+      <div class="fac-list" *ngIf="!loadingFactures">
+        <div class="fac-item" *ngFor="let f of factures">
+          <div class="fac-icon"><i class="bi bi-file-earmark-text"></i></div>
+          <div class="fac-info">
+            <p class="fac-num">Facture N° {{ f.numero || ('#' + f.id) }}</p>
+            <p class="fac-appareil">{{ getFactureAppareil(f) }}</p>
+            <p class="fac-date" *ngIf="f.date">
+              <i class="bi bi-calendar3 me-1"></i>{{ f.date | date:'dd/MM/yyyy' }}
+            </p>
+          </div>
+          <div class="fac-amounts">
+            <span class="fac-ht"   *ngIf="f.montantHT">HT : {{ f.montantHT | number:'1.2-2' }} DT</span>
+            <span class="fac-total">{{ f.montantTotal | number:'1.2-2' }} DT</span>
+          </div>
+        </div>
+        <div *ngIf="factures.length === 0" class="empty-msg">
+          <i class="bi bi-receipt fs-2"></i>
+          <span>Aucune facture disponible</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- UC5 — NOTIFICATIONS (réparations DONE)                               -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <div class="dash-card" *ngIf="activeTab === 'notifications'">
+      <div class="dash-card-header">
+        <h5><i class="bi bi-bell-fill me-2"></i>Notifications</h5>
+        <span class="badge-count notif-badge-cnt" *ngIf="notifications.length > 0">
+          {{ notifications.length }} nouvelle(s)
+        </span>
+      </div>
+      <div class="notif-list">
+        <div class="notif-item" *ngFor="let r of notifications">
+          <div class="notif-dot done-dot"></div>
+          <div class="notif-body">
+            <p class="notif-title">
+              <i class="bi bi-check-circle-fill me-2 text-success"></i>
+              Votre réparation est prête !
+            </p>
+            <p class="notif-msg">
+              <strong>{{ getAppareil(r) }}</strong>
+              <ng-container *ngIf="r.dateFinRep">
+                — terminée le {{ r.dateFinRep | date:'dd/MM/yyyy' }}
+              </ng-container>
+            </p>
+            <p class="notif-hint">
+              <i class="bi bi-envelope me-1"></i>
+              Un email et/ou SMS vous a été envoyé(e) automatiquement.
+            </p>
+          </div>
+          <span class="status-chip st-done">Prête</span>
+        </div>
+        <div *ngIf="notifications.length === 0" class="empty-msg">
+          <i class="bi bi-bell-slash fs-2"></i>
+          <span>Aucune notification</span>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>
+
+<style>
+/* ── Layout ──────────────────────────────────────────────────────────────────── */
+.dash-page { padding:2rem; background:#f4f6fb; min-height:100vh; margin-left:260px; }
+
+/* ── Header ──────────────────────────────────────────────────────────────────── */
+.dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; }
+.dash-header-left { display:flex; align-items:center; gap:1rem; }
+.dash-avatar { width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem; }
+.client-av { background:linear-gradient(135deg,#2563eb,#60a5fa); color:#fff; }
+.dash-title { font-size:1.5rem; font-weight:700; margin:0; color:#1e293b; }
+.dash-sub   { margin:0; color:#6b7280; font-size:.9rem; }
+
+/* ── Bell badge ──────────────────────────────────────────────────────────────── */
+.notif-badge-wrap { position:relative; cursor:pointer; padding:.5rem; }
+.notif-bell  { font-size:1.5rem; color:#f59e0b; }
+.notif-badge { position:absolute; top:0; right:0; background:#dc2626; color:#fff;
+               font-size:.65rem; font-weight:700; border-radius:9999px;
+               width:18px; height:18px; display:flex; align-items:center; justify-content:center; }
+
+/* ── Alert ───────────────────────────────────────────────────────────────────── */
+.alert-box  { background:#fef2f2; border:1px solid #fecaca; color:#dc2626; border-radius:12px; padding:1rem 1.5rem; margin-bottom:1.5rem; }
+.loading-row{ display:flex; align-items:center; gap:1rem; padding:2rem; color:#6b7280; }
+.spinner    { width:24px;height:24px;border:3px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;animation:spin .7s linear infinite; }
+.spinner.small { width:18px; height:18px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── KPI ─────────────────────────────────────────────────────────────────────── */
+.kpi-row  { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:1.5rem; }
+.kpi-card { border-radius:16px; padding:1.25rem 1.5rem; display:flex; align-items:center; gap:1rem;
+            position:relative; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.08); cursor:pointer;
+            transition:transform .15s, box-shadow .15s; }
+.kpi-card:hover  { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,.13); }
+.kpi-card.kpi-active { outline:3px solid rgba(255,255,255,.7); transform:translateY(-3px); }
+.kpi-blue   { background:linear-gradient(135deg,#2563eb,#60a5fa); }
+.kpi-green  { background:linear-gradient(135deg,#059669,#34d399); }
+.kpi-purple { background:linear-gradient(135deg,#7c3aed,#a855f7); }
+.kpi-orange { background:linear-gradient(135deg,#d97706,#fbbf24); }
+.kpi-icon   { font-size:1.75rem; color:rgba(255,255,255,.85); }
+.kpi-body   { display:flex; flex-direction:column; }
+.kpi-label  { font-size:.75rem; color:rgba(255,255,255,.75); font-weight:500; text-transform:uppercase; letter-spacing:.5px; }
+.kpi-value  { font-size:1.85rem; font-weight:800; color:#fff; line-height:1.1; }
+.kpi-glow   { position:absolute;right:-16px;bottom:-16px;width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.1); }
+
+/* ── Tabs ────────────────────────────────────────────────────────────────────── */
+.tabs-bar { display:flex; gap:.5rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+.tab-btn  { display:flex; align-items:center; gap:.4rem; padding:.55rem 1.1rem;
+            border:none; border-radius:10px; background:#fff; color:#64748b;
+            font-weight:600; font-size:.875rem; cursor:pointer;
+            box-shadow:0 1px 6px rgba(0,0,0,.07); transition:all .15s; white-space:nowrap; }
+.tab-btn:hover  { background:#eff6ff; color:#2563eb; }
+.tab-btn.active { background:linear-gradient(135deg,#2563eb,#60a5fa); color:#fff; box-shadow:0 4px 14px rgba(37,99,235,.35); }
+.tab-badge { background:rgba(255,255,255,.3); color:#fff; font-size:.65rem;
+             font-weight:700; border-radius:999px; padding:.1rem .45rem; margin-left:.3rem; }
+.tab-btn:not(.active) .tab-badge { background:#fee2e2; color:#dc2626; }
+
+/* ── Cards ───────────────────────────────────────────────────────────────────── */
+.dash-card { background:#fff; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.07); overflow:hidden; }
+.dash-card-header { display:flex; align-items:center; justify-content:space-between;
+                    padding:1.25rem 1.5rem; border-bottom:1px solid #f1f5f9; flex-wrap:wrap; gap:.5rem; }
+.dash-card-header h5 { margin:0; font-weight:700; color:#1e293b; }
+.header-right { display:flex; align-items:center; gap:.75rem; }
+.badge-count { background:#eff6ff; color:#2563eb; font-size:.8rem; font-weight:700; padding:.2rem .65rem; border-radius:20px; }
+.notif-badge-cnt { background:#fee2e2; color:#dc2626; }
+.total-tag   { font-size:.875rem; color:#059669; font-weight:600; }
+
+/* ── Réparations list ────────────────────────────────────────────────────────── */
+.rep-list { padding:.5rem 0; }
+.rep-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem 1.5rem; border-bottom:1px solid #f8fafc; }
+.rep-item:last-child { border-bottom:none; }
+.rep-icon-wrap { flex-shrink:0; }
+.rep-icon  { width:42px;height:42px;border-radius:12px;background:#eff6ff;color:#2563eb;
+             display:flex;align-items:center;justify-content:center;font-size:1.1rem; }
+.done-icon { background:#d1fae5; color:#059669; }
+.rep-info  { flex:1; }
+.rep-title { margin:0; font-weight:700; font-size:.9rem; color:#1e293b; }
+.rep-desc  { margin:.2rem 0 0; font-size:.8rem; color:#6b7280; }
+.rep-date  { margin:.35rem 0 0; font-size:.75rem; color:#94a3b8; }
+.rep-status{ flex-shrink:0; }
+
+/* ── Factures list ───────────────────────────────────────────────────────────── */
+.fac-list { padding:.5rem 0; }
+.fac-item { display:flex; align-items:center; gap:1rem; padding:1rem 1.5rem; border-bottom:1px solid #f8fafc; }
+.fac-item:last-child { border-bottom:none; }
+.fac-icon  { width:42px;height:42px;border-radius:12px;background:#f5f3ff;color:#7c3aed;
+             display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0; }
+.fac-info  { flex:1; }
+.fac-num   { margin:0; font-weight:700; font-size:.9rem; color:#1e293b; }
+.fac-appareil { margin:.2rem 0 0; font-size:.8rem; color:#6b7280; }
+.fac-date  { margin:.2rem 0 0; font-size:.75rem; color:#94a3b8; }
+.fac-amounts { display:flex; flex-direction:column; align-items:flex-end; gap:.2rem; }
+.fac-ht    { font-size:.75rem; color:#94a3b8; }
+.fac-total { font-weight:700; color:#059669; font-size:.95rem; white-space:nowrap; }
+
+/* ── Notifications ───────────────────────────────────────────────────────────── */
+.notif-list { padding:.5rem 0; }
+.notif-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem 1.5rem; border-bottom:1px solid #f8fafc; }
+.notif-item:last-child { border-bottom:none; }
+.notif-dot  { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:.4rem; }
+.done-dot   { background:#059669; }
+.notif-body { flex:1; }
+.notif-title{ margin:0; font-weight:700; font-size:.875rem; color:#1e293b; display:flex; align-items:center; }
+.notif-msg  { margin:.25rem 0 0; font-size:.8rem; color:#374151; }
+.notif-hint { margin:.25rem 0 0; font-size:.75rem; color:#94a3b8; }
+
+/* ── Status chips ────────────────────────────────────────────────────────────── */
+.status-chip { padding:.25rem .75rem; border-radius:20px; font-size:.72rem; font-weight:700; white-space:nowrap; display:inline-flex; align-items:center; gap:.3rem; }
+.status-chip.large { padding:.35rem 1rem; font-size:.78rem; }
+.st-done     { background:#d1fae5; color:#059669; }
+.st-progress { background:#fef3c7; color:#d97706; }
+.st-pending  { background:#f1f5f9; color:#64748b; }
+
+/* ── Empty ───────────────────────────────────────────────────────────────────── */
+.empty-msg { text-align:center; color:#9ca3af; padding:2.5rem; display:flex; flex-direction:column; align-items:center; gap:.75rem; }
+.text-success { color:#059669; }
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media(max-width:900px){ .kpi-row{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:600px){ .kpi-row{grid-template-columns:1fr;} .dash-page{margin-left:0;padding:1rem;} }
+</style>

@@ -14,18 +14,32 @@ export class ReparationService {
     return this.http.get(this.api);
   }
 
-  create(data:any) {
+  getByClientId(clientId: number) {
+    return this.http.get<any[]>(`${this.api}/client/${clientId}`);
+  }
+
+  getOne(id: number) {
+    return this.http.get(`${this.api}/${id}`);
+  }
+
+  create(data: any) {
     return this.http.post(this.api, data);
   }
 
-  update(id:number, data:any) {
+  update(id: number, data: any) {
     return this.http.put(`${this.api}/${id}`, data);
   }
 
-  delete(id:number) {
+  updateStatus(id: number, status: string) {
+    return this.http.put(`${this.api}/${id}/status`, { status });
+  }
+
+  delete(id: number) {
     return this.http.delete(`${this.api}/${id}`);
   }
+
+  // ✅ URL corrigée : /users/techniciens/list (était /utilisateurs/techniciens)
   getTechniciens() {
-  return this.http.get<any[]>('http://localhost:3000/utilisateurs/techniciens');
-}
+    return this.http.get<any[]>('http://localhost:3000/users/techniciens/list');
+  }
 }

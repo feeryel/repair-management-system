@@ -1,74 +1,170 @@
 <div class="login-page">
 
+  <!-- ═══════════ BACKGROUND ANIMÉ ═══════════ -->
+  <div class="bg-layer">
+    <div class="grid-overlay"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <!-- Icônes flottantes thème réparation -->
+    <span class="fi fi-1"><i class="bi bi-tools"></i></span>
+    <span class="fi fi-2"><i class="bi bi-cpu"></i></span>
+    <span class="fi fi-3"><i class="bi bi-gear-wide-connected"></i></span>
+    <span class="fi fi-4"><i class="bi bi-wrench-adjustable"></i></span>
+    <span class="fi fi-5"><i class="bi bi-printer"></i></span>
+    <span class="fi fi-6"><i class="bi bi-laptop"></i></span>
+    <span class="fi fi-7"><i class="bi bi-motherboard"></i></span>
+    <span class="fi fi-8"><i class="bi bi-plugin"></i></span>
+  </div>
+
+  <!-- ═══════════ CARTE PRINCIPALE ═══════════ -->
   <div class="login-card">
 
-    <!-- LEFT DESIGN PANEL -->
+    <!-- ──────── PANNEAU GAUCHE ──────── -->
     <div class="login-left">
 
-      <div class="icon-box">
-        <i class="bi bi-tools"></i>
+      <div class="brand">
+        <div class="logo-wrap">
+          <div class="logo-glow"></div>
+          <div class="logo-ring"></div>
+          <div class="logo-box">
+            <i class="bi bi-tools"></i>
+          </div>
+        </div>
+        <h1 class="brand-name">TechDoctor</h1>
+        <p class="brand-sub">Système de gestion des réparations</p>
       </div>
 
-      <h2>Repair System</h2>
+      <div class="features">
 
-      <p>Gestion des réparations, clients et factures</p>
+        <div class="feat-row">
+          <div class="feat-ico"><i class="bi bi-cpu-fill"></i></div>
+          <div>
+            <div class="feat-title">Gestion appareils</div>
+            <div class="feat-desc">Ordinateurs, imprimantes, destructeurs</div>
+          </div>
+        </div>
+
+        <div class="feat-row">
+          <div class="feat-ico"><i class="bi bi-calendar2-check"></i></div>
+          <div>
+            <div class="feat-title">Planning intelligent</div>
+            <div class="feat-desc">Planification & suivi en temps réel</div>
+          </div>
+        </div>
+
+        <div class="feat-row">
+          <div class="feat-ico"><i class="bi bi-robot"></i></div>
+          <div>
+            <div class="feat-title">Agent IA intégré</div>
+            <div class="feat-desc">Devis & diagnostic automatisés</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="left-dots">
+        <span class="dot dot-active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
 
     </div>
 
-    <!-- RIGHT FORM -->
+    <!-- ──────── PANNEAU DROIT (FORM) ──────── -->
     <div class="login-right">
 
-      <h3>Connexion</h3>
+      <!-- Badge sécurité -->
+      <div class="badge-secure">
+        <i class="bi bi-shield-lock-fill"></i>
+        Espace sécurisé
+      </div>
 
-      <p class="subtitle">Accédez à votre espace</p>
+      <h2 class="form-title">Connexion</h2>
+      <p class="form-sub">Accédez à votre tableau de bord</p>
 
-      <form (ngSubmit)="login()">
+      <form (ngSubmit)="login()" #loginForm="ngForm" novalidate>
 
-        <div class="input-group">
-
-          <label>Login</label>
-
-          <input
-            type="text"
-            [(ngModel)]="loginData.login"
-            name="login"
-            placeholder="Entrer votre login"
-            required>
-
+        <!-- ── IDENTIFIANT ── -->
+        <div class="field">
+          <label>
+            <i class="bi bi-person-fill"></i>
+            Identifiant
+          </label>
+          <div class="input-wrap">
+            <input
+              type="text"
+              [(ngModel)]="loginData.login"
+              name="login"
+              placeholder="Entrer votre identifiant"
+              autocomplete="username"
+              required
+              #loginField="ngModel"
+            />
+          </div>
+          <div *ngIf="loginField.invalid && loginField.touched" class="field-err">
+            <i class="bi bi-exclamation-circle"></i> Champ obligatoire
+          </div>
         </div>
 
-        <div class="input-group">
-
-          <label>Mot de passe</label>
-
-          <input
-            type="password"
-            [(ngModel)]="loginData.motDePasse"
-            name="motDePasse"
-            placeholder="••••••••"
-            required>
-
+        <!-- ── MOT DE PASSE ── -->
+        <div class="field">
+          <label>
+            <i class="bi bi-lock-fill"></i>
+            Mot de passe
+          </label>
+          <div class="input-wrap pwd-wrap">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="loginData.motDePasse"
+              name="motDePasse"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+              #pwdField="ngModel"
+            />
+            <button
+              type="button"
+              class="eye-btn"
+              (click)="togglePassword()"
+              tabindex="-1">
+              <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+            </button>
+          </div>
+          <div *ngIf="pwdField.invalid && pwdField.touched" class="field-err">
+            <i class="bi bi-exclamation-circle"></i> Champ obligatoire
+          </div>
         </div>
 
-        <div *ngIf="errorMessage" class="error">
+        <!-- ── ERREUR API ── -->
+        <div *ngIf="errorMessage" class="api-error">
+          <i class="bi bi-x-octagon-fill"></i>
           {{ errorMessage }}
         </div>
 
-        <button class="login-btn" [disabled]="loading">
-
-          <span *ngIf="!loading">Se connecter</span>
-          <span *ngIf="loading">Chargement...</span>
-
+        <!-- ── BOUTON ── -->
+        <button class="submit-btn" type="submit" [disabled]="loading">
+          <span *ngIf="!loading" class="btn-inner">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Se connecter
+          </span>
+          <span *ngIf="loading" class="btn-inner">
+            <span class="spinner"></span>
+            Connexion en cours…
+          </span>
+          <div class="btn-shine"></div>
         </button>
 
       </form>
 
-      <div class="footer">
-        © 2026 Repair System
+      <div class="form-foot">
+        <span class="foot-line"></span>
+        © 2026 TechDoctor
+        <span class="foot-line"></span>
       </div>
 
     </div>
-
   </div>
 
 </div>

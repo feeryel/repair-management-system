@@ -5,7 +5,6 @@
       <h2>Nouvelle Réparation</h2>
       <p>Créer une intervention technique</p>
     </div>
-
     <div class="icon">🛠</div>
   </div>
 
@@ -16,20 +15,16 @@
       <!-- Description -->
       <div class="input-group">
         <label>Description</label>
-
         <textarea
           [(ngModel)]="reparation.descriptionReparation"
           name="descriptionReparation"
           required
           #desc="ngModel">
         </textarea>
-
-        <small *ngIf="desc.invalid && desc.touched">
-          Champ obligatoire
-        </small>
+        <small *ngIf="desc.invalid && desc.touched">Champ obligatoire</small>
       </div>
 
-      <!-- Grid -->
+      <!-- Date fin + Temps -->
       <div class="grid-2">
 
         <div class="input-group">
@@ -51,110 +46,108 @@
 
       </div>
 
-      <!-- Demande -->
+      <!-- ✅ Demande — sélecteur dynamique (remplace le champ texte hardcodé) -->
       <div class="input-group">
-        <label>Demande ID</label>
-        <input type="number"
-               [(ngModel)]="reparation.demandeId"
-               name="demandeId"
-               required>
+        <label>Demande de réparation</label>
+
+        <ng-select
+          [items]="demandes"
+          bindValue="id"
+          [(ngModel)]="reparation.demandeId"
+          name="demandeId"
+          placeholder="Sélectionner une demande"
+          [searchable]="true"
+          [clearable]="false"
+          required>
+
+          <ng-template ng-label-tmp let-item="item">
+            #{{ item.id }} — {{ item.symptomesPanne | slice:0:45 }}
+          </ng-template>
+
+          <ng-template ng-option-tmp let-item="item">
+            <div><strong>#{{ item.id }}</strong> · {{ item.symptomesPanne | slice:0:50 }}</div>
+            <small style="color:#6b7280">{{ item.etat }}</small>
+          </ng-template>
+
+        </ng-select>
       </div>
 
       <!-- Technicien -->
-<!-- Technicien -->
-<div class="input-group">
-  <label>Technicien</label>
+      <div class="input-group">
+        <label>Technicien</label>
 
-  <ng-select
-    [items]="techniciens"
-    bindLabel="login"
-    bindValue="id"
-    [(ngModel)]="reparation.technicienId"
-    name="technicienId"
-    placeholder="Choisir un technicien"
-    [searchable]="true"
-    [clearable]="false"
-    required>
+        <ng-select
+          [items]="techniciens"
+          bindLabel="login"
+          bindValue="id"
+          [(ngModel)]="reparation.technicienId"
+          name="technicienId"
+          placeholder="Choisir un technicien"
+          [searchable]="true"
+          [clearable]="false"
+          required>
 
-    <!-- OPTION -->
-    <ng-template ng-option-tmp let-item="item">
-      <div class="tech-option">
-        <div class="avatar">
-          {{ item.login?.charAt(0) | uppercase }}
+          <ng-template ng-option-tmp let-item="item">
+            <div class="tech-option">
+              <div class="avatar">{{ item.login?.charAt(0) | uppercase }}</div>
+              <div class="info">
+                <div class="name">{{ item.login }}</div>
+                <small>#{{ item.id }}</small>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template ng-label-tmp let-item="item">
+            <div class="selected-tech">
+              <span class="avatar small">{{ item.login?.charAt(0) | uppercase }}</span>
+              {{ item.login }}
+            </div>
+          </ng-template>
+
+        </ng-select>
+      </div>
+
+      <!-- Status + Réparable -->
+      <div class="grid-2">
+
+        <div class="input-group">
+          <label>Status</label>
+          <select [(ngModel)]="reparation.status" name="status">
+            <option value="IN_PROGRESS">🟠 IN PROGRESS</option>
+            <option value="DONE">🟢 DONE</option>
+            <option value="FAILED">🔴 FAILED</option>
+          </select>
         </div>
 
-        <div class="info">
-          <div class="name">{{ item.login }}</div>
-          <small>#{{ item.id }}</small>
+        <div class="input-group switch-box">
+          <label>Réparable</label>
+          <div class="switch-wrapper">
+            <input type="checkbox"
+                   [(ngModel)]="reparation.estReparable"
+                   name="estReparable"
+                   id="repSwitch">
+            <label for="repSwitch" class="switch"></label>
+            <span class="switch-text">{{ reparation.estReparable ? 'Oui' : 'Non' }}</span>
+          </div>
         </div>
+
       </div>
-    </ng-template>
 
-    <!-- SELECTED (IMPORTANT FIX) -->
-    <ng-template ng-label-tmp let-item="item">
-      <div class="selected-tech">
-        <span class="avatar small">
-          {{ item.login?.charAt(0) | uppercase }}
-        </span>
-        {{ item.login }}
+      <!-- Actions -->
+      <div class="actions">
+
+        <button type="button" class="btn-cancel" (click)="cancel()">
+          Annuler
+        </button>
+
+        <button type="submit" class="btn-save" [disabled]="f.invalid || loading">
+          {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
+        </button>
+
       </div>
-    </ng-template>
 
-  </ng-select>
-</div>
-      <!-- Status -->
-    <!-- STATUS + REPARABLE -->
-<div class="grid-2">
+    </form>
 
-  <!-- Status -->
-  <div class="input-group">
-    <label>Status</label>
-
-    <select [(ngModel)]="reparation.status" name="status">
-      <option value="PENDING">🟡 PENDING</option>
-      <option value="IN_PROGRESS">🟠 IN PROGRESS</option>
-      <option value="DONE">🟢 DONE</option>
-      <option value="FAILED">🔴 FAILED</option>
-    </select>
   </div>
 
-  <!-- Réparable -->
-  <div class="input-group switch-box">
-
-    <label>Réparable</label>
-
-    <div class="switch-wrapper">
-      <input type="checkbox"
-             [(ngModel)]="reparation.estReparable"
-             name="estReparable"
-             id="repSwitch">
-
-      <label for="repSwitch" class="switch"></label>
-
-      <span class="switch-text">
-        {{ reparation.estReparable ? 'Oui' : 'Non' }}
-      </span>
-    </div>
-
-  </div>
-<!-- ACTION BUTTONS -->
-<div class="actions">
-
-  <button
-    type="button"
-    class="btn-cancel"
-    (click)="cancel()">
-
-    Annuler
-  </button>
-
-  <button
-    type="submit"
-    class="btn-save"
-    [disabled]="f.invalid || loading">
-
-    {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
-  </button>
-
-</div>
 </div>

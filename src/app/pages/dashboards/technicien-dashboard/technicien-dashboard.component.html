@@ -1,0 +1,161 @@
+<div class="dash-page">
+
+  <!-- HEADER -->
+  <div class="dash-header">
+    <div class="dash-header-left">
+      <div class="dash-avatar tech-av"><i class="bi bi-wrench-adjustable-circle-fill"></i></div>
+      <div>
+        <h2 class="dash-title">Espace Technicien</h2>
+        <p class="dash-sub">Bienvenue, <strong>{{ login }}</strong> — Gérez vos réparations et plannings</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/planning" class="dash-btn btn-slate"><i class="bi bi-calendar-event-fill"></i> Mon planning</a>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-row">
+    <div class="kpi-card kpi-emerald">
+      <div class="kpi-icon"><i class="bi bi-tools"></i></div>
+      <div class="kpi-body"><span class="kpi-label">Total réparations</span><span class="kpi-value">{{ totalRep }}</span></div>
+      <div class="kpi-glow"></div>
+    </div>
+    <div class="kpi-card kpi-amber">
+      <div class="kpi-icon"><i class="bi bi-hourglass-split"></i></div>
+      <div class="kpi-body"><span class="kpi-label">En cours</span><span class="kpi-value">{{ enCours }}</span></div>
+      <div class="kpi-glow"></div>
+    </div>
+    <div class="kpi-card kpi-blue">
+      <div class="kpi-icon"><i class="bi bi-check2-circle"></i></div>
+      <div class="kpi-body"><span class="kpi-label">Terminées</span><span class="kpi-value">{{ terminees }}</span></div>
+      <div class="kpi-glow"></div>
+    </div>
+    <!-- <div class="kpi-card kpi-rose">
+      <div class="kpi-icon"><i class="bi bi-list-check"></i></div>
+      <div class="kpi-body"><span class="kpi-label">Lignes réparation</span><span class="kpi-value">{{ totalLignes }}</span></div>
+      <div class="kpi-glow"></div>
+    </div> -->
+  </div>
+
+  <!-- TWO COLS -->
+  <div class="two-col">
+
+    <!-- MES RÉPARATIONS -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <h5><i class="bi bi-tools me-2"></i>Mes réparations assignées</h5>
+        <a routerLink="/reparations" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div class="rep-list">
+        <div class="rep-item" *ngFor="let r of mesReparations">
+          <div class="rep-icon"><i class="bi bi-wrench-adjustable"></i></div>
+          <div class="rep-info">
+            <p class="rep-desc">{{ r.descriptionReparation || 'Réparation #' + r.id }}</p>
+            <p class="rep-meta">Durée: {{ r.tempsMainOeuvre || '—' }}h</p>
+          </div>
+          <span class="status-chip" [ngClass]="statusClass(r.status)">{{ statusLabel(r.status) }}</span>
+        </div>
+        <div *ngIf="mesReparations.length === 0" class="empty-msg"><i class="bi bi-inbox"></i> Aucune réparation</div>
+      </div>
+    </div>
+
+    <!-- PLANNING -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <h5><i class="bi bi-calendar-event-fill me-2"></i>Planning du jour</h5>
+        <a routerLink="/planning" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div class="plan-list">
+        <div class="plan-item" *ngFor="let p of plannings">
+          <div class="plan-date-box">
+            <span class="plan-day">{{ p.datePlanification | date:'dd' }}</span>
+            <span class="plan-mon">{{ p.datePlanification | date:'MMM' }}</span>
+          </div>
+          <div class="plan-info">
+            <p class="plan-title">Planning {{ p.id }}</p>
+            <p class="plan-sub">{{ p.dateDebut || 'date inacessible' }}</p>
+          </div>
+        </div>
+        <div *ngIf="plannings.length === 0" class="empty-msg"><i class="bi bi-calendar-x"></i> Aucun planning</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div class="dash-card mt-quick">
+    <div class="dash-card-header">
+      <h5><i class="bi bi-lightning-fill me-2"></i>Accès rapide</h5>
+    </div>
+    <div class="quick-grid quick-grid-3">
+      <a routerLink="/reparations" class="quick-item q-emerald"><i class="bi bi-wrench-adjustable-circle-fill"></i><span>Réparations</span></a>
+      <a routerLink="/ligne-reparations" class="quick-item q-rose"><i class="bi bi-list-check"></i><span>Pièces & Main d'œuvre</span></a>
+      <a routerLink="/planning" class="quick-item q-amber"><i class="bi bi-calendar-event-fill"></i><span>Planning</span></a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.dash-page { padding:2rem; background:#f4f6fb; min-height:100vh; margin-left: 260px;}
+.dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+.dash-header-left { display:flex; align-items:center; gap:1rem; }
+.dash-avatar { width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem; }
+.tech-av { background:linear-gradient(135deg,#059669,#34d399); color:#fff; }
+.dash-title { font-size:1.5rem; font-weight:700; margin:0; color:#1e293b; }
+.dash-sub { margin:0; color:#6b7280; font-size:.9rem; }
+.header-actions { display:flex; gap:.75rem; }
+.dash-btn { border:none; border-radius:10px; padding:.6rem 1.1rem; text-decoration:none; font-weight:600; font-size:.875rem; display:flex; align-items:center; gap:.4rem; transition:opacity .2s; color:#fff; }
+.btn-emerald { background:linear-gradient(135deg,#059669,#34d399); }
+.btn-slate   { background:linear-gradient(135deg,#475569,#94a3b8); }
+.dash-btn:hover { opacity:.85; color:#fff; }
+.kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:2rem; }
+.kpi-card { border-radius:16px; padding:1.5rem; display:flex; align-items:center; gap:1rem; position:relative; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.08); }
+.kpi-emerald{ background:linear-gradient(135deg,#059669,#34d399);}
+.kpi-amber  { background:linear-gradient(135deg,#d97706,#fbbf24); }
+.kpi-blue   { background:linear-gradient(135deg,#2563eb,#60a5fa); }
+.kpi-rose   { background:linear-gradient(135deg,#e11d48,#fb7185); }
+.kpi-icon { font-size:2rem; color:rgba(255,255,255,.85); }
+.kpi-body { display:flex; flex-direction:column; }
+.kpi-label { font-size:.78rem; color:rgba(255,255,255,.75); font-weight:500; text-transform:uppercase; letter-spacing:.5px; }
+.kpi-value { font-size:2rem; font-weight:800; color:#fff; line-height:1.1; }
+.kpi-glow { position:absolute;right:-20px;bottom:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1); }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem; }
+.mt-quick { margin-top:0; }
+.dash-card { background:#fff; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.07); overflow:hidden; }
+.dash-card-header { display:flex; align-items:center; justify-content:space-between; padding:1.25rem 1.5rem; border-bottom:1px solid #f1f5f9; }
+.dash-card-header h5 { margin:0; font-weight:700; color:#1e293b; }
+.see-all { color:#059669; font-size:.85rem; font-weight:600; text-decoration:none; }
+.rep-list, .plan-list { padding:.5rem 0; }
+.rep-item { display:flex; align-items:center; gap:1rem; padding:.875rem 1.5rem; border-bottom:1px solid #f8fafc; }
+.rep-item:last-child { border-bottom:none; }
+.rep-icon { width:36px;height:36px;border-radius:10px;background:#f0fdf4;color:#059669;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0; }
+.rep-info { flex:1; }
+.rep-desc { margin:0; font-weight:600; font-size:.875rem; color:#1e293b; }
+.rep-meta { margin:0; font-size:.75rem; color:#9ca3af; }
+.plan-item { display:flex; align-items:center; gap:1rem; padding:.875rem 1.5rem; border-bottom:1px solid #f8fafc; }
+.plan-item:last-child { border-bottom:none; }
+.plan-date-box { width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#059669,#34d399);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0; }
+.plan-day { font-size:1rem; font-weight:800; color:#fff; line-height:1; }
+.plan-mon { font-size:.65rem; color:rgba(255,255,255,.8); text-transform:uppercase; }
+.plan-info { flex:1; }
+.plan-title { margin:0; font-weight:600; font-size:.875rem; color:#1e293b; }
+.plan-sub   { margin:0; font-size:.75rem; color:#9ca3af; }
+.status-chip { padding:.25rem .75rem; border-radius:20px; font-size:.72rem; font-weight:700; white-space:nowrap; }
+.st-done     { background:#d1fae5; color:#059669; }
+.st-progress { background:#fef3c7; color:#d97706; }
+.st-pending  { background:#f1f5f9; color:#64748b; }
+.quick-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; padding:1.25rem; }
+.quick-item { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; padding:1.25rem; border-radius:14px; text-decoration:none; font-weight:600; font-size:.85rem; transition:transform .15s, box-shadow .15s; }
+.quick-item:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
+.quick-item i { font-size:1.75rem; }
+.q-emerald { background:#f0fdf4; color:#059669; }
+.q-rose    { background:#fff1f2; color:#e11d48; }
+.q-slate   { background:#f8fafc; color:#475569; }
+.q-amber   { background:#fffbeb; color:#d97706; }
+.empty-msg { text-align:center; color:#9ca3af; padding:2rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; font-size:1.5rem; }
+.quick-grid-3 { grid-template-columns:repeat(3,1fr); }
+@media(max-width:900px){ .kpi-row{grid-template-columns:repeat(2,1fr);} .two-col{grid-template-columns:1fr;} .quick-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:600px){ .kpi-row{grid-template-columns:1fr;} }
+</style>

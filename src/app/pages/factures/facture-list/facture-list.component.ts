@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FactureService } from '../../../core/services/facture.service';
+import { AuthService, Role } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -20,17 +21,29 @@ export class FactureListComponent implements OnInit {
   factures: any[] = [];
   searchText: string = '';
 
-  constructor(private service: FactureService) {}
+  constructor(private service: FactureService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadData();
   }
 
   loadData() {
-    this.service.getAll().subscribe({
-      next: (res: any) => this.factures = res,
-      error: (err) => console.error(err)
-    });
+    const role = this.authService.getRole();
+
+    if (role === Role.CLIENT) {
+      const clientId = this.authService.getClientId();
+      if (clientId) {
+        this.service.getByClientId(clientId).subscribe({
+          next: (res: any) => this.factures = res,
+          error: (err) => console.error(err)
+        });
+      }
+    } else {
+      this.service.getAll().subscribe({
+        next: (res: any) => this.factures = res,
+        error: (err) => console.error(err)
+      });
+    }
   }
 getTotal(): number {
   return this.factures.reduce((sum, f) => {
@@ -152,7 +165,7 @@ doc.text(`TOTAL: ${facture?.montantTotal || 0} TND`, 20, y + 10);
 doc.addImage(logo, 'PNG', 133, y + 35, 50, 18);
 
 /* ================= QR CODE ================= */
-const qrData = `https://charming-pony-fc2235.netlify.app/garantie`;
+const qrData = `https://regal-cobbler-e2516a.netlify.app/public/garantie/${facture?.id}`;
 const qr = await QRCode.toDataURL(qrData);
 
 doc.addImage(qr, 'PNG', 150, y + 65, 40, 40);

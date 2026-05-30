@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReparationService } from '../../../core/services/reparation.service';
+import { AuthService, Role } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -21,19 +22,33 @@ export class ReparationListComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 6;
 
-  constructor(private service: ReparationService) {}
+  constructor(private service: ReparationService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadData();
   }
 
   loadData() {
-    this.service.getAll().subscribe({
-      next: (res: any) => {
-        this.reparations = res;
-      },
-      error: (err) => console.log(err)
-    });
+    const role = this.authService.getRole();
+
+    if (role === Role.CLIENT) {
+      const clientId = this.authService.getClientId();
+      if (clientId) {
+        this.service.getByClientId(clientId).subscribe({
+          next: (res: any) => {
+            this.reparations = res;
+          },
+          error: (err) => console.log(err)
+        });
+      }
+    } else {
+      this.service.getAll().subscribe({
+        next: (res: any) => {
+          this.reparations = res;
+        },
+        error: (err) => console.log(err)
+      });
+    }
   }
 
   setFilter(value: string) {

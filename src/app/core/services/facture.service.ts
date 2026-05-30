@@ -8,24 +8,34 @@ export class FactureService {
 
   api = 'http://localhost:3000/factures';
 
-  constructor(private http:HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   getAll() {
     return this.http.get(this.api);
   }
 
-  create(data:any) {
-    return this.http.post(this.api,data);
+  create(data: any) {
+    return this.http.post(this.api, data);
   }
 
-  update(id:number,data:any) {
-    return this.http.put(`${this.api}/${id}`,data);
+  update(id: number, data: any) {
+    return this.http.put(`${this.api}/${id}`, data);
   }
 
-  delete(id:number) {
+  delete(id: number) {
     return this.http.delete(`${this.api}/${id}`);
   }
+
+  getByReparation(reparationId: number) {
+    return this.http.get(`${this.api}/reparation/${reparationId}`);
+  }
+
+  getByClientId(clientId: number) {
+    return this.http.get<any[]>(`${this.api}/client/${clientId}`);
+  }
+
+  // ✅ URL corrigée : était `${this.api}/factures/${id}` → double "factures"
   getFactureById(id: number) {
-  return this.http.get(`${this.api}/factures/${id}`);
-}
+    return this.http.get(`${this.api}/${id}`);
+  }
 }

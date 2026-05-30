@@ -1,0 +1,211 @@
+<div class="dash-page">
+
+  <!-- HEADER -->
+  <div class="dash-header">
+    <div class="dash-header-left">
+      <div class="dash-avatar rep-av"><i class="bi bi-clipboard2-pulse-fill"></i></div>
+      <div>
+        <h2 class="dash-title">Supervision des Réparations</h2>
+        <p class="dash-sub">Bienvenue, <strong>{{ login }}</strong> — Gérez le planning et supervisez les réparations</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/planning/add" class="dash-btn btn-rep"><i class="bi bi-calendar-plus-fill"></i> Planifier</a>
+      <a routerLink="/reparations" class="dash-btn btn-dark-rep"><i class="bi bi-eye-fill"></i> Superviser</a>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-row">
+    <div class="kpi-card kpi-rep">
+      <div class="kpi-icon"><i class="bi bi-tools"></i></div>
+      <div class="kpi-body"><span class="kpi-label">Total réparations</span><span class="kpi-value">{{ totalRep }}</span></div>
+      <div class="kpi-glow"></div>
+    </div>
+    <div class="kpi-card kpi-amber">
+      <div class="kpi-icon"><i class="bi bi-hourglass-split"></i></div>
+      <div class="kpi-body"><span class="kpi-label">En cours</span><span class="kpi-value">{{ enCours }}</span></div>
+      <div class="kpi-glow"></div>
+    </div>
+    <div class="kpi-card kpi-green">
+      <div class="kpi-icon"><i class="bi bi-check-circle-fill"></i></div>
+      <div class="kpi-body"><span class="kpi-label">Terminées</span><span class="kpi-value">{{ terminees }}</span></div>
+      <div class="kpi-glow"></div>
+    </div>
+    <div class="kpi-card kpi-indigo">
+      <div class="kpi-icon"><i class="bi bi-calendar-event-fill"></i></div>
+      <div class="kpi-body"><span class="kpi-label">Plannings</span><span class="kpi-value">{{ totalPlan }}</span></div>
+      <div class="kpi-glow"></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="dash-card progress-card">
+    <div class="dash-card-header">
+      <h5><i class="bi bi-bar-chart-fill me-2"></i>Taux d'avancement global</h5>
+      <span class="pct-badge">{{ donePercent() }}% terminées</span>
+    </div>
+    <div class="progress-body">
+      <div class="prog-bar-wrap">
+        <div class="prog-bar-track">
+          <div class="prog-bar-fill" [style.width.%]="donePercent()"></div>
+        </div>
+        <div class="prog-labels">
+          <span>Terminées ({{ terminees }})</span>
+          <span>En cours ({{ enCours }})</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANOMALIES DETECTION -->
+  <div class="dash-card anomaly-card">
+    <div class="dash-card-header">
+      <h5><i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>Détection d'anomalies appareil</h5>
+      <span class="ai-badge"><i class="bi bi-robot me-1"></i>Agent IA</span>
+    </div>
+    <div class="anomaly-body">
+      <div class="anomaly-row" *ngFor="let r of reparations | slice:0:4">
+        <ng-container *ngIf="!r.estReparable">
+          <div class="anomaly-icon anomaly-critical"><i class="bi bi-x-circle-fill"></i></div>
+          <div class="anomaly-info">
+            <p class="anomaly-title">Appareil non réparable — Réparation #{{ r.id }}</p>
+            <p class="anomaly-desc">{{ r.descriptionReparation || 'Anomalie détectée' }}</p>
+          </div>
+          <span class="anomaly-badge badge-critical">Non réparable</span>
+        </ng-container>
+        <ng-container *ngIf="r.estReparable && r.status !== 'DONE'">
+          <div class="anomaly-icon anomaly-warn"><i class="bi bi-exclamation-circle-fill"></i></div>
+          <div class="anomaly-info">
+            <p class="anomaly-title">En attente de traitement — Réparation #{{ r.id }}</p>
+            <p class="anomaly-desc">{{ r.descriptionReparation || 'Vérification recommandée' }}</p>
+          </div>
+          <span class="anomaly-badge badge-warn">En attente</span>
+        </ng-container>
+      </div>
+      <div *ngIf="reparations.length === 0" class="empty-msg">
+        <i class="bi bi-check-circle-fill text-success"></i> Aucune anomalie détectée
+      </div>
+    </div>
+  </div>
+
+  <!-- TWO COLS -->
+  <div class="two-col">
+
+    <!-- RÉPARATIONS -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <h5><i class="bi bi-tools me-2"></i>Réparations à superviser</h5>
+        <a routerLink="/reparations" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div class="rep-list">
+        <div class="rep-item" *ngFor="let r of reparations">
+          <div class="rep-icon"><i class="bi bi-wrench-adjustable"></i></div>
+          <div class="rep-info">
+            <p class="rep-desc">{{ r.descriptionReparation || 'Réparation #' + r.id }}</p>
+            <p class="rep-meta">Durée MO: {{ r.tempsMainOeuvre || '—' }}h</p>
+          </div>
+          <span class="status-chip" [ngClass]="statusClass(r.status)">{{ statusLabel(r.status) }}</span>
+        </div>
+        <div *ngIf="reparations.length === 0" class="empty-msg"><i class="bi bi-inbox"></i> Aucune réparation</div>
+      </div>
+    </div>
+
+    <!-- PLANNING -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <h5><i class="bi bi-calendar-event-fill me-2"></i>Plannings récents</h5>
+        <a routerLink="/planning" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div class="plan-list">
+        <div class="plan-item" *ngFor="let p of plannings">
+          <div class="plan-date-box">
+            <span class="plan-day">{{ p.datePlanification | date:'dd' }}</span>
+            <span class="plan-mon">{{ p.datePlanification | date:'MMM' }}</span>
+          </div>
+          <div class="plan-info">
+            <p class="plan-title">Planning #{{ p.id }}</p>
+            <p class="plan-sub">{{ p.description || 'Sans description' }}</p>
+          </div>
+          <a [routerLink]="['/planning/edit', p.id]" class="icon-btn"><i class="bi bi-pencil-fill"></i></a>
+        </div>
+        <div *ngIf="plannings.length === 0" class="empty-msg"><i class="bi bi-calendar-x"></i> Aucun planning</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+.dash-page { padding:2rem; background:#f4f6fb; min-height:100vh; }
+.dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+.dash-header-left { display:flex; align-items:center; gap:1rem; }
+.dash-avatar { width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem; }
+.rep-av { background:linear-gradient(135deg,#dc2626,#f87171); color:#fff; }
+.dash-title { font-size:1.5rem; font-weight:700; margin:0; color:#1e293b; }
+.dash-sub { margin:0; color:#6b7280; font-size:.9rem; }
+.header-actions { display:flex; gap:.75rem; }
+.dash-btn { border:none; border-radius:10px; padding:.6rem 1.1rem; text-decoration:none; font-weight:600; font-size:.875rem; display:flex; align-items:center; gap:.4rem; transition:opacity .2s; color:#fff; }
+.btn-rep      { background:linear-gradient(135deg,#dc2626,#f87171); }
+.btn-dark-rep { background:linear-gradient(135deg,#1e293b,#475569); }
+.dash-btn:hover { opacity:.85; color:#fff; }
+.kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:1.5rem; }
+.kpi-card { border-radius:16px; padding:1.5rem; display:flex; align-items:center; gap:1rem; position:relative; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.08); }
+.kpi-rep    { background:linear-gradient(135deg,#dc2626,#f87171); }
+.kpi-amber  { background:linear-gradient(135deg,#d97706,#fbbf24); }
+.kpi-green  { background:linear-gradient(135deg,#059669,#34d399); }
+.kpi-indigo { background:linear-gradient(135deg,#4f46e5,#818cf8); }
+.kpi-icon { font-size:2rem; color:rgba(255,255,255,.85); }
+.kpi-body { display:flex; flex-direction:column; }
+.kpi-label { font-size:.78rem; color:rgba(255,255,255,.75); font-weight:500; text-transform:uppercase; letter-spacing:.5px; }
+.kpi-value { font-size:2rem; font-weight:800; color:#fff; line-height:1.1; }
+.kpi-glow { position:absolute;right:-20px;bottom:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1); }
+.progress-card { margin-bottom:1.5rem; }
+.prog-bar-wrap { padding:1.25rem 1.5rem; }
+.prog-bar-track { height:14px; background:#f1f5f9; border-radius:99px; overflow:hidden; margin-bottom:.75rem; }
+.prog-bar-fill  { height:100%; background:linear-gradient(90deg,#059669,#34d399); border-radius:99px; transition:width .6s ease; }
+.prog-labels { display:flex; justify-content:space-between; font-size:.8rem; color:#6b7280; }
+.pct-badge { background:#d1fae5; color:#059669; font-size:.85rem; font-weight:700; padding:.25rem .75rem; border-radius:20px; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+.dash-card { background:#fff; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.07); overflow:hidden; }
+.dash-card-header { display:flex; align-items:center; justify-content:space-between; padding:1.25rem 1.5rem; border-bottom:1px solid #f1f5f9; }
+.dash-card-header h5 { margin:0; font-weight:700; color:#1e293b; }
+.see-all { color:#dc2626; font-size:.85rem; font-weight:600; text-decoration:none; }
+.rep-list, .plan-list { padding:.5rem 0; }
+.rep-item, .plan-item { display:flex; align-items:center; gap:1rem; padding:.875rem 1.5rem; border-bottom:1px solid #f8fafc; }
+.rep-item:last-child, .plan-item:last-child { border-bottom:none; }
+.rep-icon { width:36px;height:36px;border-radius:10px;background:#fff1f2;color:#dc2626;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0; }
+.rep-info, .plan-info { flex:1; }
+.rep-desc, .plan-title { margin:0; font-weight:600; font-size:.875rem; color:#1e293b; }
+.rep-meta, .plan-sub   { margin:0; font-size:.75rem; color:#9ca3af; }
+.plan-date-box { width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#818cf8);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0; }
+.plan-day { font-size:1rem; font-weight:800; color:#fff; line-height:1; }
+.plan-mon { font-size:.65rem; color:rgba(255,255,255,.8); text-transform:uppercase; }
+.icon-btn { color:#4f46e5; font-size:1rem; padding:.25rem; border-radius:6px; transition:background .2s; }
+.icon-btn:hover { background:#eef2ff; }
+.status-chip { padding:.25rem .75rem; border-radius:20px; font-size:.72rem; font-weight:700; white-space:nowrap; }
+.st-done     { background:#d1fae5; color:#059669; }
+.st-progress { background:#fef3c7; color:#d97706; }
+.st-pending  { background:#f1f5f9; color:#64748b; }
+.empty-msg { text-align:center; color:#9ca3af; padding:2rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; font-size:1.5rem; }
+/* Anomaly section */
+.anomaly-card { margin-bottom:1.5rem; }
+.anomaly-body { padding:.5rem 0; }
+.anomaly-row  { display:flex; align-items:center; gap:1rem; padding:.875rem 1.5rem; border-bottom:1px solid #f8fafc; }
+.anomaly-row:last-child { border-bottom:none; }
+.anomaly-icon { width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0; }
+.anomaly-critical { background:#fee2e2; color:#dc2626; }
+.anomaly-warn     { background:#fef3c7; color:#d97706; }
+.anomaly-info     { flex:1; }
+.anomaly-title    { margin:0; font-weight:600; font-size:.875rem; color:#1e293b; }
+.anomaly-desc     { margin:0; font-size:.75rem; color:#9ca3af; }
+.anomaly-badge    { padding:.25rem .75rem; border-radius:20px; font-size:.72rem; font-weight:700; white-space:nowrap; }
+.badge-critical   { background:#fee2e2; color:#dc2626; }
+.badge-warn       { background:#fef3c7; color:#d97706; }
+.ai-badge { background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; font-size:.75rem; font-weight:700; padding:.25rem .75rem; border-radius:20px; display:flex; align-items:center; }
+ .dash-page{ margin-left: 260px;}
+
+@media(max-width:900px){ .kpi-row{grid-template-columns:repeat(2,1fr);} .two-col{grid-template-columns:1fr;} }
+@media(max-width:600px){ .kpi-row{grid-template-columns:1fr;} }
+</style>

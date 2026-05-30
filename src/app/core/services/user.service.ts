@@ -1,28 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class UserService {
 
-  apiUrl = 'http://localhost:3000/users';
+  private api = 'http://localhost:3000/users';
 
   constructor(private http: HttpClient) {}
 
   getAll() {
-    return this.http.get(this.apiUrl);
+    return this.http.get<any[]>(this.api);
   }
 
   add(data: any) {
-    return this.http.post(this.apiUrl, data);
+    return this.http.post(this.api, data);
   }
 
-  delete(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  desactiver(id: number) {
+    return this.http.patch(`${this.api}/${id}/desactiver`, {});
   }
+
+  reactiver(id: number) {
+    return this.http.patch(`${this.api}/${id}/reactiver`, {});
+  }
+
+  bannir(id: number) {
+    return this.http.patch(`${this.api}/${id}/bannir`, {});
+  }
+
   getTechniciens() {
-  return this.http.get<any[]>('http://localhost:3000/users/techniciens/list');
-}
-
+    return this.http.get<any[]>(`${this.api}/techniciens/list`);
+  }
 }

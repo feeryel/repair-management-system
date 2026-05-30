@@ -1,64 +1,135 @@
-<div class="container mt-4">
+<div class="page">
 
-  <h2>Liste des pièces</h2>
+  <!-- HEADER -->
+  <div class="topbar">
 
-  <a routerLink="/pieces/add"
-     class="btn btn-primary mb-3">
+    <div>
+      <h1>🔧 Pièces de rechange</h1>
+      <p>Gestion intelligente du stock</p>
+    </div>
 
-    Ajouter
+    <a routerLink="/pieces/add" class="add-btn">
+      + Nouvelle pièce
+    </a>
 
-  </a>
+  </div>
 
-  <table class="table table-bordered">
+  <!-- FILTERS -->
+  <div class="filters">
 
-    <thead class="table-dark">
+    <input
+      type="text"
+      placeholder="🔍 Rechercher une pièce..."
+      [(ngModel)]="searchText"
+      (input)="resetPage()"
+    />
 
-      <tr>
+    <select [(ngModel)]="filterType" (change)="resetPage()">
 
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Prix</th>
-        <th>Stock</th>
-        <th>Actions</th>
+      <option value="ALL">Tous</option>
+      <option value="OK">OK</option>
+      <option value="CRITIQUE">Critiques</option>
+      <option value="RUPTURE">Rupture</option>
 
-      </tr>
+    </select>
 
-    </thead>
+  </div>
 
-    <tbody>
+  <!-- STATS -->
+  <div class="stats">
 
-      <tr *ngFor="let p of pieces">
+    <div class="card blue">
+      📦 <span>Stock total</span>
+      <h2>{{ stockTotal }}</h2>
+    </div>
 
-        <td>{{p.id}}</td>
+    <div class="card orange">
+      ⚠️ <span>Critiques</span>
+      <h2>{{ piecesCritiques }}</h2>
+    </div>
 
-        <td>{{p.nom}}</td>
+    <div class="card green">
+      ✅ <span>OK</span>
+      <h2>{{ piecesOK }}</h2>
+    </div>
 
-        <td>{{p.prix}}</td>
+    <div class="card red">
+      ⛔ <span>Rupture</span>
+      <h2>{{ ruptureStock }}</h2>
+    </div>
 
-        <td>{{p.quantiteStock}}</td>
+  </div>
 
-        <td>
+  <!-- GRID -->
+  <div class="grid">
 
-          <a [routerLink]="['/pieces/edit', p.id]"
-             class="btn btn-warning btn-sm me-2">
+    <div class="piece-card" *ngFor="let p of paginatedPieces">
 
-            Modifier
+      <div class="card-header">
+        <span class="id">{{ p.id }}</span>
+      </div>
 
-          </a>
+      <h3>{{ p.nom }}</h3>
 
-          <button class="btn btn-danger btn-sm"
-                  (click)="delete(p.id)">
+      <p class="price">{{ p.prixHT }} DT</p>
 
-            Supprimer
+      <div class="stock"
+        [ngClass]="{
+          'ok': p.quantiteEnStock > 5,
+          'warn': p.quantiteEnStock <= 5 && p.quantiteEnStock > 0,
+          'danger': p.quantiteEnStock === 0
+        }">
 
-          </button>
+        Stock: {{ p.quantiteEnStock }}
 
-        </td>
+      </div>
 
-      </tr>
+      <div class="actions">
 
-    </tbody>
+        <a [routerLink]="['/pieces/edit', p.id]" class="edit-btn">
+          ✏️
+        </a>
 
-  </table>
+        <button class="delete-btn" (click)="delete(p.id)">
+          🗑
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- EMPTY -->
+  <div class="empty" *ngIf="paginatedPieces.length === 0">
+    😕 Aucune pièce trouvée
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pagination-container">
+
+    <button
+      class="page-btn"
+      (click)="changePage(currentPage - 1)"
+      [disabled]="currentPage === 1">
+      ‹
+    </button>
+
+    <button
+      *ngFor="let page of [].constructor(totalPages); let i = index"
+      class="page-number"
+      [class.active-page]="currentPage === i + 1"
+      (click)="changePage(i + 1)">
+      {{ i + 1 }}
+    </button>
+
+    <button
+      class="page-btn"
+      (click)="changePage(currentPage + 1)"
+      [disabled]="currentPage === totalPages">
+      ›
+    </button>
+
+  </div>
 
 </div>
