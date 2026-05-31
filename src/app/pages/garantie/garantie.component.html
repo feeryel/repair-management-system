@@ -1,23 +1,21 @@
 <div class="certificate-wrapper">
-
   <div class="certificate">
 
     <!-- HEADER -->
     <div class="header">
-      <div class="logo">TECHDOCTOR</div>
-      <div class="subtitle">Service de Réparation Professionnel</div>
+      <div class="logo">🛠️ TECHDOCTOR</div>
+      <div class="subtitle">Certificat de Garantie Professionnel</div>
     </div>
 
     <!-- TITLE -->
     <h1>Certificat de Garantie</h1>
-
     <p class="intro" *ngIf="facture">
-      Ce document certifie que votre appareil bénéficie d’une garantie de réparation.
+      Votre réparation est garantie. Ce document certifie que votre appareil bénéficie d’une couverture complète.
     </p>
 
-    <!-- INFO CLIENT -->
+    <!-- INFORMATIONS CLIENT -->
     <div class="card" *ngIf="facture?.Reparation?.Demande?.Appareil?.Client">
-      <h3>Informations Client</h3>
+      <h3>👤 Informations Client</h3>
       <div class="row">
         <span class="label">Nom</span>
         <span class="value">{{ facture.Reparation.Demande.Appareil.Client.nom }}</span>
@@ -32,50 +30,66 @@
       </div>
     </div>
 
-    <!-- INFO APPAREIL -->
+    <!-- APPAREIL -->
     <div class="card" *ngIf="facture?.Reparation?.Demande?.Appareil">
-      <h3>Appareil</h3>
+      <h3>📱 Appareil Réparé</h3>
       <div class="row">
         <span class="label">Marque & Modèle</span>
         <span class="value">{{ facture.Reparation.Demande.Appareil.marque }} {{ facture.Reparation.Demande.Appareil.modele }}</span>
       </div>
       <div class="row">
-        <span class="label">Numéro de série</span>
+        <span class="label">Numéro de Série</span>
         <span class="value">{{ facture.Reparation.Demande.Appareil.numSerie }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Date de Réparation</span>
+        <span class="value">{{ facture.date | date: ‘shortDate’ }}</span>
       </div>
     </div>
 
-    <!-- GARANTIE -->
+    <!-- GARANTIE DETAILS -->
     <div class="card" *ngIf="isValidGarantie()">
-      <h3>Détails de Garantie</h3>
+      <h3>✅ Détails de Garantie</h3>
       <div class="row">
-        <span class="label">✔ Durée de garantie</span>
-        <span class="value highlight">30 JOURS</span>
+        <span class="label">Durée Couverte</span>
+        <span class="highlight">30 JOURS</span>
       </div>
       <div class="row">
-        <span class="label">✔ Type de garantie</span>
-        <span class="value">Réparation et pièces remplacées</span>
+        <span class="label">Type de Couverture</span>
+        <span class="value">Réparation complète + Pièces remplacées</span>
       </div>
       <div class="row">
-        <span class="label">✔ Validité</span>
-        <span class="value">À partir du {{ facture.date | date: 'shortDate' }}</span>
+        <span class="label">Début de Validité</span>
+        <span class="value">À partir du {{ facture.date | date: ‘shortDate’ }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Fin de Validité</span>
+        <span class="value">Jusqu’au {{ facture.date | date: ‘shortDate’ }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Statut</span>
+        <span class="highlight">ACTIVE</span>
       </div>
     </div>
 
     <!-- CONDITIONS -->
     <div class="conditions">
-      <h3>Conditions générales</h3>
+      <h3>Conditions Générales</h3>
       <ul>
-        <li>La garantie ne couvre pas les chocs ou mauvaise utilisation</li>
-        <li>Modification externe annule la garantie</li>
-        <li>Pièces électroniques uniquement couvertes</li>
+        <li><strong>Couverture Complète :</strong> Couvre tous les défauts de fabrication et problèmes liés à la réparation</li>
+        <li><strong>Non Couverts :</strong> Les dommages dus aux chocs, chutes, ou mauvaise utilisation</li>
+        <li><strong>Modifications :</strong> Toute modification externe annule automatiquement la garantie</li>
+        <li><strong>Composants Électroniques :</strong> Seuls les composants électroniques sont couverts</li>
+        <li><strong>Service :</strong> Retour gratuit à l’atelier pour tout problème couvert</li>
       </ul>
     </div>
 
     <!-- FOOTER -->
     <div class="footer">
-      Facture #{{ facture?.id }} - TECHDOCTOR © 2026 - Tous droits réservés
+      <strong>Facture #{{ facture?.id }}</strong> — TECHDOCTOR © 2026 — Tous droits réservés<br>
+      <span style="font-size: 12px; margin-top: 8px; display: block;">Contact: contact@techdoctor.tn | Merci de votre confiance!</span>
     </div>
 
   </div>
 </div>
+
