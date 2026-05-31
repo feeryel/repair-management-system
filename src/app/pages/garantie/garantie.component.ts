@@ -27,8 +27,8 @@ export class GarantieComponent implements OnInit {
       if (!isNaN(id)) {
         this.http.get<any>(`${this.apiUrl}/public/garantie/${id}`).subscribe({
           next: (res) => {
-            console.log(res);
             this.facture = res;
+            console.log('FACTURE =>', res);
           },
           error: (err) => console.error('Erreur chargement garantie:', err)
         });
@@ -36,19 +36,33 @@ export class GarantieComponent implements OnInit {
     });
   }
 
+  // 🔥 Garantie valide ou non
   isValidGarantie(): boolean {
     if (!this.facture?.date) return false;
 
-    const dateFacture = new Date(this.facture.date);
-    const dateFin = new Date(dateFacture);
-    dateFin.setDate(dateFin.getDate() + 30);
+    const start = new Date(this.facture.date);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 30);
 
-    return new Date() <= dateFin;
+    return new Date() <= end;
   }
 
+  // 📅 date fin garantie
   getDateFinGarantie(date: string): Date {
     const d = new Date(date);
     d.setDate(d.getDate() + 30);
     return d;
+  }
+
+  // ⏳ jours restants
+  getJoursRestants(date: string): number {
+    const start = new Date(date);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 30);
+
+    const diff = end.getTime() - new Date().getTime();
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+    return days > 0 ? days : 0;
   }
 }
