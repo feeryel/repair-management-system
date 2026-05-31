@@ -37,6 +37,11 @@ export class GarantieComponent implements OnInit {
   isValidGarantie(): boolean {
     return this.facture?.Reparation?.estReparable === true;
   }
+  getDateFinGarantie(date: string): Date {
+  const d = new Date(date);
+  d.setDate(d.getDate() + 30);
+  return d;
+}
 }
 
 
