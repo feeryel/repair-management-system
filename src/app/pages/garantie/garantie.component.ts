@@ -23,9 +23,11 @@ export class GarantieComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
+
       if (!isNaN(id)) {
         this.http.get<any>(`${this.apiUrl}/public/garantie/${id}`).subscribe({
           next: (res) => {
+            console.log(res);
             this.facture = res;
           },
           error: (err) => console.error('Erreur chargement garantie:', err)
@@ -35,13 +37,18 @@ export class GarantieComponent implements OnInit {
   }
 
   isValidGarantie(): boolean {
-    return this.facture?.Reparation?.estReparable === true;
+    if (!this.facture?.date) return false;
+
+    const dateFacture = new Date(this.facture.date);
+    const dateFin = new Date(dateFacture);
+    dateFin.setDate(dateFin.getDate() + 30);
+
+    return new Date() <= dateFin;
   }
+
   getDateFinGarantie(date: string): Date {
-  const d = new Date(date);
-  d.setDate(d.getDate() + 30);
-  return d;
+    const d = new Date(date);
+    d.setDate(d.getDate() + 30);
+    return d;
+  }
 }
-}
-
-
