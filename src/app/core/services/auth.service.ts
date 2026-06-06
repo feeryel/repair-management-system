@@ -10,7 +10,7 @@ const KEY_ROLE      = 'role';
 const KEY_USER_ID   = 'userId';
 const KEY_LOGIN     = 'userLogin';
 const KEY_CLIENT_ID = 'clientId';
-
+const KEY_CLIENT_NAME = 'clientName';
 // ─────────────────────────────────────────────
 // Rôles métier (snake_case majuscule)
 // correspondant exactement à ce que renvoie
@@ -38,16 +38,16 @@ export class AuthService {
   // APPEL API
   // ─────────────────────────────────────────
 
-  login(data: { login: string; motDePasse: string }) {
-    return this.http.post<{
-      token: string;
-      role: string;
-      userId: number;
-      login: string;
-      clientId?: number;
-    }>(`${this.apiUrl}/login`, data);
-  }
-
+login(data: { login: string; motDePasse: string }) {
+  return this.http.post<{
+    token: string;
+    role: string;
+    userId: number;
+    login: string;
+    clientId?: number;
+    clientName?: string;
+  }>(`${this.apiUrl}/login`, data);
+}
   // ─────────────────────────────────────────
   // SAUVEGARDE — écriture dans localStorage
   // ─────────────────────────────────────────
@@ -92,7 +92,13 @@ export class AuthService {
   saveClientId(id: number | string): void {
     localStorage.setItem(KEY_CLIENT_ID, String(id));
   }
+saveClientName(name: string): void {
+  localStorage.setItem(KEY_CLIENT_NAME, name);
+}
 
+getClientName(): string | null {
+  return localStorage.getItem(KEY_CLIENT_NAME);
+}
   getClientId(): number | null {
     const val = localStorage.getItem(KEY_CLIENT_ID);
     return val ? Number(val) : null;
@@ -103,7 +109,9 @@ export class AuthService {
     role?: string,
     userId?: number | string,
     login?: string,
-    clientId?: number | string
+    clientId?: number | string,
+     clientName?: string
+
   ): void {
 
     this.saveToken(token);
@@ -129,6 +137,8 @@ export class AuthService {
     if (resolvedClientId !== undefined && resolvedClientId !== null) {
       this.saveClientId(resolvedClientId);
     }
+  if (clientName) this.saveClientName(clientName);
+
   }
 
   // ─────────────────────────────────────────
@@ -168,6 +178,8 @@ export class AuthService {
     localStorage.removeItem(KEY_USER_ID);
     localStorage.removeItem(KEY_LOGIN);
     localStorage.removeItem(KEY_CLIENT_ID);
+      localStorage.removeItem(KEY_CLIENT_NAME); // 🔥 IMPORTANT
+
   }
 
   // ─────────────────────────────────────────

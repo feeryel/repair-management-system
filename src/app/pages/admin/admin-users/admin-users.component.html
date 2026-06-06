@@ -1,5 +1,6 @@
 <div class="dash-page">
 
+  <!-- HEADER -->
   <div class="dash-header">
     <div class="dash-header-left">
       <div class="dash-avatar admin-av"><i class="bi bi-people-fill"></i></div>
@@ -25,8 +26,8 @@
     </div>
     <div class="form-grid">
       <div class="field">
-        <label>Login</label>
-        <input type="text" [(ngModel)]="newUser.login" placeholder="Identifiant" />
+        <label>Identifiant / Email</label>
+        <input type="email" [(ngModel)]="newUser.login" placeholder="adresse email de l'utilisateur" />
       </div>
       <div class="field">
         <label>Mot de passe</label>
@@ -40,7 +41,7 @@
       </div>
     </div>
     <div class="form-actions">
-      <button class="btn-save"   (click)="add()">      <i class="bi bi-check-lg"></i> Créer</button>
+      <button class="btn-save"   (click)="add()">        <i class="bi bi-check-lg"></i> Créer</button>
       <button class="btn-cancel" (click)="showForm=false"><i class="bi bi-x-lg"></i> Annuler</button>
     </div>
     <div *ngIf="errorMsg" class="alert-error">{{ errorMsg }}</div>
@@ -48,13 +49,77 @@
 
   <div *ngIf="successMsg" class="alert-success">{{ successMsg }}</div>
 
+  <!-- FILTERS -->
+  <div class="filters-card">
+    <div class="filters-row">
+
+      <!-- Search login -->
+      <div class="filter-field filter-search">
+        <i class="bi bi-search filter-icon"></i>
+        <input type="text" [(ngModel)]="filterLogin" (ngModelChange)="currentPage=1"
+               placeholder="Rechercher par login…" />
+      </div>
+
+      <!-- Role -->
+      <div class="filter-field">
+        <label><i class="bi bi-person-badge me-1"></i>Rôle</label>
+        <select [(ngModel)]="filterRole" (ngModelChange)="currentPage=1">
+          <option value="">Tous les rôles</option>
+          <option *ngFor="let r of roles" [value]="r.value">{{ r.label }}</option>
+        </select>
+      </div>
+
+      <!-- Status -->
+      <div class="filter-field">
+        <label><i class="bi bi-activity me-1"></i>Statut</label>
+        <select [(ngModel)]="filterStatus" (ngModelChange)="currentPage=1">
+          <option value="">Tous</option>
+          <option value="actif">Actif</option>
+          <option value="inactif">Inactif</option>
+          <option value="banni">Banni</option>
+        </select>
+      </div>
+
+      <!-- Date from -->
+      <div class="filter-field">
+        <label><i class="bi bi-calendar-event me-1"></i>Créé après</label>
+        <input type="date" [(ngModel)]="filterDateFrom" (ngModelChange)="currentPage=1" />
+      </div>
+
+      <!-- Date to -->
+      <div class="filter-field">
+        <label><i class="bi bi-calendar-check me-1"></i>Créé avant</label>
+        <input type="date" [(ngModel)]="filterDateTo" (ngModelChange)="currentPage=1" />
+      </div>
+
+      <!-- Reset -->
+      <button class="btn-reset" (click)="resetFilters()" *ngIf="hasActiveFilters" title="Effacer les filtres">
+        <i class="bi bi-x-circle-fill"></i> Réinitialiser
+      </button>
+
+    </div>
+
+    <!-- Active filters summary -->
+    <div class="filter-summary" *ngIf="!loading">
+      <span class="result-count">
+        <strong>{{ totalFiltered }}</strong> compte{{ totalFiltered > 1 ? 's' : '' }}
+        <span *ngIf="hasActiveFilters"> trouvé{{ totalFiltered > 1 ? 's' : '' }} sur {{ users.length }} total</span>
+      </span>
+      <div class="page-size-wrap">
+        <span>Afficher</span>
+        <select [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
+          <option *ngFor="let s of pageSizes" [value]="s">{{ s }}</option>
+        </select>
+        <span>par page</span>
+      </div>
+    </div>
+  </div>
+
   <!-- TABLE -->
   <div class="dash-card">
-    <div class="dash-card-header">
-      <h5><i class="bi bi-list-ul me-2"></i>Tous les comptes ({{ users.length }})</h5>
-    </div>
     <div class="table-wrap">
       <div *ngIf="loading" class="loading-row"><i class="bi bi-arrow-repeat spin"></i> Chargement…</div>
+
       <table class="dtable" *ngIf="!loading">
         <thead>
           <tr>
@@ -62,16 +127,17 @@
             <th>Login</th>
             <th>Rôle</th>
             <th>Statut</th>
+            <th>Date création</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let u of users" [class.row-inactive]="!u.actif || u.bannit">
+          <tr *ngFor="let u of paginatedUsers" [class.row-inactive]="!u.actif || u.bannit">
             <td class="td-id">{{ u.id }}</td>
             <td>
               <div class="user-chip">
                 <div class="user-av" [class.av-banni]="u.bannit" [class.av-inactif]="!u.actif && !u.bannit">
-                  {{ (u.login||'?').charAt(0).toUpperCase() }}
+                  {{ (u.login || '?').charAt(0).toUpperCase() }}
                 </div>
                 {{ u.login }}
               </div>
@@ -82,43 +148,83 @@
             <td>
               <span class="status-chip" [ngClass]="statusClass(u)">{{ statusLabel(u) }}</span>
             </td>
+            <td class="td-date">
+              {{ u.createdAt ? (u.createdAt | date:'dd/MM/yyyy') : '—' }}
+            </td>
             <td class="td-actions">
-              <!-- Réactiver si inactif ou banni (et pas admin) -->
               <button *ngIf="(!u.actif || u.bannit) && u.role !== 'admin'"
                       class="icon-btn icon-btn-reactiver"
-                      (click)="reactiver(u)"
-                      title="Réactiver">
+                      (click)="reactiver(u)" title="Réactiver">
                 <i class="bi bi-check-circle-fill"></i>
               </button>
-              <!-- Désactiver si actif et pas banni et pas admin -->
               <button *ngIf="u.actif && !u.bannit && u.role !== 'admin'"
                       class="icon-btn icon-btn-desact"
-                      (click)="desactiver(u)"
-                      title="Désactiver">
+                      (click)="desactiver(u)" title="Désactiver">
                 <i class="bi bi-slash-circle-fill"></i>
               </button>
-              <!-- Bannir si pas encore banni et pas admin -->
               <button *ngIf="!u.bannit && u.role !== 'admin'"
                       class="icon-btn icon-btn-ban"
-                      (click)="bannir(u)"
-                      title="Bannir">
+                      (click)="bannir(u)" title="Bannir">
                 <i class="bi bi-ban-fill"></i>
               </button>
             </td>
           </tr>
-          <tr *ngIf="users.length === 0"><td colspan="5" class="empty-row">Aucun compte</td></tr>
+          <tr *ngIf="paginatedUsers.length === 0">
+            <td colspan="6" class="empty-row">
+              <i class="bi bi-search" style="font-size:1.5rem;display:block;margin-bottom:.5rem"></i>
+              Aucun compte ne correspond aux filtres
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination-bar" *ngIf="!loading && totalFiltered > 0">
+      <span class="page-info">
+        Page {{ currentPage }} / {{ totalPages }}
+        &nbsp;·&nbsp;
+        {{ (currentPage - 1) * pageSize + 1 }}–{{ currentPage * pageSize > totalFiltered ? totalFiltered : currentPage * pageSize }} sur {{ totalFiltered }}
+      </span>
+
+      <div class="page-nav">
+        <!-- First -->
+        <button class="page-btn" (click)="goTo(1)" [disabled]="currentPage === 1" title="Première page">
+          <i class="bi bi-chevron-double-left"></i>
+        </button>
+        <!-- Prev -->
+        <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1" title="Précédent">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <!-- Page numbers -->
+        <button *ngIf="pageNumbers[0] > 1" class="page-btn page-ellipsis" disabled>…</button>
+        <button *ngFor="let p of pageNumbers"
+                class="page-btn"
+                [class.page-active]="p === currentPage"
+                (click)="goTo(p)">{{ p }}</button>
+        <button *ngIf="pageNumbers[pageNumbers.length - 1] < totalPages" class="page-btn page-ellipsis" disabled>…</button>
+
+        <!-- Next -->
+        <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages" title="Suivant">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+        <!-- Last -->
+        <button class="page-btn" (click)="goTo(totalPages)" [disabled]="currentPage === totalPages" title="Dernière page">
+          <i class="bi bi-chevron-double-right"></i>
+        </button>
+      </div>
+    </div>
+
   </div>
 
 </div>
 
 <style>
 .dash-page { padding:2rem; background:#f4f6fb; min-height:100vh; margin-left:260px; }
-.dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+.dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem; }
 .dash-header-left { display:flex; align-items:center; gap:1rem; }
-.dash-avatar { width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem; }
+.dash-avatar { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; }
 .admin-av { background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; }
 .dash-title { font-size:1.5rem; font-weight:700; margin:0; color:#1e1b4b; }
 .dash-sub { margin:0; color:#6b7280; font-size:.9rem; }
@@ -128,12 +234,13 @@
 .btn-add  { background:linear-gradient(135deg,#7c3aed,#a855f7); }
 .dash-btn:hover { opacity:.85; color:#fff; }
 
+/* Create form */
 .info-box { background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; border-radius:10px; padding:.75rem 1rem; margin-bottom:1rem; font-size:.875rem; }
 .add-form { background:#fff; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.07); padding:1.5rem; margin-bottom:1.5rem; }
 .form-title { font-weight:700; color:#1e1b4b; margin-bottom:1rem; }
 .form-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1rem; }
 .field label { display:block; font-size:.8rem; font-weight:600; color:#374151; margin-bottom:.4rem; }
-.field input, .field select { width:100%; padding:.6rem .875rem; border:1.5px solid #e5e7eb; border-radius:10px; font-size:.9rem; outline:none; transition:border-color .2s; }
+.field input, .field select { width:100%; padding:.6rem .875rem; border:1.5px solid #e5e7eb; border-radius:10px; font-size:.9rem; outline:none; transition:border-color .2s; box-sizing:border-box; }
 .field input:focus, .field select:focus { border-color:#7c3aed; }
 .form-actions { display:flex; gap:.75rem; }
 .btn-save   { background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; border:none; border-radius:10px; padding:.6rem 1.25rem; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:.4rem; }
@@ -141,23 +248,43 @@
 .alert-error   { margin-top:1rem; padding:.75rem 1rem; background:#fee2e2; color:#dc2626; border-radius:10px; font-size:.875rem; }
 .alert-success { padding:.75rem 1rem; background:#d1fae5; color:#059669; border-radius:10px; font-size:.875rem; margin-bottom:1rem; }
 
+/* Filters */
+.filters-card { background:#fff; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.07); padding:1.25rem 1.5rem; margin-bottom:1.25rem; }
+.filters-row { display:flex; flex-wrap:wrap; gap:.75rem; align-items:flex-end; }
+.filter-field { display:flex; flex-direction:column; gap:.3rem; min-width:150px; }
+.filter-field label { font-size:.75rem; font-weight:600; color:#6b7280; }
+.filter-field input, .filter-field select { padding:.5rem .75rem; border:1.5px solid #e5e7eb; border-radius:10px; font-size:.875rem; outline:none; transition:border-color .2s; background:#fff; }
+.filter-field input:focus, .filter-field select:focus { border-color:#7c3aed; }
+.filter-search { position:relative; flex:1; min-width:220px; }
+.filter-search input { padding-left:2.2rem; width:100%; box-sizing:border-box; }
+.filter-icon { position:absolute; left:.7rem; bottom:.55rem; color:#9ca3af; font-size:.9rem; }
+.btn-reset { align-self:flex-end; padding:.5rem .9rem; border:1.5px solid #e5e7eb; border-radius:10px; background:#fff; color:#dc2626; font-size:.8rem; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:.35rem; transition:background .2s,border-color .2s; white-space:nowrap; }
+.btn-reset:hover { background:#fee2e2; border-color:#dc2626; }
+
+.filter-summary { display:flex; align-items:center; justify-content:space-between; margin-top:1rem; padding-top:.9rem; border-top:1px solid #f1f5f9; flex-wrap:wrap; gap:.5rem; }
+.result-count { font-size:.875rem; color:#6b7280; }
+.result-count strong { color:#1e1b4b; font-size:1rem; }
+.page-size-wrap { display:flex; align-items:center; gap:.5rem; font-size:.85rem; color:#6b7280; }
+.page-size-wrap select { padding:.3rem .6rem; border:1.5px solid #e5e7eb; border-radius:8px; font-size:.85rem; outline:none; }
+.page-size-wrap select:focus { border-color:#7c3aed; }
+
+/* Table */
 .dash-card { background:#fff; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.07); overflow:hidden; }
-.dash-card-header { padding:1.25rem 1.5rem; border-bottom:1px solid #f1f5f9; }
-.dash-card-header h5 { margin:0; font-weight:700; color:#1e1b4b; }
 .table-wrap { overflow-x:auto; }
 .dtable { width:100%; border-collapse:collapse; }
-.dtable th { padding:.75rem 1.5rem; text-align:left; font-size:.75rem; text-transform:uppercase; letter-spacing:.5px; color:#9ca3af; font-weight:600; border-bottom:1px solid #f1f5f9; }
+.dtable th { padding:.75rem 1.5rem; text-align:left; font-size:.75rem; text-transform:uppercase; letter-spacing:.5px; color:#9ca3af; font-weight:600; border-bottom:1px solid #f1f5f9; white-space:nowrap; }
 .dtable td { padding:.875rem 1.5rem; border-bottom:1px solid #f8fafc; vertical-align:middle; }
 .dtable tbody tr:hover { background:#f8fafc; }
 .row-inactive { opacity:.6; }
 .td-id { color:#9ca3af; font-size:.85rem; }
+.td-date { color:#6b7280; font-size:.85rem; white-space:nowrap; }
 
 .user-chip { display:flex; align-items:center; gap:.6rem; font-weight:500; }
-.user-av  { width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem; }
-.av-banni  { background:linear-gradient(135deg,#dc2626,#f87171) !important; }
-.av-inactif{ background:linear-gradient(135deg,#6b7280,#9ca3af) !important; }
+.user-av  { width:32px; height:32px; border-radius:8px; background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.8rem; flex-shrink:0; }
+.av-banni   { background:linear-gradient(135deg,#dc2626,#f87171) !important; }
+.av-inactif { background:linear-gradient(135deg,#6b7280,#9ca3af) !important; }
 
-.role-badge { padding:.25rem .75rem; border-radius:20px; font-size:.75rem; font-weight:600; }
+.role-badge { padding:.25rem .75rem; border-radius:20px; font-size:.75rem; font-weight:600; white-space:nowrap; }
 .badge-admin  { background:#ede9fe; color:#7c3aed; }
 .badge-client { background:#dbeafe; color:#2563eb; }
 .badge-tech   { background:#d1fae5; color:#059669; }
@@ -177,9 +304,21 @@
 .icon-btn-reactiver { color:#059669; } .icon-btn-reactiver:hover { background:#d1fae5; }
 .icon-btn-ban       { color:#dc2626; } .icon-btn-ban:hover       { background:#fee2e2; }
 
+/* Pagination */
+.pagination-bar { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem; border-top:1px solid #f1f5f9; flex-wrap:wrap; gap:.75rem; }
+.page-info { font-size:.82rem; color:#6b7280; }
+.page-nav { display:flex; align-items:center; gap:.3rem; }
+.page-btn { width:34px; height:34px; display:flex; align-items:center; justify-content:center; border:1.5px solid #e5e7eb; border-radius:8px; background:#fff; color:#374151; font-size:.85rem; font-weight:500; cursor:pointer; transition:all .15s; padding:0; }
+.page-btn:hover:not(:disabled) { border-color:#7c3aed; color:#7c3aed; background:#faf5ff; }
+.page-btn:disabled { opacity:.35; cursor:not-allowed; }
+.page-btn.page-active { background:#7c3aed; border-color:#7c3aed; color:#fff; font-weight:700; }
+.page-ellipsis { border:none; background:transparent; cursor:default; color:#9ca3af; }
+.page-ellipsis:hover { border:none; background:transparent; color:#9ca3af; }
+
 .loading-row { text-align:center; padding:2rem; color:#9ca3af; }
 .empty-row { text-align:center; color:#9ca3af; padding:2rem; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .spin { display:inline-block; animation:spin 1s linear infinite; }
-@media(max-width:600px){ .form-grid{grid-template-columns:1fr;} .dash-page{margin-left:0;} }
+@media(max-width:900px) { .filters-row { flex-direction:column; } .filter-field { min-width:100%; } }
+@media(max-width:600px) { .form-grid{grid-template-columns:1fr;} .dash-page{margin-left:0;} .pagination-bar{flex-direction:column;} }
 </style>

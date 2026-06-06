@@ -125,7 +125,7 @@ villes: string[] = [
     }
 
     // VALIDATION TEL
-    const telRegex = /^[0-9]{8}$/;
+    const telRegex = /^[9254][0-9]{7}$/;
 
     if(!telRegex.test(this.client.numTel)){
 
@@ -133,7 +133,7 @@ villes: string[] = [
 
         icon: 'warning',
         title: 'Téléphone invalide',
-        text: 'Le numéro doit contenir 8 chiffres',
+        text: 'Le numéro doit contenir 8 chiffres et commencer par 2, 4, 5 ou 9',
 
         confirmButtonColor: '#667eea'
 
@@ -153,23 +153,6 @@ villes: string[] = [
         icon: 'warning',
         title: 'Email invalide',
         text: 'Veuillez entrer un email valide',
-
-        confirmButtonColor: '#667eea'
-
-      });
-
-      return;
-
-    }
-
-    // VALIDATION ADRESSE
-    if(this.client.adresse.length < 5){
-
-      Swal.fire({
-
-        icon: 'warning',
-        title: 'Adresse invalide',
-        text: 'Adresse trop courte',
 
         confirmButtonColor: '#667eea'
 

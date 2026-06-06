@@ -10,9 +10,11 @@
 
     <div class="actions">
 
-      <a [routerLink]="['/factures/add']" class="btn-add">
-        + Nouvelle facture
-      </a>
+<a *ngIf="!isClient"
+   [routerLink]="['/factures/add']"
+   class="btn-add">
+  + Nouvelle facture
+</a>
 
 
 

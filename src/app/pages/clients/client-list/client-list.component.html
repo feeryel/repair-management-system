@@ -131,18 +131,12 @@
 
           <td class="actions">
 
-            <button class="btn danger" (click)="deleteClient(client.id!)">
-              🗑
+            <button
+              class="btn warn"
+              (click)="editAlert()"
+              [routerLink]="['/clients/edit', client.id]">
+              ✏️
             </button>
-
-      <button
-  class="btn warn"
-  (click)="editAlert()"
-  [routerLink]="['/clients/edit', client.id]">
-
-  ✏️
-
-</button>
 
           </td>
 

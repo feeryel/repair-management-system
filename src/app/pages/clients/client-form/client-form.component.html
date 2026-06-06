@@ -81,7 +81,8 @@
                 name="numTel"
                 #numTel="ngModel"
                 required
-                pattern="^[0-9]{8}$"
+                pattern="^[9254][0-9]{7}$"
+                maxlength="8"
                 placeholder="Entrer le téléphone">
 
             </div>
@@ -93,7 +94,7 @@
               </small>
 
               <small *ngIf="numTel.errors?.['pattern']">
-                Numéro invalide (8 chiffres)
+                8 chiffres, commence par 2, 4, 5 ou 9
               </small>
 
             </div>

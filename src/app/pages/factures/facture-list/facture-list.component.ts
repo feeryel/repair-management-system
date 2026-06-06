@@ -17,15 +17,19 @@ import QRCode from 'qrcode';
   styleUrls: ['./facture-list.component.css']
 })
 export class FactureListComponent implements OnInit {
-
+role: Role | '' = '';
+isClient = false;
   factures: any[] = [];
   searchText: string = '';
 
   constructor(private service: FactureService, private authService: AuthService) {}
 
-  ngOnInit(): void {
-    this.loadData();
-  }
+ ngOnInit(): void {
+  this.role = (this.authService.getRole() as Role) ?? '';
+  this.isClient = this.role === Role.CLIENT;
+
+  this.loadData();
+}
 
   loadData() {
     const role = this.authService.getRole();

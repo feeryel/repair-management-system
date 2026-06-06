@@ -61,13 +61,14 @@ export class LoginComponent {
         // Cas couverts :
         //   • Backend renvoie { token, role, userId, login }  → tout sauvegardé directement
         //   • Backend renvoie { token } seulement             → rôle extrait du payload JWT
-        this.authService.saveSession(
-          res.token,
-          res.role,
-          res.userId,
-          res.login ?? this.loginData.login,
-          res.clientId
-        );
+   this.authService.saveSession(
+  res.token,
+  res.role,
+  res.userId,
+  res.login ?? this.loginData.login,
+  res.clientId,      res.clientName   // ✅ FIX IMPORTANT
+
+);
 
         // Redirection selon le rôle persisté
         this.redirectByRole();

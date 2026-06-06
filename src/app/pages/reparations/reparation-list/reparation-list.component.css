@@ -125,25 +125,6 @@
   color:#111827;
 }
 
-/* STATUS COLORS (DIFFERENT STYLE) */
-.DONE .status-bar{
-  background:#22c55e;
-}
-
-.IN_PROGRESS .status-bar{
-  background:#f59e0b;
-}
-
-/* pill colors */
-.DONE{
-  background:#dcfce7;
-  color:#16a34a;
-}
-
-.IN_PROGRESS{
-  background:#fef3c7;
-  color:#b45309;
-}
 /* ================= TOOLBAR ================= */
 
 .toolbar {
@@ -183,94 +164,20 @@
   color: white;
 }
 
+/* ================= STATUS COLORS ================= */
+
+.PENDING .status-bar { background: #3b82f6; }
+.IN_PROGRESS .status-bar { background: #f59e0b; }
+.DONE .status-bar { background: #22c55e; }
+.FAILED .status-bar { background: #ef4444; }
+
+.PENDING.status-pill  { background: #dbeafe; color: #1d4ed8; }
+.IN_PROGRESS.status-pill { background: #fef3c7; color: #b45309; }
+.DONE.status-pill     { background: #dcfce7; color: #16a34a; }
+.FAILED.status-pill   { background: #fee2e2; color: #dc2626; }
+
 /* ================= PAGINATION ================= */
 
-.pagination-container {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.page-btn,
-.page-number {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  background: white;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-  font-weight: 600;
-}
-
-.page-btn:hover,
-.page-number:hover {
-  background: #eef2ff;
-}
-
-.active-page {
-  background: linear-gradient(135deg,#6366f1,#8b5cf6) !important;
-  color: white !important;
-}
-
-
-/* STATUS COLORS GLOBAL */
-.PENDING .status-bar {
-  background: #3b82f6;
-}
-
-.IN_PROGRESS .status-bar {
-  background: #f59e0b;
-}
-
-.DONE .status-bar {
-  background: #22c55e;
-}
-
-.FAILED .status-bar {
-  background: #ef4444;
-}
-
-/* PILLS */
-.PENDING.status-pill {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-.IN_PROGRESS.status-pill {
-  background: #fef3c7;
-  color: #b45309;
-}
-
-.DONE.status-pill {
-  background: #dcfce7;
-  color: #16a34a;
-}
-
-.FAILED.status-pill {
-  background: #fee2e2;
-  color: #dc2626;
-}
-
-/* FILTER BUTTONS */
-.filters button {
-  padding: 10px 14px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  background: #eef2ff;
-  color: #4f46e5;
-  font-weight: 600;
-  transition: .3s;
-}
-
-.filters button.active {
-  background: linear-gradient(135deg,#6366f1,#8b5cf6);
-  color: white;
-}
-
-/* PAGINATION */
 .pagination-container {
   margin-top: 30px;
   display: flex;
@@ -299,4 +206,29 @@
 .active-page {
   background: linear-gradient(135deg,#6366f1,#8b5cf6) !important;
   color: white !important;
+}
+
+/* ================= ACTION FOOTER ================= */
+
+.card-actions {
+  padding: 12px 16px 14px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.btn-done {
+  width: 100%;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 0;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .2s, transform .2s;
+}
+
+.btn-done:hover {
+  opacity: .88;
+  transform: translateY(-1px);
 }

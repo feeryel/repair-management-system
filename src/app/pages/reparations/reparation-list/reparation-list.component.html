@@ -8,7 +8,7 @@
       <p>Suivi technique des interventions et diagnostics</p>
     </div>
 
-    <button class="btn-add" [routerLink]="['/reparations/form']">
+    <button *ngIf="!isClient" class="btn-add" [routerLink]="['/reparations/form']">
       + Nouvelle réparation
     </button>
 
@@ -103,6 +103,12 @@
 
         </div>
 
+      </div>
+
+      <div class="card-actions" *ngIf="canChangeStatus() && r.status !== 'DONE'">
+        <button class="btn-done" (click)="changeStatus(r.id, 'DONE')">
+          ✓ Marquer comme terminée
+        </button>
       </div>
 
     </div>

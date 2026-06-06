@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import Swal from 'sweetalert2';
 import { PlanningService } from '../../../core/services/planning.service';
+import { AuthService, Role } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-planning-list',
@@ -13,8 +14,10 @@ import { PlanningService } from '../../../core/services/planning.service';
   styleUrls: ['./planning-list.component.scss']
 })
 export class PlanningListComponent implements OnInit {
+isTechnicien = false;
 
   plannings: any[] = [];
+role: Role | '' = '';
 
   loading: boolean = false;
 
@@ -22,9 +25,11 @@ export class PlanningListComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 7;
 
-  constructor(private service: PlanningService) {}
+  constructor(private service: PlanningService,private authService: AuthService) {}
 
   ngOnInit(): void {
+      this.role = (this.authService.getRole() as Role) ?? '';
+      this.isTechnicien = this.role === Role.TECHNICIEN;
     this.loadData();
   }
 

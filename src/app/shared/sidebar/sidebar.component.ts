@@ -55,13 +55,15 @@ export class SidebarComponent implements OnInit {
   navItems: NavItem[] = [];
   userLogin = '';
   roleLabel = '';
-
+clientName =''  ;
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     const role = (this.authService.getRole() ?? '') as Role;
     this.navItems  = NAV[role] ?? [];
     this.userLogin = this.authService.getUserLogin() ?? 'Utilisateur';
+      this.clientName = this.authService.getClientName() ?? '';
+
     this.roleLabel = this.getRoleLabel(role);
   }
 
@@ -75,6 +77,13 @@ export class SidebarComponent implements OnInit {
       [Role.ACHAT_STOCK]:'Resp. Stock',
     };
     return labels[role] ?? role;
+  }
+
+  get displayName(): string {
+    if (this.clientName) return this.clientName;
+    const login = this.userLogin || '';
+    const atIdx = login.indexOf('@');
+    return atIdx > 0 ? login.substring(0, atIdx) : (login || 'Utilisateur');
   }
 
   logout(): void {

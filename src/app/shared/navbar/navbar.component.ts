@@ -53,6 +53,8 @@ const NAV: Record<Role, NavItem[]> = {
 export class NavbarComponent {
 userLogin = '';
 roleLabel = '';
+clientName = '';
+
   constructor(
     private authService: AuthService,
     private router: Router
@@ -64,6 +66,7 @@ roleLabel = '';
 
     this.userLogin = this.authService.getUserLogin() ?? 'Utilisateur';
         this.roleLabel = this.getRoleLabel(role);
+  this.clientName = this.authService.getClientName() ?? '';
 
   }
    private getRoleLabel(role: Role): string {
@@ -77,6 +80,13 @@ roleLabel = '';
       };
       return labels[role] ?? role;
     }
+  get displayName(): string {
+    if (this.clientName) return this.clientName;
+    const login = this.userLogin || '';
+    const atIdx = login.indexOf('@');
+    return atIdx > 0 ? login.substring(0, atIdx) : (login || 'Utilisateur');
+  }
+
   logout() {
 
     this.authService.logout();

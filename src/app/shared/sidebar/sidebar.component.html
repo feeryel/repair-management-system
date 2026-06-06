@@ -11,9 +11,9 @@
 
   <!-- USER CHIP -->
   <div class="user-chip mb-4">
-    <div class="user-av">{{ (userLogin || '?').charAt(0).toUpperCase() }}</div>
+    <div class="user-av">{{ displayName.charAt(0).toUpperCase() }}</div>
     <div class="user-info">
-      <span class="user-name">{{ userLogin }}</span>
+      <span class="user-name">{{ displayName }}</span>
       <span class="user-role">{{ roleLabel }}</span>
     </div>
   </div>

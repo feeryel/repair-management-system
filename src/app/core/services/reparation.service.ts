@@ -31,7 +31,7 @@ export class ReparationService {
   }
 
   updateStatus(id: number, status: string) {
-    return this.http.put(`${this.api}/${id}/status`, { status });
+    return this.http.patch(`${this.api}/${id}/status`, { status });
   }
 
   delete(id: number) {
