@@ -21,8 +21,16 @@ export class PlanningService {
     return this.http.get(`${this.api}/${id}`);
   }
 
+  getByTechnicien(technicienId:any){
+    return this.http.get<any[]>(`${this.api}/technicien/${technicienId}`);
+  }
+
   update(id:any,data:any){
     return this.http.put(`${this.api}/${id}`,data);
+  }
+
+  updateStatut(id:any, statut:string){
+    return this.http.patch(`${this.api}/${id}/statut`, { statut });
   }
 
   delete(id:any){

@@ -10,6 +10,4 @@ export interface Demande {
 
   etat: string;
 
-  idEtiquette: number;
-
 }

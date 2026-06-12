@@ -1,65 +1,126 @@
-<div class="container mt-4">
+<div class="page">
 
-  <h2>Lignes Réparation</h2>
+  <!-- HEADER -->
+  <div class="header">
 
-  <a
-    routerLink="/ligne-reparations/add"
-    class="btn btn-primary mb-3">
+    <div class="header-left">
 
-    Ajouter
+      <div class="header-icon">🧾</div>
 
-  </a>
+      <div>
+        <h2>Lignes de Réparation</h2>
+        <p>Pièces détachées utilisées pour chaque intervention</p>
+      </div>
 
-  <table class="table table-bordered">
+    </div>
 
-    <thead class="table-dark">
+    <a routerLink="/ligne-reparations/add" class="btn-add" *ngIf="!isAchatStock">
+      + Ajouter une ligne
+    </a>
 
-      <tr>
+  </div>
 
-        <th>ID</th>
-        <th>Réparation</th>
-        <th>Pièce</th>
-        <th>Quantité</th>
-        <th>Actions</th>
+  <!-- STATS -->
+  <div class="stats">
 
-      </tr>
+    <div class="stat-card indigo">
+      <div class="stat-icon">📋</div>
+      <div class="stat-info">
+        <span>Lignes enregistrées</span>
+        <h3>{{ totalLignes }}</h3>
+      </div>
+    </div>
 
-    </thead>
+    <div class="stat-card orange">
+      <div class="stat-icon">🔩</div>
+      <div class="stat-info">
+        <span>Pièces consommées</span>
+        <h3>{{ totalQuantite }}</h3>
+      </div>
+    </div>
 
-    <tbody>
+    <div class="stat-card green">
+      <div class="stat-icon">💰</div>
+      <div class="stat-info">
+        <span>Valeur totale</span>
+        <h3>{{ totalValeur | number:'1.2-2' }} DT</h3>
+      </div>
+    </div>
 
-      <tr *ngFor="let l of lignes">
+  </div>
 
-        <td>{{l.id}}</td>
+  <!-- SEARCH -->
+  <div class="toolbar">
 
-        <td>
-          {{l.ReparationId}}
-        </td>
+    <input
+      type="text"
+      placeholder="🔎 Rechercher par pièce, code ou n° de réparation..."
+      [(ngModel)]="searchText"
+      class="search">
 
-        <td>
-          {{l.Piece?.nom}}
-        </td>
+  </div>
 
-        <td>
-          {{l.quantite}}
-        </td>
+  <!-- TABLE -->
+  <div class="table-card" *ngIf="filteredLignes.length > 0">
 
-        <td>
+    <table>
 
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="delete(l.id)">
+      <thead>
 
-            Supprimer
+        <tr>
+          <th>#</th>
+          <th>Réparation</th>
+          <th>Pièce</th>
+          <th>Prix unitaire</th>
+          <th>Quantité</th>
+          <th>Total</th>
+          <th *ngIf="!isAchatStock"></th>
+        </tr>
 
-          </button>
+      </thead>
 
-        </td>
+      <tbody>
 
-      </tr>
+        <tr *ngFor="let l of filteredLignes">
 
-    </tbody>
+          <td class="id-cell">#{{ l.id }}</td>
 
-  </table>
+          <td>
+            <span class="rep-pill">Réparation #{{ l.ReparationId }}</span>
+          </td>
+
+          <td>
+            <div class="piece-cell">
+              <span class="piece-name">{{ l.Piece?.nom || '—' }}</span>
+              <span class="piece-code" *ngIf="l.Piece?.code">{{ l.Piece?.code }}</span>
+            </div>
+          </td>
+
+          <td>{{ (l.Piece?.prixHT || 0) | number:'1.2-2' }} DT</td>
+
+          <td>
+            <span class="qty-badge">x{{ l.quantite }}</span>
+          </td>
+
+          <td class="total-cell">{{ ligneTotal(l) | number:'1.2-2' }} DT</td>
+
+          <td *ngIf="!isAchatStock">
+            <button class="btn-delete" (click)="delete(l.id)" title="Supprimer">
+              🗑
+            </button>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- EMPTY -->
+  <div class="empty" *ngIf="filteredLignes.length === 0">
+    😕 Aucune ligne de réparation trouvée
+  </div>
 
 </div>

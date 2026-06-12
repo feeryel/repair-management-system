@@ -2,20 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
 import { DemandeService } from '../../../core/services/demande.service';
+import { AppareilService } from '../../../core/services/appareil.service';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-demande-form',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule
-  ],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './demande-form.component.html',
-  styleUrls: ['./demande-form.component.scss']
+  styleUrls: ['./demande-form.component.css']
 })
 export class DemandeFormComponent implements OnInit {
 
@@ -24,15 +20,19 @@ export class DemandeFormComponent implements OnInit {
     datePrevueRep: '',
     symptomesPanne: '',
     etat: 'En attente',
-    idEtiquette: null,
     appareilId: null
   };
 
+  appareils: any[] = [];
+
   id: any;
-  loading: boolean = false;
+  loading = false;
+  predicted = false;
+  predictionFailed = false;
 
   constructor(
     private demandeService: DemandeService,
+    private appareilService: AppareilService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -41,145 +41,168 @@ export class DemandeFormComponent implements OnInit {
 
     this.id = this.route.snapshot.paramMap.get('id');
 
-    if (this.id) {
+    this.appareilService.getAll().subscribe({
+      next: (res: any) => this.appareils = res ?? []
+    });
 
+    if (this.id) {
       this.loading = true;
 
       this.demandeService.getOne(this.id).subscribe({
-
         next: (res: any) => {
           this.demande = res;
+          this.demande.appareilId = res?.AppareilId ?? res?.Appareil?.id ?? null;
+          if (this.demande.dateDepot) this.demande.dateDepot = this.demande.dateDepot.substring(0, 10);
+          if (this.demande.datePrevueRep) this.demande.datePrevueRep = this.demande.datePrevueRep.substring(0, 10);
+
+          // ⭐ important fix
+          this.predicted = !!res?.datePrevueRep;
+
           this.loading = false;
         },
-
-        error: () => {
-          this.loading = false;
-        }
-
+        error: () => this.loading = false
       });
+    }
+  }
 
+  appareilLabel(a: any): string {
+    const client = a.Client?.nom ? `${a.Client.nom} — ` : '';
+    return `${client}${a.marque ?? ''} ${a.modele ?? ''} (${a.numSerie ?? '—'})`;
+  }
+
+  predict() {
+
+    console.log("🟡 CLICK predict()");
+    console.log("symptomes =", this.demande.symptomesPanne);
+    console.log("dateDepot =", this.demande.dateDepot);
+
+    if (!this.demande.symptomesPanne || !this.demande.dateDepot) {
+      Swal.fire('Warning', 'Remplir symptômes + date dépôt', 'warning');
+      return;
     }
 
+    this.loading = true;
+    this.predicted = false;
+    this.predictionFailed = false;
+
+    this.demandeService.predictDate(
+      this.demande.symptomesPanne,
+      this.demande.dateDepot
+    )
+    .subscribe({
+
+      next: (res: any) => {
+
+        console.log("🟢 RESPONSE =", res);
+
+        if (!res) {
+          Swal.fire('Erreur', 'Backend ne répond pas', 'error');
+          this.loading = false;
+          return;
+        }
+
+        const raw = res.datePrevueRep;
+
+        if (!raw) {
+          Swal.fire('Erreur', 'Date invalide reçue', 'error');
+          this.loading = false;
+          return;
+        }
+
+        // clean date (important)
+        const cleanDate = raw.replace('=', '').split('T')[0];
+
+        console.log("🧼 CLEAN DATE =", cleanDate);
+
+        this.demande.datePrevueRep = cleanDate;
+
+        this.predicted = true;
+
+        this.loading = false;
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Date prédite',
+          text: cleanDate
+        });
+      },
+
+      error: (err) => {
+        console.log("🔴 ERROR =", err);
+        this.loading = false;
+        this.predicted = false;
+        this.predictionFailed = true;
+
+        Swal.fire({
+          icon: 'warning',
+          title: 'Prédiction indisponible',
+          text: 'Le service de prédiction ne répond pas. Vous pouvez saisir la date prévue manuellement.'
+        });
+      }
+
+    });
   }
 
   save(form: any) {
 
-  // VALIDATION FORM
-  if (form.invalid) {
+    if (form.invalid) {
 
-    Object.keys(form.controls).forEach(key => {
-      form.controls[key].markAsTouched();
-    });
+      Object.keys(form.controls).forEach(k => {
+        if (k !== 'datePrevueRep') {
+          form.controls[k].markAsTouched();
+        }
+      });
 
-    Swal.fire({
-      icon: 'warning',
-      title: 'Formulaire invalide',
-      text: 'Veuillez remplir tous les champs obligatoires',
-      confirmButtonColor: '#6366f1'
-    });
+      Swal.fire('Formulaire invalide', 'Remplir les champs obligatoires', 'warning');
+      return;
+    }
 
-    return;
-  }
+    // ⭐ FIX IMPORTANT
+    if (!this.demande.datePrevueRep) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Date prévue manquante',
+        text: 'Cliquez sur "Prédire la date" ou saisissez une date prévue manuellement'
+      });
+      return;
+    }
 
-  // VALIDATION IDS
-  if (
-    Number(this.demande.appareilId) <= 0 ||
-    Number(this.demande.idEtiquette) <= 0
-  ) {
+    if (new Date(this.demande.datePrevueRep) < new Date(this.demande.dateDepot)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Dates incohérentes',
+        text: 'La date prévue ne peut pas être avant la date de dépôt'
+      });
+      return;
+    }
 
-    Swal.fire({
-      icon: 'warning',
-      title: 'ID invalide',
-      text: 'Les IDs doivent être supérieurs à 0',
-      confirmButtonColor: '#6366f1'
-    });
+    this.loading = true;
 
-    return;
-  }
+    const payload = {
+      ...this.demande,
+      appareilId: Number(this.demande.appareilId)
+    };
 
-  this.loading = true;
+    const req = this.id
+      ? this.demandeService.update(this.id, payload)
+      : this.demandeService.add(payload);
 
-  const payload = {
-    ...this.demande,
-    appareilId: Number(this.demande.appareilId),
-    idEtiquette: Number(this.demande.idEtiquette)
-  };
-
-  // UPDATE
-  if (this.id) {
-
-    this.demandeService.update(this.id, payload).subscribe({
-
+    req.subscribe({
       next: () => {
-
         this.loading = false;
 
         Swal.fire({
           icon: 'success',
           title: 'Succès',
-          text: 'Demande modifiée avec succès',
-          confirmButtonColor: '#22c55e'
+          text: this.id ? 'Demande modifiée' : 'Demande ajoutée'
         });
 
         this.router.navigate(['/demandes']);
       },
-
-      error: (err) => {
-
+      error: () => {
         this.loading = false;
-
-        console.log(err);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Erreur',
-          text: 'Erreur lors de la modification',
-          confirmButtonColor: '#ef4444'
-        });
-
+        Swal.fire('Erreur', 'Operation échouée', 'error');
       }
-
     });
-
   }
-
-  // ADD
-  else {
-
-    this.demandeService.add(payload).subscribe({
-
-      next: () => {
-
-        this.loading = false;
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Succès',
-          text: 'Demande ajoutée avec succès',
-          confirmButtonColor: '#22c55e'
-        });
-
-        this.router.navigate(['/demandes']);
-      },
-
-      error: (err) => {
-
-        this.loading = false;
-
-        console.log(err);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Erreur',
-          text: 'Erreur lors de l’ajout',
-          confirmButtonColor: '#ef4444'
-        });
-
-      }
-
-    });
-
-  }
-
-}
 }

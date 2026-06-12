@@ -5,28 +5,39 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
 import { PlanningService } from '../../../core/services/planning.service';
+import { UserService } from '../../../core/services/user.service';
+import { DemandeService } from '../../../core/services/demande.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-planning-form',
   standalone: true,
   imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './planning-form.component.html',
-  styleUrls: ['./planning-form.component.scss']
+  styleUrls: ['./planning-form.component.css']
 })
 export class PlanningFormComponent implements OnInit {
 
   planning: any = {
+    description: '',
     dateDebut: '',
     dateFin: '',
-    responsableId: null,
-    DemandeReparationId: null
+    technicienId: null,
+    DemandeReparationId: null,
+    statut: 'PLANIFIE'
   };
+
+  techniciens: any[] = [];
+  demandes: any[] = [];
 
   id: any;
   loading = false;
 
   constructor(
     private service: PlanningService,
+    private userService: UserService,
+    private demandeService: DemandeService,
+    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -35,10 +46,35 @@ export class PlanningFormComponent implements OnInit {
 
     this.id = this.route.snapshot.paramMap.get('id');
 
+    this.userService.getTechniciens().subscribe({
+      next: (res: any) => this.techniciens = res
+    });
+
+    this.demandeService.getAll().subscribe({
+      next: (res: any) => this.demandes = res
+    });
+
     if (this.id) {
       this.service.getOne(this.id).subscribe({
-        next: (res: any) => this.planning = res
+        next: (res: any) => {
+          this.planning = {
+            description: res.description ?? '',
+            dateDebut: res.dateDebut ? res.dateDebut.substring(0, 10) : '',
+            dateFin: res.dateFin ? res.dateFin.substring(0, 10) : '',
+            technicienId: res.technicienId,
+            DemandeReparationId: res.DemandeReparationId,
+            statut: res.statut ?? 'PLANIFIE'
+          };
+        }
       });
+    }
+  }
+
+  onDemandeChange(): void {
+    const demande = this.demandes.find(d => d.id === this.planning.DemandeReparationId);
+    if (demande) {
+      this.planning.dateDebut = demande.dateDepot ? demande.dateDepot.substring(0, 10) : '';
+      this.planning.dateFin = demande.datePrevueRep ? demande.datePrevueRep.substring(0, 10) : '';
     }
   }
 
@@ -59,25 +95,13 @@ export class PlanningFormComponent implements OnInit {
       return;
     }
 
-    // ❌ validation IDs > 0
-    if (
-      this.planning.responsableId <= 0 ||
-      this.planning.DemandeReparationId <= 0
-    ) {
-      Swal.fire({
-        icon: 'error',
-        title: 'IDs invalides',
-        text: 'Les IDs doivent être strictement supérieurs à 0'
-      });
-      return;
-    }
-
     this.loading = true;
 
     const payload = {
       ...this.planning,
-      responsableId: Number(this.planning.responsableId),
-      DemandeReparationId: Number(this.planning.DemandeReparationId)
+      technicienId: Number(this.planning.technicienId),
+      DemandeReparationId: Number(this.planning.DemandeReparationId),
+      responsableId: this.authService.getUserId()
     };
 
     const request = this.id

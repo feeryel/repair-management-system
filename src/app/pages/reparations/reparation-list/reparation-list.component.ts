@@ -18,8 +18,11 @@ export class ReparationListComponent implements OnInit {
   reparations: any[] = [];
 role: Role | '' = '';
 isClient = false;
+isTechnicien = false;
+
   searchText: string = '';
   filter: string = 'all';
+  Role = Role; // ✅ IMPORTANT FIX
 
   currentPage: number = 1;
   itemsPerPage: number = 6;
@@ -29,6 +32,7 @@ isClient = false;
 ngOnInit(): void {
   this.role = (this.authService.getRole() as Role) ?? '';
   this.isClient = this.role === Role.CLIENT;
+  this.isTechnicien = this.role === Role.TECHNICIEN;
 
   this.loadData();
 }

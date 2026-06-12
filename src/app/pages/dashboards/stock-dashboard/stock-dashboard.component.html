@@ -40,7 +40,7 @@
   </div>
 
   <!-- STOCK TABLE -->
-  <!-- <div class="dash-card">
+  <div class="dash-card">
     <div class="dash-card-header">
       <h5><i class="bi bi-boxes me-2"></i>Catalogue des pièces de rechange</h5>
       <a routerLink="/pieces" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
@@ -51,8 +51,8 @@
           <tr>
             <th>Code</th>
             <th>Désignation</th>
-            <th>Prix HT</th>
-            <th>Prix TTC</th>
+            <th>Prix Achat</th>
+            <th>Prix Vente HT</th>
             <th>Qté stock</th>
             <th>Statut</th>
             <th>Actions</th>
@@ -62,8 +62,8 @@
           <tr *ngFor="let p of pieces | slice:0:8">
             <td class="td-code">{{ p.code }}</td>
             <td class="td-name">{{ p.nom }}</td>
+            <td>{{ p.prixAchat | number:'1.2-2' }} DT</td>
             <td>{{ p.prixHT | number:'1.2-2' }} DT</td>
-            <td>{{ p.prixTTC | number:'1.2-2' }} DT</td>
             <td>
               <span class="qty-badge" [ngClass]="stockClass(p.quantiteEnStock)">
                 {{ p.quantiteEnStock ?? 0 }}
@@ -84,46 +84,7 @@
         </tbody>
       </table>
     </div>
-  </div> -->
-
-  <!-- TARIFS HT / TTC / MAIN D'OEUVRE -->
-  <!-- <div class="dash-card mt-card">
-    <div class="dash-card-header">
-      <h5><i class="bi bi-currency-exchange me-2"></i>Tarifs HT / TTC & Main d'œuvre</h5>
-      <a routerLink="/pieces" class="see-all">Gérer <i class="bi bi-arrow-right"></i></a>
-    </div>
-    <div class="table-wrap">
-      <table class="dtable">
-        <thead>
-          <tr>
-            <th>Code</th>
-            <th>Désignation</th>
-            <th>Prix HT</th>
-            <th>Prix TTC</th>
-            <th>Tarif MO (h)</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let p of pieces | slice:0:6">
-            <td class="td-code">{{ p.code }}</td>
-            <td class="td-name">{{ p.nom }}</td>
-            <td class="td-price">{{ p.prixHT | number:'1.2-2' }} DT</td>
-            <td class="td-price">{{ p.prixTTC | number:'1.2-2' }} DT</td>
-            <td>
-              <span class="tarif-badge">{{ p.tarifHoraireMO | number:'1.2-2' }} DT/h</span>
-            </td>
-            <td>
-              <a [routerLink]="['/pieces/edit', p.id]" class="icon-btn"><i class="bi bi-pencil-fill"></i></a>
-            </td>
-          </tr>
-          <tr *ngIf="pieces.length === 0">
-            <td colspan="6" class="empty-row">Aucune pièce dans le catalogue</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div> -->
+  </div>
 
   <!-- QUICK ACTIONS -->
   <div class="dash-card mt-card">
@@ -194,8 +155,6 @@
 .q-green { background:#d1fae5; color:#059669; }
 .q-amber { background:#fffbeb; color:#d97706; }
 .quick-grid-2 { grid-template-columns:repeat(2,1fr); }
-.td-price { font-weight:600; color:#1e293b; }
-.tarif-badge { display:inline-block; background:linear-gradient(135deg,#ede9fe,#f5f3ff); color:#7c3aed; font-weight:700; font-size:.78rem; padding:.3rem .7rem; border-radius:8px; white-space:nowrap; }
 @media(max-width:900px){ .kpi-row{grid-template-columns:repeat(2,1fr);} .quick-grid{grid-template-columns:1fr 1fr;} }
 @media(max-width:600px){ .kpi-row{grid-template-columns:1fr;} .quick-grid{grid-template-columns:1fr;} }
 </style>

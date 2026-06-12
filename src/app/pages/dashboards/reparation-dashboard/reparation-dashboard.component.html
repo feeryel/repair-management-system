@@ -120,8 +120,8 @@
       <div class="plan-list">
         <div class="plan-item" *ngFor="let p of plannings">
           <div class="plan-date-box">
-            <span class="plan-day">{{ p.datePlanification | date:'dd' }}</span>
-            <span class="plan-mon">{{ p.datePlanification | date:'MMM' }}</span>
+            <span class="plan-day">{{ p.dateDebut | date:'dd' }}</span>
+            <span class="plan-mon">{{ p.dateDebut | date:'MMM' }}</span>
           </div>
           <div class="plan-info">
             <p class="plan-title">Planning #{{ p.id }}</p>

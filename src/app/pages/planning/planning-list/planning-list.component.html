@@ -4,11 +4,11 @@
   <div class="header">
 
     <div>
-      <h2>Planning Réparation</h2>
-      <p>Gestion intelligente des interventions et réparations</p>
+      <h2>{{ isTechnicien ? 'Mon Planning' : 'Planning Réparation' }}</h2>
+      <p>{{ isTechnicien ? 'Vos interventions assignées' : 'Gestion intelligente des interventions et réparations' }}</p>
     </div>
 
-    <a *ngIf="!isTechnicien"
+    <a *ngIf="isResponsable"
       routerLink="/planning/add"
       class="btn-add">
 
@@ -46,8 +46,8 @@
           #{{ p.id }}
         </div>
 
-        <div class="status">
-          Planning
+        <div class="status-pill" [ngClass]="statusClass(p.statut)">
+          {{ statusLabel(p.statut) }}
         </div>
 
       </div>
@@ -55,13 +55,17 @@
       <!-- BODY -->
       <div class="card-body">
 
+        <div class="planning-title">
+          {{ p.description || 'Intervention sans description' }}
+        </div>
+
         <div class="info">
 
           <span class="icon">📅</span>
 
           <div>
             <small>Date début</small>
-            <h4>{{ p.dateDebut }}</h4>
+            <h4>{{ p.dateDebut | date:'dd/MM/yyyy' }}</h4>
           </div>
 
         </div>
@@ -72,18 +76,18 @@
 
           <div>
             <small>Date fin</small>
-            <h4>{{ p.dateFin }}</h4>
+            <h4>{{ p.dateFin | date:'dd/MM/yyyy' }}</h4>
           </div>
 
         </div>
 
-        <div class="info">
+        <div class="info" *ngIf="!isTechnicien">
 
           <span class="icon">👨‍🔧</span>
 
           <div>
-            <small>Responsable</small>
-            <h4>ID : {{ p.responsableId }}</h4>
+            <small>Technicien</small>
+            <h4>{{ p.technicien?.login || '—' }}</h4>
           </div>
 
         </div>
@@ -94,15 +98,15 @@
 
           <div>
             <small>Demande</small>
-            <h4>ID : {{ p.DemandeReparationId }}</h4>
+            <h4>#{{ p.DemandeReparationId }}</h4>
           </div>
 
         </div>
 
       </div>
 
-      <!-- FOOTER -->
-      <div class="card-footer">
+      <!-- FOOTER — RESPONSABLE -->
+      <div class="card-footer" *ngIf="isResponsable">
 
         <a
           [routerLink]="['/planning/edit', p.id]"
@@ -119,6 +123,33 @@
           🗑 Supprimer
 
         </button>
+
+      </div>
+
+      <!-- FOOTER — TECHNICIEN -->
+      <div class="card-footer" *ngIf="isTechnicien">
+
+        <button
+          *ngIf="p.statut === 'PLANIFIE'"
+          class="btn-status btn-progress"
+          (click)="changeStatut(p, 'EN_COURS')">
+
+          ▶ Démarrer
+
+        </button>
+
+        <button
+          *ngIf="p.statut !== 'TERMINE'"
+          class="btn-status btn-done"
+          (click)="changeStatut(p, 'TERMINE')">
+
+          ✓ Terminer
+
+        </button>
+
+        <span class="done-label" *ngIf="p.statut === 'TERMINE'">
+          ✅ Intervention terminée
+        </span>
 
       </div>
 

@@ -11,10 +11,11 @@ import { AuthService, Role } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './planning-list.component.html',
-  styleUrls: ['./planning-list.component.scss']
+  styleUrls: ['./planning-list.component.css']
 })
 export class PlanningListComponent implements OnInit {
 isTechnicien = false;
+isResponsable = false;
 
   plannings: any[] = [];
 role: Role | '' = '';
@@ -30,6 +31,7 @@ role: Role | '' = '';
   ngOnInit(): void {
       this.role = (this.authService.getRole() as Role) ?? '';
       this.isTechnicien = this.role === Role.TECHNICIEN;
+      this.isResponsable = this.role === Role.RESPONSABLE_REPARATION;
     this.loadData();
   }
 
@@ -40,7 +42,13 @@ role: Role | '' = '';
 
     this.loading = true;
 
-    this.service.getAll().subscribe({
+    const userId = this.authService.getUserId();
+
+    const source = this.isTechnicien && userId
+      ? this.service.getByTechnicien(userId)
+      : this.service.getAll();
+
+    source.subscribe({
 
       next: (res: any) => {
         this.plannings = res;
@@ -62,6 +70,37 @@ role: Role | '' = '';
         });
 
       }
+
+    });
+
+  }
+
+  // =========================
+  // STATUT (TECHNICIEN)
+  // =========================
+  statusLabel(s: string): string {
+    return s === 'TERMINE' ? 'Terminé' : s === 'EN_COURS' ? 'En cours' : 'Planifié';
+  }
+
+  statusClass(s: string): string {
+    return s === 'TERMINE' ? 'st-done' : s === 'EN_COURS' ? 'st-progress' : 'st-pending';
+  }
+
+  changeStatut(p: any, statut: string) {
+
+    this.service.updateStatut(p.id, statut).subscribe({
+
+      next: () => {
+        p.statut = statut;
+        Swal.fire({ icon: 'success', title: 'Statut mis à jour', timer: 1500, showConfirmButton: false });
+      },
+
+      error: () => Swal.fire({
+        icon: 'error',
+        title: 'Erreur',
+        text: 'Impossible de mettre à jour le statut',
+        confirmButtonColor: '#6366f1'
+      })
 
     });
 

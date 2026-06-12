@@ -1,0 +1,264 @@
+/* PAGE */
+.page {
+  padding: 30px;
+  margin-left: 260px;
+  min-height: 100vh;
+  background: #f6f7fb;
+  font-family: system-ui;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.header-icon {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: white;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.25);
+}
+
+.header h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+
+.header p {
+  color: #6b7280;
+  margin: 4px 0 0;
+}
+
+/* ADD BUTTON */
+.btn-add {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  padding: 14px 22px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.25);
+  transition: .25s;
+}
+
+.btn-add:hover {
+  transform: translateY(-3px);
+}
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 18px;
+  color: white;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card.indigo { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.stat-card.orange { background: linear-gradient(135deg, #f59e0b, #f97316); }
+.stat-card.green  { background: linear-gradient(135deg, #22c55e, #16a34a); }
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.stat-info span {
+  display: block;
+  font-size: 12px;
+  opacity: .9;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.stat-info h3 {
+  margin: 4px 0 0;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+/* TOOLBAR */
+.toolbar {
+  margin-bottom: 20px;
+}
+
+.search {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  outline: none;
+  background: white;
+  font-size: 14px;
+  transition: .25s;
+}
+
+.search:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+/* TABLE CARD */
+.table-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead tr {
+  background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+}
+
+th {
+  text-align: left;
+  padding: 16px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #6366f1;
+}
+
+td {
+  padding: 16px 18px;
+  border-top: 1px solid #f3f4f6;
+  font-size: 14px;
+  color: #111827;
+  vertical-align: middle;
+}
+
+tbody tr {
+  transition: background .2s;
+}
+
+tbody tr:hover {
+  background: #f9fafb;
+}
+
+.id-cell {
+  font-weight: 800;
+  color: #9ca3af;
+}
+
+/* REPARATION PILL */
+.rep-pill {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* PIECE CELL */
+.piece-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.piece-name {
+  font-weight: 700;
+  color: #111827;
+}
+
+.piece-code {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* QUANTITY BADGE */
+.qty-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #b45309;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* TOTAL */
+.total-cell {
+  font-weight: 800;
+  color: #16a34a;
+}
+
+/* DELETE BUTTON */
+.btn-delete {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 12px;
+  background: #fee2e2;
+  color: #dc2626;
+  cursor: pointer;
+  font-size: 15px;
+  transition: .2s;
+}
+
+.btn-delete:hover {
+  background: #fecaca;
+  transform: translateY(-2px);
+}
+
+/* EMPTY */
+.empty {
+  text-align: center;
+  padding: 60px;
+  color: #9ca3af;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  font-size: 15px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}

@@ -8,7 +8,8 @@
       <p>Suivi technique des interventions et diagnostics</p>
     </div>
 
-    <button *ngIf="!isClient" class="btn-add" [routerLink]="['/reparations/form']">
+    <button   *ngIf="role === Role.RESPONSABLE_REPARATION"
+ class="btn-add" [routerLink]="['/reparations/form']">
       + Nouvelle réparation
     </button>
 

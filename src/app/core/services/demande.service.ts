@@ -28,5 +28,14 @@ getAll() {
   delete(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+predictDate(symptomes: string, dateDepot: string) {
+  return this.http.post<any>(
+    'http://localhost:5678/webhook/predict-date',
+    {
+      symptomesPanne: symptomes,
+      dateDepot: dateDepot
+    }
+  );
+}
 
 }

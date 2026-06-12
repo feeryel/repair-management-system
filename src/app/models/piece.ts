@@ -6,6 +6,8 @@ export interface Piece {
 
   nom: string;
 
+  prixAchat: number;
+
   prixHT: number;
 
   quantiteEnStock: number;

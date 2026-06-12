@@ -1,69 +1,154 @@
-<div class="container mt-4">
+<div class="page">
 
-  <h2>Ajouter Ligne Réparation</h2>
+  <div class="form-container">
 
-  <form (ngSubmit)="save()">
+    <!-- HEADER -->
+    <div class="form-header">
 
-    <div class="mb-3">
+      <div>
+        <h2>Nouvelle Ligne de Réparation</h2>
+        <p>Ajouter une pièce détachée utilisée pour une intervention</p>
+      </div>
 
-      <label>Réparation</label>
-
-      <select
-        class="form-control"
-        [(ngModel)]="formData.ReparationId"
-        name="reparation">
-
-        <option
-          *ngFor="let r of reparations"
-          [value]="r.id">
-
-          Réparation #{{r.id}}
-
-        </option>
-
-      </select>
+      <div class="header-icon">🧩</div>
 
     </div>
 
-    <div class="mb-3">
+    <div class="form-card">
 
-      <label>Pièce</label>
+      <form #f="ngForm" (ngSubmit)="save()">
 
-      <select
-        class="form-control"
-        [(ngModel)]="formData.PieceId"
-        name="piece">
+        <!-- REPARATION -->
+        <div class="input-group-custom">
+          <label>Réparation concernée</label>
 
-        <option
-          *ngFor="let p of pieces"
-          [value]="p.id">
+          <div class="input-box">
+            <select
+              class="form-control"
+              [(ngModel)]="formData.ReparationId"
+              name="reparation"
+              required
+              #reparation="ngModel">
 
-          {{p.nom}}
+              <option value="" disabled selected>— Sélectionner une réparation —</option>
 
-        </option>
+              <option
+                *ngFor="let r of reparations"
+                [value]="r.id">
 
-      </select>
+                Réparation #{{ r.id }} — {{ r.descriptionReparation || 'Sans description' }}
+
+              </option>
+
+            </select>
+          </div>
+
+          <div class="error" *ngIf="reparation.invalid && reparation.touched">
+            <small>Veuillez choisir une réparation</small>
+          </div>
+        </div>
+
+        <!-- PIECE + QUANTITE -->
+        <div class="grid-2">
+
+          <div class="input-group-custom">
+            <label>Pièce détachée</label>
+
+            <div class="input-box">
+              <select
+                class="form-control"
+                [(ngModel)]="formData.PieceId"
+                name="piece"
+                required
+                #piece="ngModel">
+
+                <option value="" disabled selected>— Sélectionner une pièce —</option>
+
+                <option
+                  *ngFor="let p of pieces"
+                  [value]="p.id">
+
+                  {{ p.nom }} — {{ p.prixHT | number:'1.2-2' }} DT
+                </option>
+
+              </select>
+            </div>
+
+            <div class="error" *ngIf="piece.invalid && piece.touched">
+              <small>Veuillez choisir une pièce</small>
+            </div>
+          </div>
+
+          <div class="input-group-custom">
+            <label>Quantité</label>
+
+            <div class="input-box">
+              <input
+                type="number"
+                min="1"
+                [(ngModel)]="formData.quantite"
+                name="quantite"
+                required
+                #quantite="ngModel">
+            </div>
+
+            <div class="error" *ngIf="quantite.invalid && quantite.touched">
+              <small>Quantité invalide</small>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- PREVIEW -->
+        <div class="preview-card" *ngIf="selectedPiece">
+
+          <div class="preview-title">
+            🔎 Récapitulatif de la ligne
+          </div>
+
+          <div class="preview-row">
+            <span>Pièce</span>
+            <strong>{{ selectedPiece.nom }} <small *ngIf="selectedPiece.code">({{ selectedPiece.code }})</small></strong>
+          </div>
+
+          <div class="preview-row">
+            <span>Prix unitaire</span>
+            <strong>{{ selectedPiece.prixHT | number:'1.2-2' }} DT</strong>
+          </div>
+
+          <div class="preview-row">
+            <span>Stock disponible</span>
+            <strong [class.stock-low]="stockInsuffisant">{{ selectedPiece.quantiteEnStock }} pcs</strong>
+          </div>
+
+          <div class="preview-row total">
+            <span>Total ligne</span>
+            <strong>{{ subtotal | number:'1.2-2' }} DT</strong>
+          </div>
+
+          <div class="warning" *ngIf="stockInsuffisant">
+            ⚠️ La quantité demandée dépasse le stock disponible
+          </div>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+
+          <button type="button" class="btn-cancel" routerLink="/ligne-reparations">
+            Annuler
+          </button>
+
+          <button type="submit" class="btn-save" [disabled]="f.invalid">
+            + Ajouter la ligne
+          </button>
+
+        </div>
+
+      </form>
 
     </div>
 
-    <div class="mb-3">
-
-      <label>Quantité</label>
-
-      <input
-        type="number"
-        class="form-control"
-        [(ngModel)]="formData.quantite"
-        name="quantite">
-
-    </div>
-
-    <button class="btn btn-success">
-
-      Ajouter
-
-    </button>
-
-  </form>
+  </div>
 
 </div>

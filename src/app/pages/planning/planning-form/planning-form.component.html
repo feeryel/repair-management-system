@@ -6,8 +6,8 @@
     <div class="form-header">
 
       <div>
-        <h2>{{ id ? 'Modifier Planning' : 'Ajouter Planning' }}</h2>
-        <p>Gestion intelligente des plannings de réparation</p>
+        <h2>{{ id ? 'Modifier Planning' : 'Nouveau Planning' }}</h2>
+        <p>Assigner une intervention à un technicien</p>
       </div>
 
       <div class="header-icon">📅</div>
@@ -19,82 +19,130 @@
 
       <form #f="ngForm" (ngSubmit)="save(f)" novalidate>
 
+        <!-- DESCRIPTION -->
+        <div class="input-group-custom">
+          <label>Description de l'intervention</label>
+
+          <div class="input-box">
+            <input type="text"
+                   placeholder="Ex: Diagnostic et remplacement écran"
+                   [(ngModel)]="planning.description"
+                   name="description"
+                   required
+                   #description="ngModel">
+          </div>
+
+          <div class="error" *ngIf="description.invalid && description.touched">
+            <small>Champ obligatoire</small>
+          </div>
+        </div>
+
+        <!-- TECHNICIEN + DEMANDE -->
+        <div class="grid-2">
+
+          <!-- TECHNICIEN -->
+          <div class="input-group-custom">
+            <label>Technicien assigné</label>
+
+            <div class="input-box">
+              <select [(ngModel)]="planning.technicienId"
+                      name="technicienId"
+                      required
+                      #technicienId="ngModel">
+
+                <option [ngValue]="null" disabled>— Choisir un technicien —</option>
+
+                <option *ngFor="let t of techniciens" [ngValue]="t.id">
+                  {{ t.login }}
+                </option>
+
+              </select>
+            </div>
+
+            <div class="error" *ngIf="technicienId.invalid && technicienId.touched">
+              <small>Veuillez choisir un technicien</small>
+            </div>
+          </div>
+
+          <!-- DEMANDE -->
+          <div class="input-group-custom">
+            <label>Demande de réparation</label>
+
+            <div class="input-box">
+              <select [(ngModel)]="planning.DemandeReparationId"
+                      name="DemandeReparationId"
+                      required
+                      (change)="onDemandeChange()"
+                      #demandeId="ngModel">
+
+                <option [ngValue]="null" disabled>— Choisir une demande —</option>
+
+                <option *ngFor="let d of demandes" [ngValue]="d.id">
+                  Demande #{{ d.id }} — {{ d.symptomesPanne | slice:0:40 }}
+                </option>
+
+              </select>
+            </div>
+
+            <div class="error" *ngIf="demandeId.invalid && demandeId.touched">
+              <small>Veuillez choisir une demande</small>
+            </div>
+          </div>
+
+        </div>
+
         <!-- DATES -->
         <div class="grid-2">
 
           <!-- DATE DEBUT -->
           <div class="input-group-custom">
-            <label>Date début</label>
+            <label>Date début <small>(date de dépôt de la demande)</small></label>
 
             <div class="input-box">
               <input type="date"
                      [(ngModel)]="planning.dateDebut"
                      name="dateDebut"
                      required
+                     readonly
                      #dateDebut="ngModel">
             </div>
 
             <div class="error" *ngIf="dateDebut.invalid && dateDebut.touched">
-              <small>Champ obligatoire</small>
+              <small>Veuillez d'abord choisir une demande</small>
             </div>
           </div>
 
           <!-- DATE FIN -->
           <div class="input-group-custom">
-            <label>Date fin</label>
+            <label>Date fin <small>(date prévue de la demande)</small></label>
 
             <div class="input-box">
               <input type="date"
                      [(ngModel)]="planning.dateFin"
                      name="dateFin"
                      required
+                     readonly
                      #dateFin="ngModel">
             </div>
 
             <div class="error" *ngIf="dateFin.invalid && dateFin.touched">
-              <small>Champ obligatoire</small>
+              <small>Veuillez d'abord choisir une demande</small>
             </div>
           </div>
 
         </div>
 
-        <!-- IDS -->
-        <div class="extra-grid">
+        <!-- STATUT -->
+        <div class="input-group-custom" *ngIf="id">
+          <label>Statut</label>
 
-          <!-- RESPONSABLE -->
-          <div class="field-card">
-            <label>Responsable ID</label>
-
-            <input type="number"
-                   [(ngModel)]="planning.responsableId"
-                   name="responsableId"
-                   required
-                   min="1"
-                   #responsableId="ngModel">
-
-            <div class="error" *ngIf="responsableId.invalid && responsableId.touched">
-              <small *ngIf="responsableId.errors?.['required']">Champ obligatoire</small>
-              <small *ngIf="responsableId.errors?.['min']">Doit être > 0</small>
-            </div>
+          <div class="input-box">
+            <select [(ngModel)]="planning.statut" name="statut">
+              <option value="PLANIFIE">Planifié</option>
+              <option value="EN_COURS">En cours</option>
+              <option value="TERMINE">Terminé</option>
+            </select>
           </div>
-
-          <!-- DEMANDE -->
-          <div class="field-card">
-            <label>Demande ID</label>
-
-            <input type="number"
-                   [(ngModel)]="planning.DemandeReparationId"
-                   name="DemandeReparationId"
-                   required
-                   min="1"
-                   #demandeId="ngModel">
-
-            <div class="error" *ngIf="demandeId.invalid && demandeId.touched">
-              <small *ngIf="demandeId.errors?.['required']">Champ obligatoire</small>
-              <small *ngIf="demandeId.errors?.['min']"> l'id doit être supérieur à 0</small>
-            </div>
-          </div>
-
         </div>
 
         <!-- ACTIONS -->

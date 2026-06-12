@@ -14,10 +14,10 @@
 
     </div>
 
-    <!-- FORM -->
     <div class="form-card">
 
-<form #f="ngForm" (ngSubmit)="save(f)">
+      <form #f="ngForm" (ngSubmit)="save(f)">
+
         <!-- DATES -->
         <div class="grid-2">
 
@@ -40,18 +40,33 @@
 
           <!-- DATE PREVUE -->
           <div class="input-group-custom">
-            <label>Date Prévue</label>
+            <label>
+              Date Prévue
+              <span *ngIf="loading" style="color:orange;">(calcul...)</span>
+              <span *ngIf="predicted" style="color:green;">✔ prédite</span>
+            </label>
 
-            <div class="input-box">
+            <!-- Valeur prédite par l'IA (lecture seule) -->
+            <div class="input-box" *ngIf="!predictionFailed">
+              <div class="fake-input">
+                {{ demande.datePrevueRep ? demande.datePrevueRep : '— — —' }}
+              </div>
+            </div>
+
+            <!-- Fallback : prédiction indisponible -> saisie manuelle -->
+            <div class="input-box" *ngIf="predictionFailed">
               <input type="date"
                      [(ngModel)]="demande.datePrevueRep"
                      name="datePrevueRep"
-                     required
-                     #datePrevue="ngModel">
+                     required>
             </div>
 
-            <div class="error" *ngIf="datePrevue.invalid && datePrevue.touched">
-              <small>Champ obligatoire</small>
+            <div class="error" *ngIf="predictionFailed">
+              <small>Prédiction indisponible — date saisie manuellement</small>
+            </div>
+
+            <div class="error" *ngIf="demande.datePrevueRep && demande.dateDepot && demande.datePrevueRep < demande.dateDepot">
+              <small>La date prévue doit être après la date de dépôt</small>
             </div>
           </div>
 
@@ -74,62 +89,42 @@
           </div>
         </div>
 
-        <!-- EXTRA -->
-        <div class="extra-grid">
+        <!-- BUTTON PREDICT -->
+        <div class="input-group-custom">
 
- <!-- APPAREIL ID -->
-<div class="field-card">
+          <button type="button"
+                  class="btn-predict"
+                  (click)="predict()"
+                  [disabled]="!demande.symptomesPanne || loading">
 
-  <label>Appareil ID</label>
+            🔮 Prédire la date
 
-  <input
-    type="number"
-    [(ngModel)]="demande.appareilId"
-    name="appareilId"
-    required
-    min="1"
-    #appareilId="ngModel">
+          </button>
 
-  <div class="error" *ngIf="appareilId.invalid && appareilId.touched">
+        </div>
 
-    <small *ngIf="appareilId.errors?.['required']">
-      L'id de l'appareil est obligatoire
-    </small>
+        <!-- APPAREIL -->
+        <div class="input-group-custom">
+          <label>Appareil concerné</label>
 
-    <small *ngIf="appareilId.errors?.['min']">
-      L'id ne peut pas être négatif ou 0
-    </small>
+          <div class="input-box">
+            <select [(ngModel)]="demande.appareilId"
+                    name="appareilId"
+                    required
+                    #appareilId="ngModel">
 
-  </div>
+              <option [ngValue]="null" disabled>— Choisir un appareil —</option>
 
-</div>
+              <option *ngFor="let a of appareils" [ngValue]="a.id">
+                {{ appareilLabel(a) }}
+              </option>
 
-<!-- ETIQUETTE ID -->
-<div class="field-card">
+            </select>
+          </div>
 
-  <label>Étiquette ID</label>
-
-  <input
-    type="number"
-    [(ngModel)]="demande.idEtiquette"
-    name="idEtiquette"
-    required
-    min="1"
-    #idEtiquette="ngModel">
-
-  <div class="error" *ngIf="idEtiquette.invalid && idEtiquette.touched">
-
-    <small *ngIf="idEtiquette.errors?.['required']">
-      L'id étiquette est obligatoire
-    </small>
-
-    <small *ngIf="idEtiquette.errors?.['min']">
-      L'id ne peut pas être négatif ou 0
-    </small>
-
-  </div>
-
-</div>
+          <div class="error" *ngIf="appareilId.invalid && appareilId.touched">
+            <small>Veuillez choisir un appareil</small>
+          </div>
         </div>
 
         <!-- ETAT -->
@@ -159,14 +154,13 @@
             Annuler
           </button>
 
-        <button
-  type="submit"
-  class="btn-save"
-  [disabled]="f.invalid || loading">
+          <button type="submit"
+                  class="btn-save"
+                  [disabled]="f.invalid || loading || !demande.datePrevueRep">
 
-  {{ id ? 'Modifier' : 'Enregistrer' }}
+            {{ id ? 'Modifier' : 'Enregistrer' }}
 
-</button>
+          </button>
 
         </div>
 

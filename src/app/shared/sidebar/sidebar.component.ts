@@ -41,6 +41,7 @@ const NAV: Record<Role, NavItem[]> = {
   [Role.ACHAT_STOCK]: [
     { label: 'Dashboard',             icon: 'bi-grid-1x2-fill',                route: '/stock/dashboard' },
     { label: 'Catalogue pièces',      icon: 'bi-box-seam-fill',                route: '/pieces' },
+    { label: 'Pièces utilisées',      icon: 'bi-list-check',                   route: '/ligne-reparations' },
   ],
 };
 

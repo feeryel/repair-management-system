@@ -1,53 +1,150 @@
-<div class="container mt-4">
+<div class="page">
 
-  <h2>
-    {{ id ? 'Modifier' : 'Ajouter' }} Pièce
-  </h2>
+  <div class="form-container">
 
-  <form (ngSubmit)="save()">
+    <!-- HEADER -->
+    <div class="form-header">
 
-    <div class="mb-3">
+      <div>
+        <h2>{{ id ? 'Modifier la pièce' : 'Nouvelle pièce' }}</h2>
+        <p>Gestion du catalogue de pièces détachées</p>
+      </div>
 
-      <label>Nom</label>
-
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="formData.nom"
-        name="nom">
+      <div class="header-icon">🔩</div>
 
     </div>
 
-    <div class="mb-3">
+    <div class="form-card">
 
-      <label>Prix</label>
+      <form #f="ngForm" (ngSubmit)="save(f)">
 
-      <input
-        type="number"
-        class="form-control"
-        [(ngModel)]="formData.prix"
-        name="prix">
+        <!-- CODE + NOM -->
+        <div class="grid-2">
+
+          <div class="input-group-custom">
+            <label>Code pièce</label>
+
+            <div class="input-box">
+              <input type="text"
+                     [(ngModel)]="formData.code"
+                     name="code"
+                     placeholder="ex: P011">
+            </div>
+          </div>
+
+          <div class="input-group-custom">
+            <label>Désignation</label>
+
+            <div class="input-box">
+              <input type="text"
+                     [(ngModel)]="formData.nom"
+                     name="nom"
+                     required
+                     #nom="ngModel"
+                     placeholder="ex: Écran Samsung 21'">
+            </div>
+
+            <div class="error" *ngIf="nom.invalid && nom.touched">
+              <small>Champ obligatoire</small>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- PRIX -->
+        <div class="grid-2">
+
+          <div class="input-group-custom">
+            <label>Prix d'achat (DT)</label>
+
+            <div class="input-box">
+              <input type="number"
+                     min="0"
+                     step="0.01"
+                     [(ngModel)]="formData.prixAchat"
+                     name="prixAchat"
+                     required
+                     #prixAchat="ngModel">
+            </div>
+
+            <div class="error" *ngIf="prixAchat.invalid && prixAchat.touched">
+              <small>Le prix d'achat doit être positif</small>
+            </div>
+          </div>
+
+          <div class="input-group-custom">
+            <label>Prix de vente HT (DT)</label>
+
+            <div class="input-box">
+              <input type="number"
+                     min="0"
+                     step="0.01"
+                     [(ngModel)]="formData.prixHT"
+                     name="prixHT"
+                     required
+                     #prixHT="ngModel">
+            </div>
+
+            <div class="error" *ngIf="prixHT.invalid && prixHT.touched">
+              <small>Le prix de vente doit être positif</small>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- STOCK -->
+        <div class="input-group-custom">
+          <label>Quantité en stock</label>
+
+          <div class="input-box">
+            <input type="number"
+                   min="0"
+                   [(ngModel)]="formData.quantiteEnStock"
+                   name="quantiteEnStock"
+                   required
+                   #quantiteEnStock="ngModel">
+          </div>
+
+          <div class="error" *ngIf="quantiteEnStock.invalid && quantiteEnStock.touched">
+            <small>La quantité doit être positive</small>
+          </div>
+        </div>
+
+        <!-- PREVIEW MARGE -->
+        <div class="preview-card">
+
+          <div class="preview-title">📊 Aperçu de la marge</div>
+
+          <div class="preview-row">
+            <span>Marge unitaire</span>
+            <strong [class.marge-negative]="marge < 0">{{ marge | number:'1.2-2' }} DT</strong>
+          </div>
+
+          <div class="preview-row total">
+            <span>Marge</span>
+            <strong [class.marge-negative]="marge < 0">{{ margePercent | number:'1.0-0' }} %</strong>
+          </div>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+
+          <a class="btn-cancel" routerLink="/pieces">
+            Annuler
+          </a>
+
+          <button type="submit" class="btn-save" [disabled]="f.invalid || saving">
+            <span class="spinner" *ngIf="saving"></span>
+            {{ id ? 'Enregistrer les modifications' : 'Ajouter la pièce' }}
+          </button>
+
+        </div>
+
+      </form>
 
     </div>
 
-    <div class="mb-3">
-
-      <label>Stock</label>
-
-      <input
-        type="number"
-        class="form-control"
-        [(ngModel)]="formData.quantiteStock"
-        name="stock">
-
-    </div>
-
-    <button class="btn btn-success">
-
-      Enregistrer
-
-    </button>
-
-  </form>
+  </div>
 
 </div>

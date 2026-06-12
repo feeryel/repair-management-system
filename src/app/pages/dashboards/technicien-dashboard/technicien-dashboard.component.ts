@@ -40,9 +40,12 @@ export class TechnicienDashboardComponent implements OnInit {
       }
     });
 
-    this.planningService.getAll().subscribe({
-      next: (r: any) => this.plannings = r.slice(0, 4)
-    });
+    const userId = this.authService.getUserId();
+    if (userId) {
+      this.planningService.getByTechnicien(userId).subscribe({
+        next: (r: any) => this.plannings = r.slice(0, 4)
+      });
+    }
 
     this.ligneService.getAll().subscribe({
       next: (r: any) => this.totalLignes = r.length
@@ -54,5 +57,12 @@ export class TechnicienDashboardComponent implements OnInit {
   }
   statusLabel(s: string): string {
     return s === 'DONE' ? 'Terminée' : s === 'IN_PROGRESS' ? 'En cours' : 'En attente';
+  }
+
+  planningStatusClass(s: string): string {
+    return s === 'TERMINE' ? 'st-done' : s === 'EN_COURS' ? 'st-progress' : 'st-pending';
+  }
+  planningStatusLabel(s: string): string {
+    return s === 'TERMINE' ? 'Terminé' : s === 'EN_COURS' ? 'En cours' : 'Planifié';
   }
 }

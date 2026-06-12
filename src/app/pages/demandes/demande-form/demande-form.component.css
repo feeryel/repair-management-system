@@ -12,7 +12,13 @@
 }
 
 /* HEADER */
-
+.fake-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f9f9f9;
+  color: #333;
+}
 .form-header{
   display:flex;
   justify-content:space-between;
@@ -61,17 +67,9 @@
   gap:20px;
 }
 
-.extra-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-  margin-top:20px;
-}
-
 @media(max-width:768px){
 
-  .grid-2,
-  .extra-grid{
+  .grid-2{
     grid-template-columns:1fr;
   }
 
@@ -125,37 +123,6 @@
 
 textarea{
   resize:none;
-}
-
-/* FIELD CARD */
-
-.field-card{
-  background:white;
-  border-radius:16px;
-  padding:18px;
-  border:1px solid #e5e7eb;
-  box-shadow:0 6px 20px rgba(0,0,0,0.06);
-}
-
-.field-card label{
-  display:block;
-  margin-bottom:10px;
-  font-weight:600;
-  color:#374151;
-}
-
-.field-card input{
-  width:100%;
-  padding:12px;
-  border:1px solid #d1d5db;
-  border-radius:12px;
-  outline:none;
-  transition:0.3s;
-}
-
-.field-card input:focus{
-  border-color:#6366f1;
-  box-shadow:0 0 0 4px rgba(99,102,241,0.12);
 }
 
 /* ERRORS */

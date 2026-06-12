@@ -82,8 +82,8 @@ export const routes: Routes = [
       { path: 'reparations',        component: ReparationListComponent, canActivate: [roleGuard([C, T, REC, REP])] },
       { path: 'reparations/form',   component: ReparationFormComponent, canActivate: [roleGuard([REC, REP])] },
 
-      // ── LIGNES RÉPARATION (TECHNICIEN) ───────────────────────────────────
-      { path: 'ligne-reparations',      component: LigneListComponent, canActivate: [roleGuard([T])] },
+      // ── LIGNES RÉPARATION (TECHNICIEN écriture ; ACHAT_STOCK lecture) ─────
+      { path: 'ligne-reparations',      component: LigneListComponent, canActivate: [roleGuard([T, STK])] },
       { path: 'ligne-reparations/add',  component: LigneFormComponent, canActivate: [roleGuard([T])] },
 
       // ── PLANNING (TECHNICIEN + RESP. REPARATION) ─────────────────────────

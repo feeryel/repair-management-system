@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './demande-list.component.html',
-  styleUrls: ['./demande-list.component.scss']
+  styleUrls: ['./demande-list.component.css']
 })
 export class DemandeListComponent implements OnInit {
 

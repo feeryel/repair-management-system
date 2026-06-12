@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { LigneReparationService }
 from '../../../core/services/ligne-reparation.service';
@@ -17,8 +17,9 @@ from '../../../core/services/reparation.service';
 @Component({
   selector: 'app-ligne-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './ligne-form.component.html'
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './ligne-form.component.html',
+  styleUrls: ['./ligne-form.component.css']
 })
 export class LigneFormComponent
 implements OnInit {
@@ -74,9 +75,27 @@ implements OnInit {
 
   }
 
+  get selectedPiece(){
+    return this.pieces.find(p => p.id == this.formData.PieceId);
+  }
+
+  get subtotal(): number {
+    return (this.selectedPiece?.prixHT || 0) * (this.formData.quantite || 0);
+  }
+
+  get stockInsuffisant(): boolean {
+    return !!this.selectedPiece
+      && this.formData.quantite > this.selectedPiece.quantiteEnStock;
+  }
+
   save(){
 
-    this.service.create(this.formData)
+    const payload = {
+      ...this.formData,
+      prixHT: this.selectedPiece?.prixHT || 0
+    };
+
+    this.service.create(payload)
     .subscribe({
 
       next:()=>{

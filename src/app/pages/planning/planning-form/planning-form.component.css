@@ -87,6 +87,16 @@
   color:#374151;
 }
 
+.input-group-custom label small{
+  font-weight:400;
+  color:#9ca3af;
+}
+
+.input-box input[readonly]{
+  color:#6b7280;
+  cursor:not-allowed;
+}
+
 .input-box{
   border:1px solid #e5e7eb;
   border-radius:16px;
@@ -101,7 +111,8 @@
 }
 
 /* INPUT */
-.input-box input{
+.input-box input,
+.input-box select{
   width:100%;
   border:none;
   outline:none;
