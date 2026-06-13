@@ -99,6 +99,11 @@ ngOnInit(): void {
     }
   }
 
+  getAppareil(r: any): string {
+    const a = r?.Demande?.Appareil ?? r?.DemandeReparation?.Appareil;
+    return a ? `${a.marque ?? ''} ${a.modele ?? ''}`.trim() : '—';
+  }
+
   canChangeStatus(): boolean {
     return this.role === Role.TECHNICIEN || this.role === Role.RESPONSABLE_REPARATION;
   }

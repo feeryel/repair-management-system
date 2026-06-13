@@ -89,9 +89,11 @@ export class ClientDashboardComponent implements OnInit {
     this.loadingFactures = true;
     this.factureService.getByClientId(this.clientId!).subscribe({
       next: (data: any[]) => {
-        this.factures    = data;
-        this.totalFac    = data.length;
-        this.montantTotal = data.reduce((sum, f) => sum + (f.montantTotal ?? 0), 0);
+        // Aligné avec isValidFacture() de la page "/factures" : on n'affiche
+        // que les factures de réparations terminées et réparables.
+        this.factures    = data.filter(f => f?.Reparation?.status === 'DONE' && f?.Reparation?.estReparable === true);
+        this.totalFac    = this.factures.length;
+        this.montantTotal = this.factures.reduce((sum, f) => sum + (f.montantTotal ?? 0), 0);
         this.loadingFactures = false;
       },
       error: () => { this.loadingFactures = false; }

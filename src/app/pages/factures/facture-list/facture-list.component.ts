@@ -49,8 +49,12 @@ isClient = false;
       });
     }
   }
+get validFactures(): any[] {
+  return this.factures.filter(f => this.isValidFacture(f));
+}
+
 getTotal(): number {
-  return this.factures.reduce((sum, f) => {
+  return this.validFactures.reduce((sum, f) => {
     return sum + (Number(f.montantTotal) || 0);
   }, 0);
 }
@@ -65,9 +69,11 @@ async getBase64ImageFromURL(url: string): Promise<string> {
   });
 }
   filteredFactures() {
-    if (!this.searchText) return this.factures;
+    const base = this.validFactures;
 
-    return this.factures.filter(f =>
+    if (!this.searchText) return base;
+
+    return base.filter(f =>
       f.id?.toString().includes(this.searchText) ||
       f.ReparationId?.toString().includes(this.searchText)
     );

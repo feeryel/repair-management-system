@@ -31,20 +31,12 @@
         Toutes
       </button>
 
-      <button (click)="setFilter('PENDING')" [class.active]="filter==='PENDING'">
-        PENDING
-      </button>
-
       <button (click)="setFilter('IN_PROGRESS')" [class.active]="filter==='IN_PROGRESS'">
         IN PROGRESS
       </button>
 
       <button (click)="setFilter('DONE')" [class.active]="filter==='DONE'">
         DONE
-      </button>
-
-      <button (click)="setFilter('FAILED')" [class.active]="filter==='FAILED'">
-        FAILED
       </button>
 
     </div>
@@ -93,13 +85,13 @@
           </div>
 
           <div>
-            <span>📌 Demande</span>
-            <strong>#{{ r.demandeId }}</strong>
+            <span>📱 Appareil</span>
+            <strong>{{ getAppareil(r) }}</strong>
           </div>
 
           <div>
-            <span>👨‍🔧 Tech</span>
-            <strong>#{{ r.technicienId }}</strong>
+            <span>👨‍🔧 Technicien</span>
+            <strong>{{ r.technicien?.login || '—' }}</strong>
           </div>
 
         </div>

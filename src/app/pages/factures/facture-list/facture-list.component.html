@@ -26,7 +26,7 @@
   <div class="stats">
 
     <div class="stat-card">
-      <h3>{{ factures.length }}</h3>
+      <h3>{{ validFactures.length }}</h3>
       <p>Total Factures</p>
     </div>
 
@@ -64,8 +64,7 @@
 
       <tbody>
 
-<tr *ngFor="let f of filteredFactures()"
-    [hidden]="!isValidFacture(f)">
+<tr *ngFor="let f of filteredFactures()">
           <td><span class="id">{{ f.id }}</span></td>
 
           <td>{{ f.date | date:'dd/MM/yyyy' }}</td>
@@ -96,7 +95,7 @@
     </table>
 
     <!-- EMPTY -->
-    <div class="empty" *ngIf="factures.length === 0">
+    <div class="empty" *ngIf="validFactures.length === 0">
       📭 Aucune facture trouvée
     </div>
 
