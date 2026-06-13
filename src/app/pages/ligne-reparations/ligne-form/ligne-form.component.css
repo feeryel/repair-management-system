@@ -2,7 +2,7 @@
   padding: 30px;
   margin-left: 260px;
   min-height: 100vh;
-  background: #f6f7fb;
+  background: var(--bg-page);
   font-family: system-ui;
 }
 
@@ -23,11 +23,11 @@
   font-size: 28px;
   margin: 0;
   font-weight: 800;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .form-header p {
-  color: #6b7280;
+  color: var(--text-muted);
   margin-top: 6px;
 }
 
@@ -47,7 +47,7 @@
 
 /* CARD */
 .form-card {
-  background: white;
+  background: var(--surface-card);
   border-radius: 24px;
   padding: 30px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
@@ -75,13 +75,13 @@
   display: block;
   margin-bottom: 10px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 /* INPUT BOX */
 .input-box {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 14px 16px;
   transition: .3s;
@@ -93,7 +93,7 @@
 
 .input-box:focus-within {
   border-color: #6366f1;
-  background: white;
+  background: var(--surface-card);
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
 }
 
@@ -104,7 +104,7 @@
   outline: none;
   background: transparent;
   font-size: 15px;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 /* ERRORS */
@@ -113,7 +113,7 @@
 }
 
 .error small {
-  color: #dc2626;
+  color: var(--danger);
   font-size: 13px;
   font-weight: 600;
 }
@@ -141,7 +141,7 @@
   align-items: center;
   padding: 8px 0;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--text-muted);
   border-bottom: 1px solid rgba(99, 102, 241, 0.1);
 }
 
@@ -150,12 +150,12 @@
 }
 
 .preview-row strong {
-  color: #111827;
+  color: var(--text-primary);
   font-weight: 700;
 }
 
 .preview-row strong small {
-  color: #9ca3af;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
@@ -172,19 +172,19 @@
 
 .preview-row.total strong {
   font-size: 18px;
-  color: #16a34a;
+  color: var(--success);
 }
 
 .stock-low {
-  color: #dc2626 !important;
+  color: var(--danger) !important;
 }
 
 .warning {
   margin-top: 12px;
   padding: 10px 14px;
   border-radius: 12px;
-  background: #fef2f2;
-  color: #dc2626;
+  background: var(--danger-bg);
+  color: var(--danger);
   font-size: 13px;
   font-weight: 600;
 }
@@ -225,7 +225,7 @@
   border: none;
   padding: 14px 24px;
   border-radius: 14px;
-  background: #eef2ff;
+  background: var(--info-bg);
   color: #4f46e5;
   font-weight: 600;
   cursor: pointer;
@@ -233,5 +233,5 @@
 }
 
 .btn-cancel:hover {
-  background: #dbeafe;
+  background: var(--info-bg);
 }

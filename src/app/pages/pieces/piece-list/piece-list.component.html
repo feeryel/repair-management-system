@@ -4,7 +4,7 @@
   <div class="topbar">
 
     <div>
-      <h1>🔧 Pièces de rechange</h1>
+      <h1><i class="bi bi-tools"></i> Pièces de rechange</h1>
       <p>Gestion intelligente du stock</p>
     </div>
 
@@ -19,7 +19,7 @@
 
     <input
       type="text"
-      placeholder="🔍 Rechercher une pièce..."
+      placeholder="Rechercher une pièce..."
       [(ngModel)]="searchText"
       (input)="resetPage()"
     />
@@ -39,22 +39,22 @@
   <div class="stats">
 
     <div class="card blue">
-      📦 <span>Stock total</span>
+      <i class="bi bi-box-seam-fill"></i> <span>Stock total</span>
       <h2>{{ stockTotal }}</h2>
     </div>
 
     <div class="card orange">
-      ⚠️ <span>Critiques</span>
+      <i class="bi bi-exclamation-triangle-fill"></i> <span>Critiques</span>
       <h2>{{ piecesCritiques }}</h2>
     </div>
 
     <div class="card green">
-      ✅ <span>OK</span>
+      <i class="bi bi-check-circle-fill"></i> <span>OK</span>
       <h2>{{ piecesOK }}</h2>
     </div>
 
     <div class="card red">
-      ⛔ <span>Rupture</span>
+      <i class="bi bi-slash-circle-fill"></i> <span>Rupture</span>
       <h2>{{ ruptureStock }}</h2>
     </div>
 
@@ -87,11 +87,11 @@
       <div class="actions">
 
         <a [routerLink]="['/pieces/edit', p.id]" class="edit-btn">
-          ✏️
+          <i class="bi bi-pencil-square"></i>
         </a>
 
         <button class="delete-btn" (click)="delete(p.id)">
-          🗑
+          <i class="bi bi-trash"></i>
         </button>
 
       </div>
@@ -102,7 +102,7 @@
 
   <!-- EMPTY -->
   <div class="empty" *ngIf="paginatedPieces.length === 0">
-    😕 Aucune pièce trouvée
+    <i class="bi bi-inbox"></i> Aucune pièce trouvée
   </div>
 
   <!-- PAGINATION -->

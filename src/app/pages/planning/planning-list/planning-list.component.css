@@ -2,7 +2,7 @@
   padding:30px;
   margin-left:260px;
   min-height:100vh;
-  background:#f6f7fb;
+  background:var(--bg-page);
   font-family:system-ui;
 }
 
@@ -18,13 +18,55 @@
 .header h2{
   font-size:32px;
   font-weight:700;
-  color:#111827;
+  color:var(--text-primary);
   margin:0;
 }
 
 .header p{
-  color:#6b7280;
+  color:var(--text-muted);
   margin-top:6px;
+}
+
+/* HEADER ACTIONS */
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+/* VIEW TOGGLE */
+
+.view-toggle{
+  display:flex;
+  background:var(--surface-card);
+  border-radius:14px;
+  padding:4px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+
+.toggle-btn{
+  border:none;
+  background:transparent;
+  padding:10px 16px;
+  border-radius:10px;
+  font-weight:600;
+  font-size:14px;
+  color:var(--text-muted);
+  cursor:pointer;
+  transition:.25s;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.toggle-btn:hover{
+  color:#6366f1;
+}
+
+.toggle-btn.active{
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:white;
 }
 
 /* ADD BUTTON */
@@ -68,7 +110,7 @@
 
 .planning-card{
 
-  background:white;
+  background:var(--surface-card);
 
   border-radius:24px;
 
@@ -131,9 +173,9 @@
   letter-spacing:.03em;
 }
 
-.status-pill.st-pending{ background:#eef2ff; color:#4f46e5; }
-.status-pill.st-progress{ background:#fef3c7; color:#b45309; }
-.status-pill.st-done{ background:#dcfce7; color:#16a34a; }
+.status-pill.st-pending{ background:var(--info-bg); color:var(--info); }
+.status-pill.st-progress{ background:var(--warning-bg); color:var(--warning); }
+.status-pill.st-done{ background:var(--success-bg); color:var(--success); }
 
 /* BODY */
 
@@ -145,7 +187,7 @@
 .planning-title{
   font-weight:700;
   font-size:16px;
-  color:#111827;
+  color:var(--text-primary);
   margin-bottom:20px;
   line-height:1.4;
 }
@@ -177,7 +219,7 @@
 }
 
 .info small{
-  color:#6b7280;
+  color:var(--text-muted);
   display:block;
   margin-bottom:4px;
 }
@@ -185,7 +227,7 @@
 .info h4{
   margin:0;
   font-size:16px;
-  color:#111827;
+  color:var(--text-primary);
 }
 
 /* FOOTER */
@@ -197,7 +239,7 @@
   display:flex;
   gap:14px;
 
-  border-top:1px solid #f3f4f6;
+  border-top:1px solid var(--border-color);
 }
 
 /* BUTTONS */
@@ -236,12 +278,12 @@
 
 .btn-delete{
 
-  background:#fef2f2;
-  color:#dc2626;
+  background:var(--danger-bg);
+  color:var(--danger);
 }
 
 .btn-delete:hover{
-  background:#fee2e2;
+  background:var(--danger-bg);
 }
 
 /* STATUS ACTIONS (TECHNICIEN) */
@@ -257,21 +299,21 @@
 }
 
 .btn-progress{
-  background:#fef3c7;
-  color:#b45309;
+  background:var(--warning-bg);
+  color:var(--warning);
 }
 
 .btn-progress:hover{
-  background:#fde68a;
+  background:var(--warning-bg);
 }
 
 .btn-done{
-  background:#dcfce7;
-  color:#16a34a;
+  background:var(--success-bg);
+  color:var(--success);
 }
 
 .btn-done:hover{
-  background:#bbf7d0;
+  background:var(--success-bg);
 }
 
 .done-label{
@@ -280,15 +322,15 @@
   padding:12px;
   border-radius:14px;
   font-weight:600;
-  background:#f0fdf4;
-  color:#16a34a;
+  background:var(--success-bg);
+  color:var(--success);
 }
 
 /* EMPTY */
 
 .empty{
 
-  background:white;
+  background:var(--surface-card);
 
   padding:40px;
 
@@ -296,7 +338,7 @@
 
   border-radius:24px;
 
-  color:#6b7280;
+  color:var(--text-muted);
 
   font-weight:600;
 }
@@ -370,7 +412,7 @@
   width: 42px;
   height: 42px;
 
-  background: white;
+  background: var(--surface-card);
 
   color: #6366f1;
 
@@ -408,9 +450,9 @@
   width: 42px;
   height: 42px;
 
-  background: white;
+  background: var(--surface-card);
 
-  color: #374151;
+  color: var(--text-secondary);
 
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 
@@ -454,127 +496,201 @@
     font-size: 14px;
   }
 
-}/* ========================= */
-/* PAGINATION MODERNE */
+}
+
+/* ========================= */
+/* VUE CALENDRIER */
 /* ========================= */
 
-.pagination-container {
-
-  margin-top: 35px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  gap: 10px;
-
-  padding: 20px;
-
+.calendar{
+  background:var(--surface-card);
+  border-radius:24px;
+  padding:24px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.06);
 }
 
-/* BUTTON BASE */
-.page-btn,
-.page-number {
-
-  border: none;
-  cursor: pointer;
-
-  font-weight: 600;
-
-  transition: all 0.25s ease;
-
-  border-radius: 12px;
-
+.calendar-nav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:24px;
+  margin-bottom:20px;
 }
 
-/* ARROWS */
-.page-btn {
-
-  width: 42px;
-  height: 42px;
-
-  background: white;
-
-  color: #6366f1;
-
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 18px;
-
+.cal-nav-btn{
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:12px;
+  background:#eef2ff;
+  color:#6366f1;
+  font-size:18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.25s;
 }
 
-.page-btn:hover {
-
-  background: #6366f1;
-  color: white;
-
-  transform: translateY(-2px);
-
+.cal-nav-btn:hover{
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:white;
 }
 
-.page-btn:disabled {
-
-  opacity: 0.4;
-  cursor: not-allowed;
-
-  transform: none;
-
+.cal-month-label{
+  margin:0;
+  font-size:20px;
+  font-weight:700;
+  color:var(--text-primary);
+  text-transform:capitalize;
+  min-width:200px;
+  text-align:center;
 }
 
-/* NUMBERS */
-.page-number {
-
-  width: 42px;
-  height: 42px;
-
-  background: white;
-
-  color: #374151;
-
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-
+/* LÉGENDE */
+.calendar-legend{
+  display:flex;
+  justify-content:center;
+  gap:24px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
 }
 
-.page-number:hover {
-
-  background: #eef2ff;
-  color: #6366f1;
-
-  transform: translateY(-2px);
-
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text-muted);
 }
 
-/* ACTIVE PAGE */
-.active-page {
-
-  background: linear-gradient(
-    135deg,
-    #6366f1,
-    #8b5cf6
-  ) !important;
-
-  color: white !important;
-
-  box-shadow: 0 10px 25px rgba(99,102,241,0.35);
-
+.legend-dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  display:inline-block;
 }
 
-/* RESPONSIVE */
-@media(max-width: 768px) {
+/* GRILLE CALENDRIER */
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+  margin-bottom:8px;
+}
 
-  .pagination-container {
-    gap: 6px;
+.calendar-header-row{
+  margin-bottom:12px;
+}
+
+.calendar-weekday{
+  text-align:center;
+  font-size:12px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--text-muted);
+  padding:8px 0;
+}
+
+.calendar-day{
+  background:var(--bg-page);
+  border-radius:14px;
+  padding:10px;
+  min-height:100px;
+  border:1px solid var(--border-color);
+  transition:.2s;
+}
+
+.calendar-day.outside-month{
+  opacity:.4;
+}
+
+.calendar-day.is-today{
+  border-color:#6366f1;
+  background:#eef2ff;
+}
+
+.day-number{
+  font-size:13px;
+  font-weight:700;
+  color:var(--text-secondary);
+  margin-bottom:6px;
+}
+
+.day-plannings{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.day-planning-chip{
+  font-size:11px;
+  font-weight:600;
+  padding:4px 8px;
+  border-radius:8px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.day-planning-chip.clickable{
+  cursor:pointer;
+}
+
+.day-planning-chip.clickable:hover{
+  filter:brightness(0.95);
+}
+
+.cal-pending{
+  background:var(--info-bg);
+  color:var(--info);
+}
+
+.cal-progress{
+  background:var(--warning-bg);
+  color:var(--warning);
+}
+
+.cal-done{
+  background:var(--success-bg);
+  color:var(--success);
+}
+
+/* RESPONSIVE CALENDRIER */
+@media(max-width:768px){
+
+  .calendar-day{
+    min-height:70px;
+    padding:6px;
   }
 
-  .page-btn,
-  .page-number {
-    width: 38px;
-    height: 38px;
-    font-size: 14px;
+  .day-planning-chip{
+    font-size:10px;
   }
 
+  .calendar-nav{
+    gap:12px;
+  }
+
+  .cal-month-label{
+    min-width:auto;
+    font-size:16px;
+  }
+
+  .header-actions{
+    flex-direction:column;
+    align-items:flex-start;
+    width:100%;
+  }
+
+  .view-toggle{
+    width:100%;
+  }
+
+  .toggle-btn{
+    flex:1;
+    justify-content:center;
+  }
 }

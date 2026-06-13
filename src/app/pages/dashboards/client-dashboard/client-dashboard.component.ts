@@ -103,12 +103,24 @@ export class ClientDashboardComponent implements OnInit {
   // ── Helpers ─────────────────────────────────────────────────────────────────
 
   statusClass(status: string): string {
-    const m: Record<string, string> = { DONE: 'st-done', IN_PROGRESS: 'st-progress', PENDING: 'st-pending' };
+    const m: Record<string, string> = {
+      DONE: 'st-done',
+      IN_PROGRESS: 'st-progress',
+      PENDING: 'st-pending',
+      EN_ATTENTE_DEVIS: 'st-progress',
+      REFUSEE_CLIENT: 'st-danger'
+    };
     return m[status] ?? 'st-pending';
   }
 
   statusLabel(status: string): string {
-    const m: Record<string, string> = { DONE: 'Terminée', IN_PROGRESS: 'En cours', PENDING: 'En attente' };
+    const m: Record<string, string> = {
+      DONE: 'Terminée',
+      IN_PROGRESS: 'En cours',
+      PENDING: 'En attente',
+      EN_ATTENTE_DEVIS: 'Devis en attente',
+      REFUSEE_CLIENT: 'Devis refusé'
+    };
     return m[status] ?? status;
   }
 

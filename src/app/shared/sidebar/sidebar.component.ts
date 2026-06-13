@@ -14,6 +14,7 @@ const NAV: Record<Role, NavItem[]> = {
   [Role.ADMIN]: [
     { label: 'Dashboard',        icon: 'bi-grid-1x2-fill',           route: '/admin/dashboard' },
     { label: 'Comptes',          icon: 'bi-people-fill',             route: '/admin/users' },
+    { label: 'Historique',       icon: 'bi-clock-history',           route: '/admin/audit-logs' },
   ],
   [Role.CLIENT]: [
     { label: 'Dashboard',        icon: 'bi-grid-1x2-fill',           route: '/client/dashboard' },

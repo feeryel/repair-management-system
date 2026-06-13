@@ -8,13 +8,32 @@
       <p>{{ isTechnicien ? 'Vos interventions assignées' : 'Gestion intelligente des interventions et réparations' }}</p>
     </div>
 
-    <a *ngIf="isResponsable"
-      routerLink="/planning/add"
-      class="btn-add">
+    <div class="header-actions">
 
-      + Ajouter Planning
+      <div class="view-toggle">
+        <button
+          class="toggle-btn"
+          [class.active]="viewMode === 'grid'"
+          (click)="setViewMode('grid')">
+          <i class="bi bi-grid-3x3-gap-fill"></i> Grille
+        </button>
+        <button
+          class="toggle-btn"
+          [class.active]="viewMode === 'calendar'"
+          (click)="setViewMode('calendar')">
+          <i class="bi bi-calendar3"></i> Calendrier
+        </button>
+      </div>
 
-    </a>
+      <a *ngIf="isResponsable"
+        routerLink="/planning/add"
+        class="btn-add">
+
+        + Ajouter Planning
+
+      </a>
+
+    </div>
 
   </div>
 
@@ -33,7 +52,7 @@
   </div>
 
   <!-- GRID -->
-  <div class="planning-grid" *ngIf="!loading">
+  <div class="planning-grid" *ngIf="!loading && viewMode === 'grid'">
 
     <div
       class="planning-card"
@@ -61,7 +80,7 @@
 
         <div class="info">
 
-          <span class="icon">📅</span>
+          <span class="icon"><i class="bi bi-calendar-event"></i></span>
 
           <div>
             <small>Date début</small>
@@ -72,7 +91,7 @@
 
         <div class="info">
 
-          <span class="icon">⏳</span>
+          <span class="icon"><i class="bi bi-hourglass-split"></i></span>
 
           <div>
             <small>Date fin</small>
@@ -83,7 +102,7 @@
 
         <div class="info" *ngIf="!isTechnicien">
 
-          <span class="icon">👨‍🔧</span>
+          <span class="icon"><i class="bi bi-person-gear"></i></span>
 
           <div>
             <small>Technicien</small>
@@ -94,7 +113,7 @@
 
         <div class="info">
 
-          <span class="icon">🛠</span>
+          <span class="icon"><i class="bi bi-tools"></i></span>
 
           <div>
             <small>Demande</small>
@@ -112,7 +131,7 @@
           [routerLink]="['/planning/edit', p.id]"
           class="btn-edit">
 
-          ✏ Modifier
+          <i class="bi bi-pencil-square"></i> Modifier
 
         </a>
 
@@ -120,7 +139,7 @@
           class="btn-delete"
           (click)="deletePlanning(p.id)">
 
-          🗑 Supprimer
+          <i class="bi bi-trash"></i> Supprimer
 
         </button>
 
@@ -134,7 +153,7 @@
           class="btn-status btn-progress"
           (click)="changeStatut(p, 'EN_COURS')">
 
-          ▶ Démarrer
+          <i class="bi bi-play-fill"></i> Démarrer
 
         </button>
 
@@ -143,12 +162,12 @@
           class="btn-status btn-done"
           (click)="changeStatut(p, 'TERMINE')">
 
-          ✓ Terminer
+          <i class="bi bi-check-circle-fill"></i> Terminer
 
         </button>
 
         <span class="done-label" *ngIf="p.statut === 'TERMINE'">
-          ✅ Intervention terminée
+          <i class="bi bi-check-circle-fill"></i> Intervention terminée
         </span>
 
       </div>
@@ -158,7 +177,7 @@
   </div>
 
 <!-- PAGINATION -->
-<div class="pagination-container" *ngIf="totalPages > 1">
+<div class="pagination-container" *ngIf="viewMode === 'grid' && totalPages > 1">
 
   <!-- PREV -->
   <button class="page-btn"
@@ -186,6 +205,61 @@
     ›
 
   </button>
+
+</div>
+
+<!-- CALENDRIER -->
+<div class="calendar" *ngIf="!loading && viewMode === 'calendar'">
+
+  <!-- NAVIGATION MOIS -->
+  <div class="calendar-nav">
+    <button class="cal-nav-btn" (click)="prevMonth()">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+
+    <h3 class="cal-month-label">{{ monthLabel }}</h3>
+
+    <button class="cal-nav-btn" (click)="nextMonth()">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- LÉGENDE -->
+  <div class="calendar-legend">
+    <span class="legend-item"><span class="legend-dot cal-pending"></span> Planifié</span>
+    <span class="legend-item"><span class="legend-dot cal-progress"></span> En cours</span>
+    <span class="legend-item"><span class="legend-dot cal-done"></span> Terminé</span>
+  </div>
+
+  <!-- EN-TÊTE JOURS -->
+  <div class="calendar-grid calendar-header-row">
+    <div class="calendar-weekday" *ngFor="let d of weekDayLabels">{{ d }}</div>
+  </div>
+
+  <!-- SEMAINES -->
+  <div class="calendar-grid" *ngFor="let week of calendarWeeks">
+
+    <div class="calendar-day"
+         *ngFor="let day of week"
+         [class.outside-month]="!day.isCurrentMonth"
+         [class.is-today]="day.isToday">
+
+      <div class="day-number">{{ day.day }}</div>
+
+      <div class="day-plannings">
+        <div class="day-planning-chip"
+             *ngFor="let p of day.plannings"
+             [ngClass]="planningStatutClass(p.statut)"
+             [class.clickable]="isResponsable"
+             (click)="openPlanning(p)"
+             [title]="p.description || 'Planning #' + p.id">
+          #{{ p.id }} — {{ p.description || 'Intervention' }}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
 

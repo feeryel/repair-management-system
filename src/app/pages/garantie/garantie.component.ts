@@ -13,7 +13,10 @@ import { CommonModule } from '@angular/common';
 export class GarantieComponent implements OnInit {
 
   facture: any;
-  apiUrl = 'https://bountiful-emphases-phantom.ngrok-free.dev';
+  apiUrl = 'http://localhost:3000';
+
+  loading = true;
+  error = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -24,19 +27,48 @@ export class GarantieComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
 
-      if (!isNaN(id)) {
-        this.http.get<any>(`${this.apiUrl}/public/garantie/${id}`).subscribe({
-          next: (res) => {
-            this.facture = res;
-            console.log('FACTURE =>', res);
-          },
-          error: (err) => console.error('Erreur chargement garantie:', err)
-        });
+      if (isNaN(id)) {
+        this.loading = false;
+        this.error = 'Identifiant de garantie invalide.';
+        return;
       }
+
+      this.http.get<any>(`${this.apiUrl}/public/garantie/${id}`).subscribe({
+        next: (res) => {
+          this.facture = res;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+          this.error = 'Certificat de garantie introuvable.';
+        }
+      });
     });
   }
 
-  // 🔥 Garantie valide ou non
+  // ── Accès aux données imbriquées (Reparation → Demande → Appareil → Client) ──
+
+  get reparation(): any {
+    return this.facture?.Reparation;
+  }
+
+  get demande(): any {
+    return this.reparation?.Demande ?? this.reparation?.DemandeReparation;
+  }
+
+  get appareil(): any {
+    return this.demande?.Appareil;
+  }
+
+  get client(): any {
+    return this.appareil?.Client;
+  }
+
+  get lignes(): any[] {
+    return this.reparation?.LigneReparations ?? [];
+  }
+
+  // Garantie valide ou non
   isValidGarantie(): boolean {
     if (!this.facture?.date) return false;
 
@@ -47,14 +79,14 @@ export class GarantieComponent implements OnInit {
     return new Date() <= end;
   }
 
-  // 📅 date fin garantie
+  // Date de fin de garantie
   getDateFinGarantie(date: string): Date {
     const d = new Date(date);
     d.setDate(d.getDate() + 30);
     return d;
   }
 
-  // ⏳ jours restants
+  // Jours restants
   getJoursRestants(date: string): number {
     const start = new Date(date);
     const end = new Date(start);

@@ -77,7 +77,7 @@ export class LoginComponent {
       error: () => {
 
         this.loading = false;
-        this.errorMessage = 'Login ou mot de passe incorrect ❌';
+        this.errorMessage = 'Login ou mot de passe incorrect';
 
       }
 

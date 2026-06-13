@@ -39,7 +39,7 @@
 
     <input
       type="text"
-      placeholder="🔎 Rechercher..."
+      placeholder="Rechercher..."
       [(ngModel)]="searchText"
       (ngModelChange)="onSearchChange()"
       class="search">
@@ -94,8 +94,8 @@
         <h3 class="title">{{ d.symptomesPanne }}</h3>
 
         <div class="meta">
-          <span>📅 {{ d.dateDepot }}</span>
-          <span>⏳ {{ d.datePrevueRep }}</span>
+          <span><i class="bi bi-calendar-event"></i> {{ d.dateDepot }}</span>
+          <span><i class="bi bi-hourglass-split"></i> {{ d.datePrevueRep }}</span>
         </div>
 
       </div>
@@ -104,11 +104,11 @@
       <div class="card-footer">
 
         <a class="btn-edit" [routerLink]="['/demandes/edit', d.id]">
-          ✏
+          <i class="bi bi-pencil-square"></i>
         </a>
 
         <button class="btn-delete" (click)="delete(d.id)">
-          🗑
+          <i class="bi bi-trash"></i>
         </button>
 
       </div>

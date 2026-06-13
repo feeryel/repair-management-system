@@ -40,7 +40,7 @@
   <!-- SEARCH -->
   <div class="search-box">
     <input type="text"
-           placeholder="🔎 Rechercher une facture..."
+           placeholder="Rechercher une facture..."
            [(ngModel)]="searchText">
   </div>
 
@@ -96,7 +96,7 @@
 
     <!-- EMPTY -->
     <div class="empty" *ngIf="validFactures.length === 0">
-      📭 Aucune facture trouvée
+      <i class="bi bi-inbox"></i> Aucune facture trouvée
     </div>
 
   </div>

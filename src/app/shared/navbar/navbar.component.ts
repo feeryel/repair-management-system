@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService,Role } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 
 
@@ -47,17 +50,25 @@ const NAV: Record<Role, NavItem[]> = {
 @Component({
   selector: 'app-navbar',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit, OnDestroy {
 userLogin = '';
 roleLabel = '';
 clientName = '';
 
+notifications: any[] = [];
+unreadCount = 0;
+showNotifDropdown = false;
+private notifPolling?: ReturnType<typeof setInterval>;
+
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private themeService: ThemeService,
+    private notificationService: NotificationService
   ) {}
 
 
@@ -68,6 +79,12 @@ clientName = '';
         this.roleLabel = this.getRoleLabel(role);
   this.clientName = this.authService.getClientName() ?? '';
 
+  this.loadUnreadCount();
+  this.notifPolling = setInterval(() => this.loadUnreadCount(), 30000);
+  }
+
+  ngOnDestroy() {
+    if (this.notifPolling) clearInterval(this.notifPolling);
   }
    private getRoleLabel(role: Role): string {
       const labels: Record<Role, string> = {
@@ -93,6 +110,74 @@ clientName = '';
 
     this.router.navigate(['/']);
 
+  }
+
+  isDark(): boolean {
+    return this.themeService.isDark();
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
+
+  loadUnreadCount() {
+    this.notificationService.getUnreadCount().subscribe({
+      next: (res) => this.unreadCount = res.count,
+      error: () => {}
+    });
+  }
+
+  toggleNotifDropdown() {
+    this.showNotifDropdown = !this.showNotifDropdown;
+
+    if (this.showNotifDropdown) {
+      this.notificationService.getAll().subscribe({
+        next: (data) => this.notifications = data,
+        error: () => {}
+      });
+    }
+  }
+
+  onNotificationClick(notif: any) {
+    if (!notif.lu) {
+      this.notificationService.markAsRead(notif.id).subscribe({
+        next: () => {
+          notif.lu = true;
+          this.unreadCount = Math.max(0, this.unreadCount - 1);
+        },
+        error: () => {}
+      });
+    }
+
+    this.showNotifDropdown = false;
+
+    if (notif.link) {
+      this.router.navigateByUrl(notif.link);
+    }
+  }
+
+  markAllAsRead() {
+    this.notificationService.markAllAsRead().subscribe({
+      next: () => {
+        this.notifications.forEach(n => n.lu = true);
+        this.unreadCount = 0;
+      },
+      error: () => {}
+    });
+  }
+
+  timeAgo(date: string): string {
+    const diffMs = Date.now() - new Date(date).getTime();
+    const minutes = Math.floor(diffMs / 60000);
+
+    if (minutes < 1) return "à l'instant";
+    if (minutes < 60) return `il y a ${minutes} min`;
+
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `il y a ${hours} h`;
+
+    const days = Math.floor(hours / 24);
+    return `il y a ${days} j`;
   }
 
 }

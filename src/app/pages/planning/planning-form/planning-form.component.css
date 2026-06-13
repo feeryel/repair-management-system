@@ -2,7 +2,7 @@
   padding:30px;
   margin-left:260px;
   min-height:100vh;
-  background:#f6f7fb;
+  background:var(--bg-page);
   font-family:system-ui;
 }
 
@@ -22,12 +22,12 @@
 .form-header h2{
   font-size:30px;
   margin:0;
-  color:#111827;
+  color:var(--text-primary);
   font-weight:700;
 }
 
 .form-header p{
-  color:#6b7280;
+  color:var(--text-muted);
   margin-top:6px;
 }
 
@@ -46,7 +46,7 @@
 
 /* CARD */
 .form-card{
-  background:white;
+  background:var(--surface-card);
   border-radius:24px;
   padding:30px;
   box-shadow:0 15px 40px rgba(0,0,0,0.06);
@@ -84,29 +84,29 @@
   display:block;
   margin-bottom:10px;
   font-weight:600;
-  color:#374151;
+  color:var(--text-secondary);
 }
 
 .input-group-custom label small{
   font-weight:400;
-  color:#9ca3af;
+  color:var(--text-muted);
 }
 
 .input-box input[readonly]{
-  color:#6b7280;
+  color:var(--text-muted);
   cursor:not-allowed;
 }
 
 .input-box{
-  border:1px solid #e5e7eb;
+  border:1px solid var(--border-color);
   border-radius:16px;
-  background:#f9fafb;
+  background:var(--bg-page);
   transition:.25s;
 }
 
 .input-box:focus-within{
   border-color:#6366f1;
-  background:white;
+  background:var(--surface-card);
   box-shadow:0 0 0 4px rgba(99,102,241,0.12);
 }
 
@@ -119,13 +119,13 @@
   background:transparent;
   padding:15px;
   font-size:15px;
-  color:#111827;
+  color:var(--text-primary);
   border-radius:16px;
 }
 
 /* CARD INPUT */
 .field-card{
-  background:#ffffff;
+  background:var(--surface-card);
   border-radius:16px;
   padding:15px;
   border:1px solid #eee;
@@ -142,7 +142,7 @@
   display:block;
   font-weight:600;
   margin-bottom:8px;
-  color:#374151;
+  color:var(--text-secondary);
 }
 
 .field-card input{
@@ -196,7 +196,7 @@
   border:none;
   padding:14px 24px;
   border-radius:14px;
-  background:#eef2ff;
+  background:var(--info-bg);
   color:#4f46e5;
   font-weight:600;
   cursor:pointer;
@@ -204,7 +204,7 @@
 }
 
 .btn-cancel:hover{
-  background:#dbeafe;
+  background:var(--info-bg);
 }
 
 /* ERROR */
@@ -213,7 +213,7 @@
 }
 
 .error small{
-  color:#dc2626;
+  color:var(--danger);
   font-size:12px;
   font-weight:600;
 }

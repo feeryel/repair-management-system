@@ -10,7 +10,7 @@
         <p>Gestion intelligente des demandes de réparation</p>
       </div>
 
-      <div class="header-icon">🛠</div>
+      <div class="header-icon"><i class="bi bi-tools"></i></div>
 
     </div>
 
@@ -43,7 +43,7 @@
             <label>
               Date Prévue
               <span *ngIf="loading" style="color:orange;">(calcul...)</span>
-              <span *ngIf="predicted" style="color:green;">✔ prédite</span>
+              <span *ngIf="predicted" style="color:green;"><i class="bi bi-check-circle-fill"></i> prédite</span>
             </label>
 
             <!-- Valeur prédite par l'IA (lecture seule) -->
@@ -97,7 +97,7 @@
                   (click)="predict()"
                   [disabled]="!demande.symptomesPanne || loading">
 
-            🔮 Prédire la date
+            <i class="bi bi-magic"></i> Prédire la date
 
           </button>
 

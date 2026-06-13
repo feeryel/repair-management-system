@@ -1,0 +1,64 @@
+/* ────────────────────────────────────────────────────────────
+   Design tokens — thème clair (par défaut) et sombre
+   Utilisés dans tout le projet via var(--xxx)
+   ──────────────────────────────────────────────────────────── */
+:root {
+  /* Surfaces */
+  --bg-page:       #f6f7fb;
+  --surface-card:  #ffffff;
+  --border-color:  #e5e7eb;
+  --shadow-color:  rgba(0, 0, 0, 0.08);
+
+  /* Texte */
+  --text-primary:   #111827;
+  --text-secondary: #374151;
+  --text-muted:     #6b7280;
+
+  /* Accents (marque) */
+  --accent-start: #6366f1;
+  --accent-end:   #8b5cf6;
+  --accent-blue-start: #2563eb;
+  --accent-blue-end:   #1d4ed8;
+
+  /* Statuts */
+  --success:    #16a34a;
+  --success-bg: #dcfce7;
+  --warning:    #d97706;
+  --warning-bg: #fef3c7;
+  --danger:     #dc2626;
+  --danger-bg:  #fee2e2;
+  --info:       #2563eb;
+  --info-bg:    #dbeafe;
+
+  /* Layout */
+  --sidebar-width: 260px;
+}
+
+[data-theme="dark"] {
+  /* Surfaces */
+  --bg-page:       #0f172a;
+  --surface-card:  #1e293b;
+  --border-color:  #334155;
+  --shadow-color:  rgba(0, 0, 0, 0.4);
+
+  /* Texte */
+  --text-primary:   #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted:     #94a3b8;
+
+  /* Statuts (légèrement adoucis sur fond sombre) */
+  --success:    #4ade80;
+  --success-bg: rgba(74, 222, 128, 0.15);
+  --warning:    #fbbf24;
+  --warning-bg: rgba(251, 191, 36, 0.15);
+  --danger:     #f87171;
+  --danger-bg:  rgba(248, 113, 113, 0.15);
+  --info:       #60a5fa;
+  --info-bg:    rgba(96, 165, 250, 0.15);
+}
+
+html, body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}

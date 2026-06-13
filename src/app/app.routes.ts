@@ -14,6 +14,7 @@ import { ReparationDashboardComponent } from './pages/dashboards/reparation-dash
 import { StockDashboardComponent }      from './pages/dashboards/stock-dashboard/stock-dashboard.component';
 
 import { AdminUsersComponent }     from './pages/admin/admin-users/admin-users.component';
+import { AuditLogListComponent }   from './pages/admin/audit-log-list/audit-log-list.component';
 import { ClientListComponent }     from './pages/clients/client-list/client-list.component';
 import { ClientFormComponent }     from './pages/clients/client-form/client-form.component';
 import { AppareilListComponent }   from './pages/appareils/appareil-list/appareil-list.component';
@@ -31,6 +32,7 @@ import { PieceFormComponent }      from './pages/pieces/piece-form/piece-form.co
 import { LigneListComponent }      from './pages/ligne-reparations/ligne-list/ligne-list.component';
 import { LigneFormComponent }      from './pages/ligne-reparations/ligne-form/ligne-form.component';
 import { GarantieComponent }       from './pages/garantie/garantie.component';
+import { DevisPublicComponent }    from './pages/devis/devis-public/devis-public.component';
 import { DashboardComponent }      from './pages/dashboard/dashboard.component';
 
 // ── Alias courts ─────────────────────────────────────────────────────────────
@@ -46,6 +48,7 @@ export const routes: Routes = [
   // ── Page publique ─────────────────────────────────────────────────────────
   { path: '', component: LoginComponent },
   { path: 'public/garantie/:id', component: GarantieComponent },
+  { path: 'public/devis/:token', component: DevisPublicComponent },
 
   // ── Zone protégée ─────────────────────────────────────────────────────────
   {
@@ -57,6 +60,7 @@ export const routes: Routes = [
       // ── DASHBOARDS ──────────────────────────────────────────────────────
       { path: 'admin/dashboard',      component: AdminDashboardComponent,      canActivate: [roleGuard([A])] },
       { path: 'admin/users',          component: AdminUsersComponent,          canActivate: [roleGuard([A])] },
+      { path: 'admin/audit-logs',     component: AuditLogListComponent,        canActivate: [roleGuard([A])] },
       { path: 'client/dashboard',     component: ClientDashboardComponent,     canActivate: [roleGuard([C])] },
       { path: 'reception/dashboard',  component: ReceptionDashboardComponent,  canActivate: [roleGuard([REC])] },
       { path: 'technicien/dashboard', component: TechnicienDashboardComponent, canActivate: [roleGuard([T])] },

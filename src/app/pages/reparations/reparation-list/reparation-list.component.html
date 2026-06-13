@@ -20,7 +20,7 @@
 
     <input
       type="text"
-      placeholder="🔎 Rechercher réparation..."
+      placeholder="Rechercher réparation..."
       [(ngModel)]="searchText"
       (ngModelChange)="currentPage = 1"
       class="search">
@@ -56,7 +56,7 @@
         <div class="id-box">#{{ r.id }}</div>
 
         <div class="status-pill" [ngClass]="r.status">
-          {{ r.status }}
+          {{ statusLabel(r.status) }}
         </div>
 
       </div>
@@ -70,27 +70,27 @@
         <div class="grid-info">
 
           <div>
-            <span>📅 Fin</span>
+            <span><i class="bi bi-calendar-event"></i> Fin</span>
             <strong>{{ r.dateFinRep }}</strong>
           </div>
 
           <div>
-            <span>⏱ Temps</span>
+            <span><i class="bi bi-stopwatch"></i> Temps</span>
             <strong>{{ r.tempsMainOeuvre }}h</strong>
           </div>
 
           <div>
-            <span>🔧 Réparable</span>
+            <span><i class="bi bi-tools"></i> Réparable</span>
             <strong>{{ r.estReparable ? 'Oui' : 'Non' }}</strong>
           </div>
 
           <div>
-            <span>📱 Appareil</span>
+            <span><i class="bi bi-phone"></i> Appareil</span>
             <strong>{{ getAppareil(r) }}</strong>
           </div>
 
           <div>
-            <span>👨‍🔧 Technicien</span>
+            <span><i class="bi bi-person-gear"></i> Technicien</span>
             <strong>{{ r.technicien?.login || '—' }}</strong>
           </div>
 
@@ -98,10 +98,20 @@
 
       </div>
 
-      <div class="card-actions" *ngIf="canChangeStatus() && r.status !== 'DONE'">
-        <button class="btn-done" (click)="changeStatus(r.id, 'DONE')">
-          ✓ Marquer comme terminée
+      <div class="card-actions" *ngIf="(canChangeStatus() && r.status !== 'DONE' && r.status !== 'EN_ATTENTE_DEVIS') || canSendDevis(r)">
+
+        <button class="btn-done"
+                *ngIf="canChangeStatus() && r.status !== 'DONE' && r.status !== 'EN_ATTENTE_DEVIS'"
+                (click)="changeStatus(r.id, 'DONE')">
+          <i class="bi bi-check-circle-fill"></i> Marquer comme terminée
         </button>
+
+        <button class="btn-devis"
+                *ngIf="canSendDevis(r)"
+                (click)="sendDevis(r)">
+          <i class="bi bi-send-fill"></i> Envoyer devis
+        </button>
+
       </div>
 
     </div>

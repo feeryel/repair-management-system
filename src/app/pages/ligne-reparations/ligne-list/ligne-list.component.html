@@ -5,7 +5,7 @@
 
     <div class="header-left">
 
-      <div class="header-icon">🧾</div>
+      <div class="header-icon"><i class="bi bi-receipt"></i></div>
 
       <div>
         <h2>Lignes de Réparation</h2>
@@ -24,7 +24,7 @@
   <div class="stats">
 
     <div class="stat-card indigo">
-      <div class="stat-icon">📋</div>
+      <div class="stat-icon"><i class="bi bi-list-check"></i></div>
       <div class="stat-info">
         <span>Lignes enregistrées</span>
         <h3>{{ totalLignes }}</h3>
@@ -32,7 +32,7 @@
     </div>
 
     <div class="stat-card orange">
-      <div class="stat-icon">🔩</div>
+      <div class="stat-icon"><i class="bi bi-gear-fill"></i></div>
       <div class="stat-info">
         <span>Pièces consommées</span>
         <h3>{{ totalQuantite }}</h3>
@@ -40,7 +40,7 @@
     </div>
 
     <div class="stat-card green">
-      <div class="stat-icon">💰</div>
+      <div class="stat-icon"><i class="bi bi-cash-coin"></i></div>
       <div class="stat-info">
         <span>Valeur totale</span>
         <h3>{{ totalValeur | number:'1.2-2' }} DT</h3>
@@ -54,7 +54,7 @@
 
     <input
       type="text"
-      placeholder="🔎 Rechercher par pièce, code ou n° de réparation..."
+      placeholder="Rechercher par pièce, code ou n° de réparation..."
       [(ngModel)]="searchText"
       class="search">
 
@@ -106,7 +106,7 @@
 
           <td *ngIf="!isAchatStock">
             <button class="btn-delete" (click)="delete(l.id)" title="Supprimer">
-              🗑
+              <i class="bi bi-trash"></i>
             </button>
           </td>
 
@@ -120,7 +120,7 @@
 
   <!-- EMPTY -->
   <div class="empty" *ngIf="filteredLignes.length === 0">
-    😕 Aucune ligne de réparation trouvée
+    <i class="bi bi-inbox"></i> Aucune ligne de réparation trouvée
   </div>
 
 </div>

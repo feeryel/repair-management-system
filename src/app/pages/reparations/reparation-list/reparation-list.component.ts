@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReparationService } from '../../../core/services/reparation.service';
+import { DevisService } from '../../../core/services/devis.service';
 import { AuthService, Role } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -27,7 +28,11 @@ isTechnicien = false;
   currentPage: number = 1;
   itemsPerPage: number = 6;
 
-  constructor(private service: ReparationService, private authService: AuthService) {}
+  constructor(
+    private service: ReparationService,
+    private devisService: DevisService,
+    private authService: AuthService
+  ) {}
 
 ngOnInit(): void {
   this.role = (this.authService.getRole() as Role) ?? '';
@@ -127,6 +132,62 @@ ngOnInit(): void {
           Swal.fire({ icon: 'success', title: 'Terminée !', text: 'Le client sera notifié par email.', timer: 2500, showConfirmButton: false });
         },
         error: () => Swal.fire('Erreur', 'Impossible de mettre à jour le statut.', 'error')
+      });
+    });
+  }
+
+  statusLabel(status: string): string {
+    const labels: Record<string, string> = {
+      EN_ATTENTE_DEVIS: 'Devis en attente',
+      REFUSEE_CLIENT: 'Devis refusé'
+    };
+    return labels[status] ?? status;
+  }
+
+  canSendDevis(r: any): boolean {
+    return this.role === Role.RESPONSABLE_REPARATION
+      && r.status === 'IN_PROGRESS'
+      && !r.Devis
+      && (r.LigneReparations?.length ?? 0) > 0;
+  }
+
+  private calculateMontant(r: any) {
+    const lignes = r.LigneReparations ?? [];
+    const montantHT = lignes.reduce((sum: number, l: any) => sum + (l.quantite || 0) * (l.prixHT || 0), 0);
+    const montantTVA = montantHT * 0.19;
+    const timbreFiscale = 1;
+    const montantTotal = montantHT + montantTVA + timbreFiscale;
+    return { montantHT, montantTVA, timbreFiscale, montantTotal };
+  }
+
+  sendDevis(r: any) {
+    const { montantHT, montantTVA, timbreFiscale, montantTotal } = this.calculateMontant(r);
+
+    Swal.fire({
+      title: 'Envoyer le devis ?',
+      html: `
+        <div style="text-align:left">
+          <p>Montant HT&nbsp;: <strong>${montantHT.toFixed(2)} TND</strong></p>
+          <p>TVA (19%)&nbsp;: <strong>${montantTVA.toFixed(2)} TND</strong></p>
+          <p>Timbre fiscal&nbsp;: <strong>${timbreFiscale.toFixed(2)} TND</strong></p>
+          <p>Total&nbsp;: <strong>${montantTotal.toFixed(2)} TND</strong></p>
+          <p>Le client recevra un email/WhatsApp avec un lien pour accepter ou refuser ce devis.</p>
+        </div>`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Envoyer',
+      cancelButtonText: 'Annuler',
+      confirmButtonColor: '#7c3aed'
+    }).then(result => {
+      if (!result.isConfirmed) return;
+
+      this.devisService.create(r.id).subscribe({
+        next: (devis: any) => {
+          r.Devis = devis;
+          r.status = 'EN_ATTENTE_DEVIS';
+          Swal.fire({ icon: 'success', title: 'Devis envoyé', text: 'Le client a été notifié par email/WhatsApp.', timer: 2500, showConfirmButton: false });
+        },
+        error: (err) => Swal.fire('Erreur', err?.error?.message || "Impossible d'envoyer le devis.", 'error')
       });
     });
   }

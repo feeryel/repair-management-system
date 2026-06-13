@@ -42,10 +42,22 @@ export class ReparationDashboardComponent implements OnInit {
   }
 
   statusClass(s: string): string {
-    return s === 'DONE' ? 'st-done' : s === 'IN_PROGRESS' ? 'st-progress' : 'st-pending';
+    const m: Record<string, string> = {
+      DONE: 'st-done',
+      IN_PROGRESS: 'st-progress',
+      EN_ATTENTE_DEVIS: 'st-progress',
+      REFUSEE_CLIENT: 'st-danger'
+    };
+    return m[s] ?? 'st-pending';
   }
   statusLabel(s: string): string {
-    return s === 'DONE' ? 'Terminée' : s === 'IN_PROGRESS' ? 'En cours' : 'En attente';
+    const m: Record<string, string> = {
+      DONE: 'Terminée',
+      IN_PROGRESS: 'En cours',
+      EN_ATTENTE_DEVIS: 'Devis en attente',
+      REFUSEE_CLIENT: 'Devis refusé'
+    };
+    return m[s] ?? 'En attente';
   }
   donePercent(): number {
     return this.totalRep ? Math.round((this.terminees / this.totalRep) * 100) : 0;

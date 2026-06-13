@@ -10,7 +10,7 @@
         <p>Ajouter une pièce détachée utilisée pour une intervention</p>
       </div>
 
-      <div class="header-icon">🧩</div>
+      <div class="header-icon"><i class="bi bi-puzzle-fill"></i></div>
 
     </div>
 
@@ -103,7 +103,7 @@
         <div class="preview-card" *ngIf="selectedPiece">
 
           <div class="preview-title">
-            🔎 Récapitulatif de la ligne
+            <i class="bi bi-clipboard-data"></i> Récapitulatif de la ligne
           </div>
 
           <div class="preview-row">
@@ -127,7 +127,7 @@
           </div>
 
           <div class="warning" *ngIf="stockInsuffisant">
-            ⚠️ La quantité demandée dépasse le stock disponible
+            <i class="bi bi-exclamation-triangle-fill"></i> La quantité demandée dépasse le stock disponible
           </div>
 
         </div>

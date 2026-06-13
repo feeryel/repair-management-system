@@ -2,7 +2,7 @@
 .dashboard-page{
   margin-left: 260px;
   padding: 25px;
-  background: #f6f7fb;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
@@ -22,7 +22,7 @@
   transition: 0.3s ease;
   cursor: pointer;
   overflow: hidden;
-  background: white;
+  background: var(--surface-card);
 }
 
 .dashboard-card:hover{
@@ -68,7 +68,7 @@ tbody tr{
 }
 
 tbody tr:hover{
-  background: #f8fafc;
+  background: var(--bg-page);
   transform: scale(1.01);
 }
 
@@ -122,12 +122,12 @@ td{
   right: 0;
   top: 60px;
   width: 360px;
-  background: white;
+  background: var(--surface-card);
   border-radius: 18px;
   overflow: hidden;
   z-index: 999;
   animation: fadeIn .25s ease;
-  border: 1px solid #f1f5f9;
+  border: 1px solid var(--border-color);
 }
 
 /* HEADER */
@@ -157,12 +157,12 @@ td{
   align-items: center;
   gap: 12px;
   padding: 14px;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-color);
   transition: 0.2s ease;
 }
 
 .notif-item:hover{
-  background: #f9fafb;
+  background: var(--bg-page);
 }
 
 /* ICONS */
@@ -177,13 +177,13 @@ td{
 }
 
 .notif-icon.DONE{
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--success-bg);
+  color: var(--success);
 }
 
 .notif-icon.IN_PROGRESS{
-  background: #fef3c7;
-  color: #d97706;
+  background: var(--warning-bg);
+  color: var(--warning);
 }
 
 /* TEXT */
@@ -200,7 +200,7 @@ td{
 .notif-content .msg{
   margin: 0;
   font-size: 12px;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 /* STATUS */
@@ -212,20 +212,20 @@ td{
 }
 
 .status.DONE{
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--success-bg);
+  color: var(--success);
 }
 
 .status.IN_PROGRESS{
-  background: #fef3c7;
-  color: #d97706;
+  background: var(--warning-bg);
+  color: var(--warning);
 }
 
 /* EMPTY */
 .empty{
   padding: 25px;
   text-align: center;
-  color: #9ca3af;
+  color: var(--text-muted);
 }
 
 /* PROGRESS */
@@ -233,7 +233,7 @@ td{
   height: 10px;
   border-radius: 999px;
   overflow: hidden;
-  background: #e5e7eb;
+  background: var(--border-color);
 }
 
 .progress-bar{

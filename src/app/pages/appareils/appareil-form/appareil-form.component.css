@@ -2,7 +2,7 @@
   padding: 30px;
   margin-left: 280px;
   min-height: 100vh;
-  background: #f6f7fb;
+  background: var(--bg-page);
 }
 
 /* HEADER */
@@ -17,12 +17,12 @@
 .header h2{
   font-size: 30px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
   margin-bottom: 5px;
 }
 
 .header p{
-  color: #6b7280;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -46,7 +46,7 @@
 /* CARD */
 
 .form-card{
-  background: white;
+  background: var(--surface-card);
   border-radius: 24px;
   padding: 35px;
 
@@ -60,16 +60,16 @@
   margin-bottom: 10px;
 
   font-weight: 600;
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 .input-box{
   display: flex;
   align-items: center;
 
-  background: #f9fafb;
+  background: var(--bg-page);
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   border-radius: 16px;
 
   padding: 14px 16px;
@@ -84,7 +84,7 @@
 .input-box:focus-within{
   border-color: #667eea;
 
-  background: white;
+  background: var(--surface-card);
 
   box-shadow: 0 0 0 4px rgba(102,126,234,0.12);
 }
@@ -103,7 +103,7 @@
   background: transparent;
 
   font-size: 15px;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 /* BUTTON */
