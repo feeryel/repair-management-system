@@ -83,12 +83,17 @@
       </div>
 
       <!-- LIGNES -->
-      <div class="card" *ngIf="lignes.length">
+      <div class="card" *ngIf="lignes.length || devis.montantMainOeuvre">
         <h3><i class="bi bi-list-check"></i> Détail des pièces & travaux</h3>
 
         <div class="row" *ngFor="let ligne of lignes">
           <span class="label">{{ ligne.Piece?.nom ?? 'Pièce' }} x{{ ligne.quantite }}</span>
           <span class="value">{{ (ligne.quantite * ligne.prixHT) | number:'1.2-2' }} TND</span>
+        </div>
+
+        <div class="row" *ngIf="devis.montantMainOeuvre">
+          <span class="label">Main d'œuvre ({{ reparation?.tempsMainOeuvre || 0 }} h)</span>
+          <span class="value">{{ devis.montantMainOeuvre | number:'1.2-2' }} TND</span>
         </div>
       </div>
 

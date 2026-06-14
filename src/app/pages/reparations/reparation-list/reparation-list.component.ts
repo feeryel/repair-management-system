@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 
+const TARIF_HORAIRE_MAIN_OEUVRE = 30; // TND / heure
+
 @Component({
   selector: 'app-reparation-list',
   standalone: true,
@@ -148,25 +150,29 @@ ngOnInit(): void {
     return this.role === Role.RESPONSABLE_REPARATION
       && r.status === 'IN_PROGRESS'
       && !r.Devis
-      && (r.LigneReparations?.length ?? 0) > 0;
+      && ((r.LigneReparations?.length ?? 0) > 0 || (r.tempsMainOeuvre ?? 0) > 0);
   }
 
   private calculateMontant(r: any) {
     const lignes = r.LigneReparations ?? [];
-    const montantHT = lignes.reduce((sum: number, l: any) => sum + (l.quantite || 0) * (l.prixHT || 0), 0);
+    const montantPieces = lignes.reduce((sum: number, l: any) => sum + (l.quantite || 0) * (l.prixHT || 0), 0);
+    const montantMainOeuvre = (r.tempsMainOeuvre || 0) * TARIF_HORAIRE_MAIN_OEUVRE;
+    const montantHT = montantPieces + montantMainOeuvre;
     const montantTVA = montantHT * 0.19;
     const timbreFiscale = 1;
     const montantTotal = montantHT + montantTVA + timbreFiscale;
-    return { montantHT, montantTVA, timbreFiscale, montantTotal };
+    return { montantPieces, montantMainOeuvre, montantHT, montantTVA, timbreFiscale, montantTotal };
   }
 
   sendDevis(r: any) {
-    const { montantHT, montantTVA, timbreFiscale, montantTotal } = this.calculateMontant(r);
+    const { montantPieces, montantMainOeuvre, montantHT, montantTVA, timbreFiscale, montantTotal } = this.calculateMontant(r);
 
     Swal.fire({
       title: 'Envoyer le devis ?',
       html: `
         <div style="text-align:left">
+          <p>Pièces&nbsp;: <strong>${montantPieces.toFixed(2)} TND</strong></p>
+          <p>Main d'œuvre (${r.tempsMainOeuvre || 0} h)&nbsp;: <strong>${montantMainOeuvre.toFixed(2)} TND</strong></p>
           <p>Montant HT&nbsp;: <strong>${montantHT.toFixed(2)} TND</strong></p>
           <p>TVA (19%)&nbsp;: <strong>${montantTVA.toFixed(2)} TND</strong></p>
           <p>Timbre fiscal&nbsp;: <strong>${timbreFiscale.toFixed(2)} TND</strong></p>
