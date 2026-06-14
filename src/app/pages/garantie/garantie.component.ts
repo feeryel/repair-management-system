@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -33,7 +33,9 @@ export class GarantieComponent implements OnInit {
         return;
       }
 
-      this.http.get<any>(`${this.apiUrl}/public/garantie/${id}`).subscribe({
+      const headers = new HttpHeaders({ 'ngrok-skip-browser-warning': 'true' });
+
+      this.http.get<any>(`${this.apiUrl}/public/garantie/${id}`, { headers }).subscribe({
         next: (res) => {
           this.facture = res;
           this.loading = false;

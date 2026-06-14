@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -8,6 +8,9 @@ export class DevisService {
 
   api = 'http://localhost:3000/devis';
   publicApi = 'https://bountiful-emphases-phantom.ngrok-free.dev/public/devis';
+
+  // Évite la page d'avertissement ngrok (sinon le JSON renvoyé est en fait du HTML)
+  private ngrokHeaders = new HttpHeaders({ 'ngrok-skip-browser-warning': 'true' });
 
   constructor(private http: HttpClient) {}
 
@@ -20,10 +23,10 @@ export class DevisService {
   }
 
   getPublicByToken(token: string) {
-    return this.http.get(`${this.publicApi}/${token}`);
+    return this.http.get(`${this.publicApi}/${token}`, { headers: this.ngrokHeaders });
   }
 
   respondPublic(token: string, action: 'accept' | 'reject', motif?: string) {
-    return this.http.post(`${this.publicApi}/${token}/respond`, { action, motif });
+    return this.http.post(`${this.publicApi}/${token}/respond`, { action, motif }, { headers: this.ngrokHeaders });
   }
 }
