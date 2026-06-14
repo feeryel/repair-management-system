@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class GarantieComponent implements OnInit {
 
   facture: any;
-  apiUrl = 'http://localhost:3000';
+  apiUrl = 'https://bountiful-emphases-phantom.ngrok-free.dev';
 
   loading = true;
   error = '';

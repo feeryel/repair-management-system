@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class DevisService {
 
   api = 'http://localhost:3000/devis';
-  publicApi = 'http://localhost:3000/public/devis';
+  publicApi = 'https://bountiful-emphases-phantom.ngrok-free.dev/public/devis';
 
   constructor(private http: HttpClient) {}
 
