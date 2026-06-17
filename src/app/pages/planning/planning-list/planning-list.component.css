@@ -209,7 +209,8 @@
 
   border-radius:14px;
 
-  background:#eef2ff;
+  background:var(--icon-soft-bg);
+  color:var(--icon-accent);
 
   display:flex;
   align-items:center;
@@ -575,9 +576,10 @@
 /* GRILLE CALENDRIER */
 .calendar-grid{
   display:grid;
-  grid-template-columns:repeat(7,1fr);
+  grid-template-columns:repeat(7,minmax(0,1fr));
   gap:8px;
   margin-bottom:8px;
+  width:100%;
 }
 
 .calendar-header-row{
@@ -599,8 +601,10 @@
   border-radius:14px;
   padding:10px;
   min-height:100px;
+  min-width:0;
   border:1px solid var(--border-color);
   transition:.2s;
+  overflow:hidden;
 }
 
 .calendar-day.outside-month{
@@ -609,7 +613,7 @@
 
 .calendar-day.is-today{
   border-color:#6366f1;
-  background:#eef2ff;
+  background:var(--icon-soft-bg);
 }
 
 .day-number{

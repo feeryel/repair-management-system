@@ -8,14 +8,14 @@
       <div class="header-icon"><i class="bi bi-receipt"></i></div>
 
       <div>
-        <h2>Lignes de Réparation</h2>
-        <p>Pièces détachées utilisées pour chaque intervention</p>
+        <h2>{{ 'ligneList.title' | translate }}</h2>
+        <p>{{ 'ligneList.subtitle' | translate }}</p>
       </div>
 
     </div>
 
     <a routerLink="/ligne-reparations/add" class="btn-add" *ngIf="!isAchatStock">
-      + Ajouter une ligne
+      + {{ 'ligneList.addLine' | translate }}
     </a>
 
   </div>
@@ -26,7 +26,7 @@
     <div class="stat-card indigo">
       <div class="stat-icon"><i class="bi bi-list-check"></i></div>
       <div class="stat-info">
-        <span>Lignes enregistrées</span>
+        <span>{{ 'ligneList.statLines' | translate }}</span>
         <h3>{{ totalLignes }}</h3>
       </div>
     </div>
@@ -34,7 +34,7 @@
     <div class="stat-card orange">
       <div class="stat-icon"><i class="bi bi-gear-fill"></i></div>
       <div class="stat-info">
-        <span>Pièces consommées</span>
+        <span>{{ 'ligneList.statConsumed' | translate }}</span>
         <h3>{{ totalQuantite }}</h3>
       </div>
     </div>
@@ -42,7 +42,7 @@
     <div class="stat-card green">
       <div class="stat-icon"><i class="bi bi-cash-coin"></i></div>
       <div class="stat-info">
-        <span>Valeur totale</span>
+        <span>{{ 'ligneList.statTotalValue' | translate }}</span>
         <h3>{{ totalValeur | number:'1.2-2' }} DT</h3>
       </div>
     </div>
@@ -54,7 +54,7 @@
 
     <input
       type="text"
-      placeholder="Rechercher par pièce, code ou n° de réparation..."
+      [placeholder]="'ligneList.searchPlaceholder' | translate"
       [(ngModel)]="searchText"
       class="search">
 
@@ -69,11 +69,11 @@
 
         <tr>
           <th>#</th>
-          <th>Réparation</th>
-          <th>Pièce</th>
-          <th>Prix unitaire</th>
-          <th>Quantité</th>
-          <th>Total</th>
+          <th>{{ 'ligneList.colRepair' | translate }}</th>
+          <th>{{ 'ligneList.colPiece' | translate }}</th>
+          <th>{{ 'ligneList.colUnitPrice' | translate }}</th>
+          <th>{{ 'ligneList.colQuantity' | translate }}</th>
+          <th>{{ 'ligneList.colTotal' | translate }}</th>
           <th *ngIf="!isAchatStock"></th>
         </tr>
 
@@ -86,7 +86,7 @@
           <td class="id-cell">#{{ l.id }}</td>
 
           <td>
-            <span class="rep-pill">Réparation #{{ l.ReparationId }}</span>
+            <span class="rep-pill">{{ 'ligneList.repairLabel' | translate }} #{{ l.ReparationId }}</span>
           </td>
 
           <td>
@@ -105,7 +105,7 @@
           <td class="total-cell">{{ ligneTotal(l) | number:'1.2-2' }} DT</td>
 
           <td *ngIf="!isAchatStock">
-            <button class="btn-delete" (click)="delete(l.id)" title="Supprimer">
+            <button class="btn-delete" (click)="delete(l.id)" [title]="'common.delete' | translate">
               <i class="bi bi-trash"></i>
             </button>
           </td>
@@ -120,7 +120,7 @@
 
   <!-- EMPTY -->
   <div class="empty" *ngIf="filteredLignes.length === 0">
-    <i class="bi bi-inbox"></i> Aucune ligne de réparation trouvée
+    <i class="bi bi-inbox"></i> {{ 'ligneList.empty' | translate }}
   </div>
 
 </div>

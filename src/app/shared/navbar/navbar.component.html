@@ -9,10 +9,10 @@
     <div>
 
       <h5 class="mb-0 title">
-TechDoctor      </h5>
+{{ 'app.title' | translate }}      </h5>
 
       <small class="subtitle">
-        Gestion intelligente des réparations
+        {{ 'app.subtitle' | translate }}
       </small>
 
     </div>
@@ -26,7 +26,7 @@ TechDoctor      </h5>
       <button
         class="btn theme-toggle-btn notif-btn"
         type="button"
-        title="Notifications"
+        [title]="'navbar.notifications' | translate"
         (click)="toggleNotifDropdown()">
         <i class="bi bi-bell-fill"></i>
         <span class="notif-badge" *ngIf="unreadCount > 0">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
@@ -37,9 +37,9 @@ TechDoctor      </h5>
       <div class="notif-dropdown" *ngIf="showNotifDropdown">
 
         <div class="notif-header">
-          <span>Notifications</span>
+          <span>{{ 'navbar.notifications' | translate }}</span>
           <button class="mark-all-btn" type="button" *ngIf="unreadCount > 0" (click)="markAllAsRead()">
-            Tout marquer comme lu
+            {{ 'navbar.markAllRead' | translate }}
           </button>
         </div>
 
@@ -57,7 +57,7 @@ TechDoctor      </h5>
           </div>
 
           <div class="notif-empty" *ngIf="notifications.length === 0">
-            <i class="bi bi-inbox"></i> Aucune notification
+            <i class="bi bi-inbox"></i> {{ 'navbar.noNotifications' | translate }}
           </div>
 
         </div>
@@ -66,10 +66,27 @@ TechDoctor      </h5>
 
     </div>
 
+    <div class="lang-switch d-flex align-items-center" [title]="'navbar.language' | translate">
+      <button
+        type="button"
+        class="btn lang-btn"
+        [class.active]="currentLang === 'fr'"
+        (click)="setLang('fr')">
+        FR
+      </button>
+      <button
+        type="button"
+        class="btn lang-btn"
+        [class.active]="currentLang === 'en'"
+        (click)="setLang('en')">
+        EN
+      </button>
+    </div>
+
     <button
       class="btn theme-toggle-btn"
       type="button"
-      title="Changer de thème"
+      [title]="'navbar.changeTheme' | translate"
       (click)="toggleTheme()">
       <i class="bi" [class.bi-moon-stars-fill]="!isDark()" [class.bi-sun-fill]="isDark()"></i>
     </button>
@@ -85,11 +102,22 @@ TechDoctor      </h5>
 
 
         <small class="admin-role">
-{{roleLabel}}        </small>
+{{ roleKey ? (roleKey | translate) : '' }}        </small>
 
       </div>
 
     </div>
+
+    <a
+      *ngIf="!isAdmin()"
+      class="btn change-pwd-btn"
+      routerLink="/changer-mot-de-passe"
+      [title]="'navbar.changePassword' | translate">
+
+      <i class="bi bi-key-fill"></i>
+
+      {{ 'navbar.changePassword' | translate }}
+    </a>
 
     <button
       class="btn logout-btn"
@@ -97,7 +125,7 @@ TechDoctor      </h5>
 
       <i class="bi bi-box-arrow-right"></i>
 
-Déconnexion
+{{ 'navbar.logout' | translate }}
     </button>
 
   </div>

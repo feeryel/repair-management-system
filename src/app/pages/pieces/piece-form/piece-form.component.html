@@ -6,8 +6,8 @@
     <div class="form-header">
 
       <div>
-        <h2>{{ id ? 'Modifier la pièce' : 'Nouvelle pièce' }}</h2>
-        <p>Gestion du catalogue de pièces détachées</p>
+        <h2>{{ (id ? 'pieceForm.editTitle' : 'pieceForm.newTitle') | translate }}</h2>
+        <p>{{ 'pieceForm.subtitle' | translate }}</p>
       </div>
 
       <div class="header-icon"><i class="bi bi-gear-fill"></i></div>
@@ -22,18 +22,18 @@
         <div class="grid-2">
 
           <div class="input-group-custom">
-            <label>Code pièce</label>
+            <label>{{ 'pieceForm.code' | translate }}</label>
 
             <div class="input-box">
               <input type="text"
                      [(ngModel)]="formData.code"
                      name="code"
-                     placeholder="ex: P011">
+                     [placeholder]="'pieceForm.codePlaceholder' | translate">
             </div>
           </div>
 
           <div class="input-group-custom">
-            <label>Désignation</label>
+            <label>{{ 'pieceForm.designation' | translate }}</label>
 
             <div class="input-box">
               <input type="text"
@@ -41,11 +41,11 @@
                      name="nom"
                      required
                      #nom="ngModel"
-                     placeholder="ex: Écran Samsung 21'">
+                     [placeholder]="'pieceForm.designationPlaceholder' | translate">
             </div>
 
             <div class="error" *ngIf="nom.invalid && nom.touched">
-              <small>Champ obligatoire</small>
+              <small>{{ 'pieceForm.requiredField' | translate }}</small>
             </div>
           </div>
 
@@ -55,7 +55,7 @@
         <div class="grid-2">
 
           <div class="input-group-custom">
-            <label>Prix d'achat (DT)</label>
+            <label>{{ 'pieceForm.purchasePrice' | translate }}</label>
 
             <div class="input-box">
               <input type="number"
@@ -68,12 +68,12 @@
             </div>
 
             <div class="error" *ngIf="prixAchat.invalid && prixAchat.touched">
-              <small>Le prix d'achat doit être positif</small>
+              <small>{{ 'pieceForm.purchasePriceError' | translate }}</small>
             </div>
           </div>
 
           <div class="input-group-custom">
-            <label>Prix de vente HT (DT)</label>
+            <label>{{ 'pieceForm.salePrice' | translate }}</label>
 
             <div class="input-box">
               <input type="number"
@@ -86,7 +86,7 @@
             </div>
 
             <div class="error" *ngIf="prixHT.invalid && prixHT.touched">
-              <small>Le prix de vente doit être positif</small>
+              <small>{{ 'pieceForm.salePriceError' | translate }}</small>
             </div>
           </div>
 
@@ -94,7 +94,7 @@
 
         <!-- STOCK -->
         <div class="input-group-custom">
-          <label>Quantité en stock</label>
+          <label>{{ 'pieceForm.stockQuantity' | translate }}</label>
 
           <div class="input-box">
             <input type="number"
@@ -106,22 +106,22 @@
           </div>
 
           <div class="error" *ngIf="quantiteEnStock.invalid && quantiteEnStock.touched">
-            <small>La quantité doit être positive</small>
+            <small>{{ 'pieceForm.quantityError' | translate }}</small>
           </div>
         </div>
 
         <!-- PREVIEW MARGE -->
         <div class="preview-card">
 
-          <div class="preview-title"><i class="bi bi-graph-up-arrow"></i> Aperçu de la marge</div>
+          <div class="preview-title"><i class="bi bi-graph-up-arrow"></i> {{ 'pieceForm.marginPreview' | translate }}</div>
 
           <div class="preview-row">
-            <span>Marge unitaire</span>
+            <span>{{ 'pieceForm.unitMargin' | translate }}</span>
             <strong [class.marge-negative]="marge < 0">{{ marge | number:'1.2-2' }} DT</strong>
           </div>
 
           <div class="preview-row total">
-            <span>Marge</span>
+            <span>{{ 'pieceForm.margin' | translate }}</span>
             <strong [class.marge-negative]="marge < 0">{{ margePercent | number:'1.0-0' }} %</strong>
           </div>
 
@@ -131,12 +131,12 @@
         <div class="actions">
 
           <a class="btn-cancel" routerLink="/pieces">
-            Annuler
+            {{ 'common.cancel' | translate }}
           </a>
 
           <button type="submit" class="btn-save" [disabled]="f.invalid || saving">
             <span class="spinner" *ngIf="saving"></span>
-            {{ id ? 'Enregistrer les modifications' : 'Ajouter la pièce' }}
+            {{ (id ? 'pieceForm.saveChanges' : 'pieceForm.addPiece') | translate }}
           </button>
 
         </div>

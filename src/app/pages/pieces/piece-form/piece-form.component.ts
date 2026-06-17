@@ -7,11 +7,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { PieceService } from '../../../core/services/piece.service';
 import Swal from 'sweetalert2';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-piece-form',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule, TranslateModule],
   templateUrl: './piece-form.component.html',
   styleUrls: ['./piece-form.component.css']
 })
@@ -33,7 +34,8 @@ export class PieceFormComponent implements OnInit {
   constructor(
     private service:PieceService,
     private router:Router,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +69,11 @@ export class PieceFormComponent implements OnInit {
 
     if (form.invalid) {
       Object.keys(form.controls).forEach(k => form.controls[k].markAsTouched());
-      Swal.fire('Formulaire invalide', 'Remplir correctement les champs obligatoires', 'warning');
+      Swal.fire(
+        this.translate.instant('pieceForm.invalidTitle'),
+        this.translate.instant('pieceForm.invalidText'),
+        'warning'
+      );
       return;
     }
 
@@ -85,8 +91,10 @@ export class PieceFormComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: 'Succès',
-          text: this.id ? 'Pièce modifiée' : 'Pièce ajoutée',
+          title: this.translate.instant('pieceForm.successTitle'),
+          text: this.id
+            ? this.translate.instant('pieceForm.updated')
+            : this.translate.instant('pieceForm.added'),
           timer: 1500,
           showConfirmButton: false
         });
@@ -99,7 +107,11 @@ export class PieceFormComponent implements OnInit {
 
         this.saving = false;
 
-        Swal.fire('Erreur', 'Opération échouée', 'error');
+        Swal.fire(
+          this.translate.instant('pieceForm.errorTitle'),
+          this.translate.instant('pieceForm.errorText'),
+          'error'
+        );
 
       }
 

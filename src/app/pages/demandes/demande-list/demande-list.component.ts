@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DemandeService } from '../../../core/services/demande.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-demande-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './demande-list.component.html',
   styleUrls: ['./demande-list.component.css']
 })
@@ -24,7 +25,10 @@ export class DemandeListComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 6;
 
-  constructor(private demandeService: DemandeService) {}
+  constructor(
+    private demandeService: DemandeService,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -50,8 +54,8 @@ export class DemandeListComponent implements OnInit {
 
         Swal.fire({
           icon: 'error',
-          title: 'Erreur',
-          text: 'Impossible de charger les demandes',
+          title: this.translate.instant('demandeList.errorTitle'),
+          text: this.translate.instant('demandeList.loadError'),
           confirmButtonColor: '#6366f1'
         });
 
@@ -152,8 +156,8 @@ export class DemandeListComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: 'État modifié',
-          text: 'Le statut a été mis à jour',
+          title: this.translate.instant('demandeList.statusChanged'),
+          text: this.translate.instant('demandeList.statusUpdated'),
           timer: 1500,
           showConfirmButton: false
         });
@@ -164,8 +168,8 @@ export class DemandeListComponent implements OnInit {
 
         Swal.fire({
           icon: 'error',
-          title: 'Erreur',
-          text: 'Modification impossible',
+          title: this.translate.instant('demandeList.errorTitle'),
+          text: this.translate.instant('demandeList.updateError'),
           confirmButtonColor: '#6366f1'
         });
 
@@ -180,8 +184,8 @@ export class DemandeListComponent implements OnInit {
 
     Swal.fire({
 
-      title: 'Supprimer cette demande ?',
-      text: 'Cette action est irréversible !',
+      title: this.translate.instant('demandeList.deleteTitle'),
+      text: this.translate.instant('demandeList.deleteText'),
       icon: 'warning',
 
       showCancelButton: true,
@@ -189,8 +193,8 @@ export class DemandeListComponent implements OnInit {
       confirmButtonColor: '#ef4444',
       cancelButtonColor: '#6b7280',
 
-      confirmButtonText: 'Oui, supprimer',
-      cancelButtonText: 'Annuler'
+      confirmButtonText: this.translate.instant('demandeList.yesDelete'),
+      cancelButtonText: this.translate.instant('common.cancel')
 
     }).then((result) => {
 
@@ -204,8 +208,8 @@ export class DemandeListComponent implements OnInit {
 
             Swal.fire({
               icon: 'success',
-              title: 'Supprimée',
-              text: 'La demande a été supprimée avec succès',
+              title: this.translate.instant('demandeList.deletedTitle'),
+              text: this.translate.instant('demandeList.deletedText'),
               confirmButtonColor: '#22c55e'
             });
 
@@ -215,8 +219,8 @@ export class DemandeListComponent implements OnInit {
 
             Swal.fire({
               icon: 'error',
-              title: 'Erreur',
-              text: 'Suppression impossible',
+              title: this.translate.instant('demandeList.errorTitle'),
+              text: this.translate.instant('demandeList.deleteError'),
               confirmButtonColor: '#6366f1'
             });
 

@@ -4,11 +4,12 @@ import { ClientService } from '../../../core/services/client.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-client-form',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, TranslateModule],
   templateUrl: './client-form.component.html',
   styleUrls: ['./client-form.component.scss']
 })
@@ -53,7 +54,8 @@ villes: string[] = [
   constructor(
     private clientService: ClientService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -96,8 +98,8 @@ villes: string[] = [
       Swal.fire({
 
         icon: 'warning',
-        title: 'Champs manquants',
-        text: 'Veuillez remplir tous les champs',
+        title: this.translate.instant('clientForm.alerts.missingFieldsTitle'),
+        text: this.translate.instant('clientForm.alerts.missingFieldsText'),
 
         confirmButtonColor: '#667eea'
 
@@ -113,8 +115,8 @@ villes: string[] = [
       Swal.fire({
 
         icon: 'warning',
-        title: 'Nom invalide',
-        text: 'Le nom doit contenir au moins 3 caractères',
+        title: this.translate.instant('clientForm.alerts.invalidNameTitle'),
+        text: this.translate.instant('clientForm.alerts.invalidNameText'),
 
         confirmButtonColor: '#667eea'
 
@@ -132,8 +134,8 @@ villes: string[] = [
       Swal.fire({
 
         icon: 'warning',
-        title: 'Téléphone invalide',
-        text: 'Le numéro doit contenir 8 chiffres et commencer par 2, 4, 5 ou 9',
+        title: this.translate.instant('clientForm.alerts.invalidPhoneTitle'),
+        text: this.translate.instant('clientForm.alerts.invalidPhoneText'),
 
         confirmButtonColor: '#667eea'
 
@@ -151,8 +153,8 @@ villes: string[] = [
       Swal.fire({
 
         icon: 'warning',
-        title: 'Email invalide',
-        text: 'Veuillez entrer un email valide',
+        title: this.translate.instant('clientForm.alerts.invalidEmailTitle'),
+        text: this.translate.instant('clientForm.alerts.invalidEmailText'),
 
         confirmButtonColor: '#667eea'
 
@@ -172,8 +174,8 @@ villes: string[] = [
           Swal.fire({
 
             icon: 'success',
-            title: 'Client modifié',
-            text: 'Modification effectuée avec succès',
+            title: this.translate.instant('clientForm.alerts.updatedTitle'),
+            text: this.translate.instant('clientForm.alerts.updatedText'),
 
             confirmButtonColor: '#667eea'
 
@@ -190,8 +192,8 @@ villes: string[] = [
           Swal.fire({
 
             icon: 'error',
-            title: 'Erreur',
-            text: 'Une erreur est survenue',
+            title: this.translate.instant('clientForm.alerts.errorTitle'),
+            text: this.translate.instant('clientForm.alerts.errorText'),
 
             confirmButtonColor: '#dc3545'
 
@@ -213,8 +215,8 @@ villes: string[] = [
           Swal.fire({
 
             icon: 'success',
-            title: 'Client ajouté',
-            text: 'Ajout effectué avec succès',
+            title: this.translate.instant('clientForm.alerts.addedTitle'),
+            text: this.translate.instant('clientForm.alerts.addedText'),
 
             confirmButtonColor: '#667eea'
 
@@ -231,8 +233,8 @@ villes: string[] = [
           Swal.fire({
 
             icon: 'error',
-            title: 'Erreur',
-            text: 'Une erreur est survenue',
+            title: this.translate.instant('clientForm.alerts.errorTitle'),
+            text: this.translate.instant('clientForm.alerts.errorText'),
 
             confirmButtonColor: '#dc3545'
 

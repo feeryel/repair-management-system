@@ -32,8 +32,8 @@
             <i class="bi bi-tools"></i>
           </div>
         </div>
-        <h1 class="brand-name">TechDoctor</h1>
-        <p class="brand-sub">Système de gestion des réparations</p>
+        <h1 class="brand-name">{{ 'app.title' | translate }}</h1>
+        <p class="brand-sub">{{ 'login.brandSub' | translate }}</p>
       </div>
 
       <div class="features">
@@ -41,24 +41,24 @@
         <div class="feat-row">
           <div class="feat-ico"><i class="bi bi-cpu-fill"></i></div>
           <div>
-            <div class="feat-title">Gestion appareils</div>
-            <div class="feat-desc">Ordinateurs, imprimantes, destructeurs</div>
+            <div class="feat-title">{{ 'login.featDeviceTitle' | translate }}</div>
+            <div class="feat-desc">{{ 'login.featDeviceDesc' | translate }}</div>
           </div>
         </div>
 
         <div class="feat-row">
           <div class="feat-ico"><i class="bi bi-calendar2-check"></i></div>
           <div>
-            <div class="feat-title">Planning intelligent</div>
-            <div class="feat-desc">Planification & suivi en temps réel</div>
+            <div class="feat-title">{{ 'login.featPlanningTitle' | translate }}</div>
+            <div class="feat-desc">{{ 'login.featPlanningDesc' | translate }}</div>
           </div>
         </div>
 
         <div class="feat-row">
           <div class="feat-ico"><i class="bi bi-robot"></i></div>
           <div>
-            <div class="feat-title">Agent IA intégré</div>
-            <div class="feat-desc">Devis & diagnostic automatisés</div>
+            <div class="feat-title">{{ 'login.featAiTitle' | translate }}</div>
+            <div class="feat-desc">{{ 'login.featAiDesc' | translate }}</div>
           </div>
         </div>
 
@@ -78,11 +78,11 @@
       <!-- Badge sécurité -->
       <div class="badge-secure">
         <i class="bi bi-shield-lock-fill"></i>
-        Espace sécurisé
+        {{ 'login.secureSpace' | translate }}
       </div>
 
-      <h2 class="form-title">Connexion</h2>
-      <p class="form-sub">Accédez à votre tableau de bord</p>
+      <h2 class="form-title">{{ 'login.title' | translate }}</h2>
+      <p class="form-sub">{{ 'login.subtitle' | translate }}</p>
 
       <form (ngSubmit)="login()" #loginForm="ngForm" novalidate>
 
@@ -90,21 +90,21 @@
         <div class="field">
           <label>
             <i class="bi bi-person-fill"></i>
-            Identifiant
+            {{ 'login.username' | translate }}
           </label>
           <div class="input-wrap">
             <input
               type="text"
               [(ngModel)]="loginData.login"
               name="login"
-              placeholder="Entrer votre identifiant"
+              [placeholder]="'login.usernamePlaceholder' | translate"
               autocomplete="username"
               required
               #loginField="ngModel"
             />
           </div>
           <div *ngIf="loginField.invalid && loginField.touched" class="field-err">
-            <i class="bi bi-exclamation-circle"></i> Champ obligatoire
+            <i class="bi bi-exclamation-circle"></i> {{ 'login.requiredField' | translate }}
           </div>
         </div>
 
@@ -112,7 +112,7 @@
         <div class="field">
           <label>
             <i class="bi bi-lock-fill"></i>
-            Mot de passe
+            {{ 'login.password' | translate }}
           </label>
           <div class="input-wrap pwd-wrap">
             <input
@@ -133,7 +133,7 @@
             </button>
           </div>
           <div *ngIf="pwdField.invalid && pwdField.touched" class="field-err">
-            <i class="bi bi-exclamation-circle"></i> Champ obligatoire
+            <i class="bi bi-exclamation-circle"></i> {{ 'login.requiredField' | translate }}
           </div>
         </div>
 
@@ -147,20 +147,25 @@
         <button class="submit-btn" type="submit" [disabled]="loading">
           <span *ngIf="!loading" class="btn-inner">
             <i class="bi bi-box-arrow-in-right"></i>
-            Se connecter
+            {{ 'login.submit' | translate }}
           </span>
           <span *ngIf="loading" class="btn-inner">
             <span class="spinner"></span>
-            Connexion en cours…
+            {{ 'login.loading' | translate }}
           </span>
           <div class="btn-shine"></div>
+        </button>
+
+        <button type="button" class="forgot-link" (click)="forgotPassword()">
+          <i class="bi bi-key-fill"></i>
+          {{ 'login.forgot' | translate }}
         </button>
 
       </form>
 
       <div class="form-foot">
         <span class="foot-line"></span>
-        © 2026 TechDoctor
+        {{ 'login.footer' | translate }}
         <span class="foot-line"></span>
       </div>
 

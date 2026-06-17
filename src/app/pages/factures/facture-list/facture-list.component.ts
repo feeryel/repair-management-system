@@ -4,6 +4,7 @@ import { AuthService, Role } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -12,7 +13,7 @@ import QRCode from 'qrcode';
 @Component({
   selector: 'app-facture-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './facture-list.component.html',
   styleUrls: ['./facture-list.component.css']
 })
@@ -22,7 +23,7 @@ isClient = false;
   factures: any[] = [];
   searchText: string = '';
 
-  constructor(private service: FactureService, private authService: AuthService) {}
+  constructor(private service: FactureService, private authService: AuthService, private translate: TranslateService) {}
 
  ngOnInit(): void {
   this.role = (this.authService.getRole() as Role) ?? '';
@@ -100,36 +101,36 @@ const logo = await this.getBase64ImageFromURL('assets/techdoctor_cachet.png');
 
   doc.setTextColor(255);
   doc.setFontSize(18);
-  doc.text('FACTURE DE RÉPARATION', 14, 22);
+  doc.text(this.translate.instant('factureList.pdf.title'), 14, 22);
 
   doc.setTextColor(0);
   doc.setFontSize(11);
 
-  doc.text(`Facture ID: ${facture.id}`, 14, 45);
-  doc.text(`Date: ${new Date(facture.date).toLocaleDateString()}`, 14, 52);
+  doc.text(`${this.translate.instant('factureList.pdf.factureId')}: ${facture.id}`, 14, 45);
+  doc.text(`${this.translate.instant('common.date')}: ${new Date(facture.date).toLocaleDateString()}`, 14, 52);
 
   /* ================= REPARATION ================= */
   autoTable(doc, {
     startY: 65,
-    head: [['Réparation', 'Détails']],
+    head: [[this.translate.instant('factureList.pdf.reparation'), this.translate.instant('common.details')]],
     body: [
-      ['Description', rep?.descriptionReparation || '-'],
-      ['Statut', rep?.status || '-'],
-      ['Temps MO', `${rep?.tempsMainOeuvre || 0} h`],
-      ['Réparable', rep?.estReparable ? 'Oui' : 'Non']
+      [this.translate.instant('factureList.pdf.description'), rep?.descriptionReparation || '-'],
+      [this.translate.instant('common.status'), rep?.status || '-'],
+      [this.translate.instant('factureList.pdf.tempsMO'), `${rep?.tempsMainOeuvre || 0} h`],
+      [this.translate.instant('factureList.pdf.reparable'), rep?.estReparable ? this.translate.instant('common.yes') : this.translate.instant('common.no')]
     ]
   });
 
   /* ================= CLIENT ================= */
   autoTable(doc, {
     startY: (doc as any).lastAutoTable.finalY + 10,
-    head: [['Client', 'Info']],
+    head: [[this.translate.instant('factureList.pdf.client'), this.translate.instant('factureList.pdf.info')]],
     body: [
-      ['Nom', client?.nom || '-'],
-      ['Téléphone', client?.numTel || '-'],
-      ['Email', client?.email || '-'],
-      ['Appareil', appareil ? `${appareil.marque} ${appareil.modele}` : '-'],
-      ['Num Série', appareil?.numSerie || '-']
+      [this.translate.instant('common.name'), client?.nom || '-'],
+      [this.translate.instant('factureList.pdf.phone'), client?.numTel || '-'],
+      [this.translate.instant('factureList.pdf.email'), client?.email || '-'],
+      [this.translate.instant('factureList.pdf.appareil'), appareil ? `${appareil.marque} ${appareil.modele}` : '-'],
+      [this.translate.instant('factureList.pdf.numSerie'), appareil?.numSerie || '-']
     ]
   });
 
@@ -137,7 +138,7 @@ const logo = await this.getBase64ImageFromURL('assets/techdoctor_cachet.png');
   if (lignes.length > 0) {
     autoTable(doc, {
       startY: (doc as any).lastAutoTable.finalY + 10,
-      head: [['Pièce', 'Code', 'Prix HT', 'Quantité']],
+      head: [[this.translate.instant('factureList.pdf.piece'), this.translate.instant('factureList.pdf.code'), this.translate.instant('factureList.pdf.prixHT'), this.translate.instant('factureList.pdf.quantite')]],
       body: lignes.map((l: any) => [
         l.Piece?.nom || '-',
         l.Piece?.code || '-',
@@ -157,17 +158,17 @@ doc.setFontSize(14);
 doc.setTextColor(22, 101, 52);
 doc.setFont('helvetica', 'bold');
 
-doc.text(`TOTAL: ${facture?.montantTotal || 0} TND`, 20, y + 10);
+doc.text(`${this.translate.instant('factureList.pdf.total')}: ${facture?.montantTotal || 0} TND`, 20, y + 10);
 
 /* ================= SIGNATURES ================= */
  doc.setTextColor(0);
   doc.setFont('helvetica', 'normal');
 
   doc.rect(14, y + 25, 80, 35);
-  doc.text('Signature Client', 16, y + 33);
+  doc.text(this.translate.instant('factureList.pdf.signatureClient'), 16, y + 33);
 
   doc.rect(120, y + 25, 80, 35);
-  doc.text('Signature Société', 122, y + 33);
+  doc.text(this.translate.instant('factureList.pdf.signatureSociete'), 122, y + 33);
 
   /* ================= LOGO ================= */
 
@@ -184,7 +185,7 @@ doc.setFontSize(9);
 doc.setTextColor(120);
 
 doc.text(
-  'pour voir la garantie il faut scanner le code QR\nTECHDOCTOR - Tunisie | contact@techdoctor.tn',
+  this.translate.instant('factureList.pdf.qrHint'),
   8,
   285
 );

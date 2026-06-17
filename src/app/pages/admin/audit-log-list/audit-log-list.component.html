@@ -5,12 +5,12 @@
     <div class="dash-header-left">
       <div class="dash-avatar audit-av"><i class="bi bi-clock-history"></i></div>
       <div>
-        <h2 class="dash-title">Historique des actions</h2>
-        <p class="dash-sub">Journal d'audit — qui a modifié quoi et quand</p>
+        <h2 class="dash-title">{{ 'auditLog.title' | translate }}</h2>
+        <p class="dash-sub">{{ 'auditLog.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="header-actions">
-      <a routerLink="/admin/dashboard" class="dash-btn btn-back"><i class="bi bi-arrow-left"></i> Dashboard</a>
+      <a routerLink="/admin/dashboard" class="dash-btn btn-back"><i class="bi bi-arrow-left"></i> {{ 'nav.dashboard' | translate }}</a>
     </div>
   </div>
 
@@ -19,32 +19,32 @@
     <div class="filters-row">
 
       <div class="filter-field">
-        <label><i class="bi bi-archive me-1"></i>Entité</label>
+        <label><i class="bi bi-archive me-1"></i>{{ 'auditLog.entity' | translate }}</label>
         <select [(ngModel)]="filterEntity" (ngModelChange)="applyFilters()">
-          <option value="">Toutes les entités</option>
-          <option *ngFor="let e of entities" [value]="e.value">{{ e.label }}</option>
+          <option value="">{{ 'auditLog.allEntities' | translate }}</option>
+          <option *ngFor="let e of entities" [value]="e.value">{{ e.labelKey | translate }}</option>
         </select>
       </div>
 
       <div class="filter-field">
-        <label><i class="bi bi-calendar-event me-1"></i>Depuis</label>
+        <label><i class="bi bi-calendar-event me-1"></i>{{ 'auditLog.from' | translate }}</label>
         <input type="date" [(ngModel)]="filterDateFrom" (ngModelChange)="applyFilters()" />
       </div>
 
       <div class="filter-field">
-        <label><i class="bi bi-calendar-check me-1"></i>Jusqu'à</label>
+        <label><i class="bi bi-calendar-check me-1"></i>{{ 'auditLog.to' | translate }}</label>
         <input type="date" [(ngModel)]="filterDateTo" (ngModelChange)="applyFilters()" />
       </div>
 
-      <button class="btn-reset" (click)="resetFilters()" *ngIf="hasActiveFilters" title="Effacer les filtres">
-        <i class="bi bi-x-circle-fill"></i> Réinitialiser
+      <button class="btn-reset" (click)="resetFilters()" *ngIf="hasActiveFilters" [title]="'auditLog.clearFilters' | translate">
+        <i class="bi bi-x-circle-fill"></i> {{ 'auditLog.reset' | translate }}
       </button>
 
     </div>
 
     <div class="filter-summary" *ngIf="!loading">
       <span class="result-count">
-        <strong>{{ total }}</strong> action{{ total > 1 ? 's' : '' }} enregistrée{{ total > 1 ? 's' : '' }}
+        <strong>{{ total }}</strong> {{ 'auditLog.actionsRecorded' | translate }}
       </span>
     </div>
   </div>
@@ -52,16 +52,16 @@
   <!-- TABLE -->
   <div class="dash-card">
     <div class="table-wrap">
-      <div *ngIf="loading" class="loading-row"><i class="bi bi-arrow-repeat spin"></i> Chargement…</div>
+      <div *ngIf="loading" class="loading-row"><i class="bi bi-arrow-repeat spin"></i> {{ 'common.loading' | translate }}</div>
 
       <table class="dtable" *ngIf="!loading">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Utilisateur</th>
-            <th>Action</th>
-            <th>Entité</th>
-            <th>Détails</th>
+            <th>{{ 'common.date' | translate }}</th>
+            <th>{{ 'auditLog.user' | translate }}</th>
+            <th>{{ 'auditLog.action' | translate }}</th>
+            <th>{{ 'auditLog.entity' | translate }}</th>
+            <th>{{ 'common.details' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -70,7 +70,7 @@
             <td>
               <div class="user-chip">
                 <div class="user-av">{{ (log.userLogin || '?').charAt(0).toUpperCase() }}</div>
-                {{ log.userLogin || 'Système' }}
+                {{ log.userLogin || ('auditLog.system' | translate) }}
               </div>
             </td>
             <td>
@@ -88,7 +88,7 @@
           <tr *ngIf="logs.length === 0">
             <td colspan="5" class="empty-row">
               <i class="bi bi-clock-history" style="font-size:1.5rem;display:block;margin-bottom:.5rem"></i>
-              Aucune action enregistrée
+              {{ 'auditLog.noActions' | translate }}
             </td>
           </tr>
         </tbody>
@@ -97,13 +97,13 @@
 
     <!-- PAGINATION -->
     <div class="pagination-bar" *ngIf="!loading && total > 0">
-      <span class="page-info">Page {{ currentPage }} / {{ totalPages }} · {{ total }} actions</span>
+      <span class="page-info">{{ 'auditLog.page' | translate }} {{ currentPage }} / {{ totalPages }} · {{ total }} {{ 'auditLog.actions' | translate }}</span>
 
       <div class="page-nav">
-        <button class="page-btn" (click)="goTo(1)" [disabled]="currentPage === 1" title="Première page">
+        <button class="page-btn" (click)="goTo(1)" [disabled]="currentPage === 1" [title]="'auditLog.firstPage' | translate">
           <i class="bi bi-chevron-double-left"></i>
         </button>
-        <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1" title="Précédent">
+        <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1" [title]="'auditLog.previous' | translate">
           <i class="bi bi-chevron-left"></i>
         </button>
 
@@ -114,10 +114,10 @@
                 (click)="goTo(p)">{{ p }}</button>
         <button *ngIf="pageNumbers[pageNumbers.length - 1] < totalPages" class="page-btn page-ellipsis" disabled>…</button>
 
-        <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages" title="Suivant">
+        <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages" [title]="'auditLog.next' | translate">
           <i class="bi bi-chevron-right"></i>
         </button>
-        <button class="page-btn" (click)="goTo(totalPages)" [disabled]="currentPage === totalPages" title="Dernière page">
+        <button class="page-btn" (click)="goTo(totalPages)" [disabled]="currentPage === totalPages" [title]="'auditLog.lastPage' | translate">
           <i class="bi bi-chevron-double-right"></i>
         </button>
       </div>

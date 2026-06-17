@@ -4,13 +4,13 @@
   <div class="header">
 
     <div>
-      <h2>Centre de Réparations</h2>
-      <p>Suivi technique des interventions et diagnostics</p>
+      <h2>{{ 'reparationList.title' | translate }}</h2>
+      <p>{{ 'reparationList.subtitle' | translate }}</p>
     </div>
 
     <button   *ngIf="role === Role.RESPONSABLE_REPARATION"
  class="btn-add" [routerLink]="['/reparations/form']">
-      + Nouvelle réparation
+      + {{ 'reparationList.newReparation' | translate }}
     </button>
 
   </div>
@@ -20,7 +20,7 @@
 
     <input
       type="text"
-      placeholder="Rechercher réparation..."
+      [placeholder]="'reparationList.searchPlaceholder' | translate"
       [(ngModel)]="searchText"
       (ngModelChange)="currentPage = 1"
       class="search">
@@ -28,15 +28,15 @@
     <div class="filters">
 
       <button (click)="setFilter('all')" [class.active]="filter==='all'">
-        Toutes
+        {{ 'reparationList.filterAll' | translate }}
       </button>
 
       <button (click)="setFilter('IN_PROGRESS')" [class.active]="filter==='IN_PROGRESS'">
-        IN PROGRESS
+        {{ 'reparationList.statusInProgress' | translate }}
       </button>
 
       <button (click)="setFilter('DONE')" [class.active]="filter==='DONE'">
-        DONE
+        {{ 'reparationList.statusDone' | translate }}
       </button>
 
     </div>
@@ -70,27 +70,27 @@
         <div class="grid-info">
 
           <div>
-            <span><i class="bi bi-calendar-event"></i> Fin</span>
+            <span><i class="bi bi-calendar-event"></i> {{ 'reparationList.end' | translate }}</span>
             <strong>{{ r.dateFinRep }}</strong>
           </div>
 
           <div>
-            <span><i class="bi bi-stopwatch"></i> Temps</span>
+            <span><i class="bi bi-stopwatch"></i> {{ 'reparationList.time' | translate }}</span>
             <strong>{{ r.tempsMainOeuvre }}h</strong>
           </div>
 
           <div>
-            <span><i class="bi bi-tools"></i> Réparable</span>
-            <strong>{{ r.estReparable ? 'Oui' : 'Non' }}</strong>
+            <span><i class="bi bi-tools"></i> {{ 'reparationList.repairable' | translate }}</span>
+            <strong>{{ (r.estReparable ? 'common.yes' : 'common.no') | translate }}</strong>
           </div>
 
           <div>
-            <span><i class="bi bi-phone"></i> Appareil</span>
+            <span><i class="bi bi-phone"></i> {{ 'reparationList.device' | translate }}</span>
             <strong>{{ getAppareil(r) }}</strong>
           </div>
 
           <div>
-            <span><i class="bi bi-person-gear"></i> Technicien</span>
+            <span><i class="bi bi-person-gear"></i> {{ 'reparationList.technician' | translate }}</span>
             <strong>{{ r.technicien?.login || '—' }}</strong>
           </div>
 
@@ -103,13 +103,13 @@
         <button class="btn-done"
                 *ngIf="canChangeStatus() && r.status !== 'DONE' && r.status !== 'EN_ATTENTE_DEVIS'"
                 (click)="changeStatus(r.id, 'DONE')">
-          <i class="bi bi-check-circle-fill"></i> Marquer comme terminée
+          <i class="bi bi-check-circle-fill"></i> {{ 'reparationList.markAsDone' | translate }}
         </button>
 
         <button class="btn-devis"
                 *ngIf="canSendDevis(r)"
                 (click)="sendDevis(r)">
-          <i class="bi bi-send-fill"></i> Envoyer devis
+          <i class="bi bi-send-fill"></i> {{ 'reparationList.sendQuote' | translate }}
         </button>
 
       </div>

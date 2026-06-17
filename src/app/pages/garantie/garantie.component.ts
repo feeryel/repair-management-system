@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-garantie',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './garantie.component.html',
   styleUrls: ['./garantie.component.css']
 })
@@ -20,7 +21,8 @@ export class GarantieComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +31,7 @@ export class GarantieComponent implements OnInit {
 
       if (isNaN(id)) {
         this.loading = false;
-        this.error = 'Identifiant de garantie invalide.';
+        this.error = this.translate.instant('garantie.errInvalidId');
         return;
       }
 
@@ -42,7 +44,7 @@ export class GarantieComponent implements OnInit {
         },
         error: () => {
           this.loading = false;
-          this.error = 'Certificat de garantie introuvable.';
+          this.error = this.translate.instant('garantie.errNotFound');
         }
       });
     });

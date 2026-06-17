@@ -10,10 +10,12 @@ from '../../../core/services/ligne-reparation.service';
 
 import { AuthService } from '../../../core/services/auth.service';
 
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-ligne-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './ligne-list.component.html',
   styleUrls: ['./ligne-list.component.css']
 })
@@ -26,7 +28,8 @@ implements OnInit {
 
   constructor(
     private service:LigneReparationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -88,12 +91,12 @@ implements OnInit {
   delete(id:any){
 
     Swal.fire({
-      title: 'Supprimer cette ligne ?',
-      text: 'Cette pièce ne sera plus comptée dans la réparation.',
+      title: this.translate.instant('ligneList.deleteTitle'),
+      text: this.translate.instant('ligneList.deleteText'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Oui, supprimer',
-      cancelButtonText: 'Annuler',
+      confirmButtonText: this.translate.instant('ligneList.deleteConfirm'),
+      cancelButtonText: this.translate.instant('common.cancel'),
       confirmButtonColor: '#dc2626'
     }).then(result => {
 
@@ -102,11 +105,15 @@ implements OnInit {
       this.service.delete(id).subscribe({
 
         next:()=>{
-          Swal.fire({ icon: 'success', title: 'Ligne supprimée', timer: 1500, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: this.translate.instant('ligneList.deleted'), timer: 1500, showConfirmButton: false });
           this.loadData();
         },
 
-        error: () => Swal.fire('Erreur', 'Impossible de supprimer cette ligne.', 'error')
+        error: () => Swal.fire(
+          this.translate.instant('ligneList.errorTitle'),
+          this.translate.instant('ligneList.deleteError'),
+          'error'
+        )
 
       });
 

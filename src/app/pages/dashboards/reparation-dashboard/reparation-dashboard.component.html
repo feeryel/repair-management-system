@@ -5,13 +5,13 @@
     <div class="dash-header-left">
       <div class="dash-avatar rep-av"><i class="bi bi-clipboard2-pulse-fill"></i></div>
       <div>
-        <h2 class="dash-title">Supervision des Réparations</h2>
-        <p class="dash-sub">Bienvenue, <strong>{{ login }}</strong> — Gérez le planning et supervisez les réparations</p>
+        <h2 class="dash-title">{{ 'reparationDashboard.title' | translate }}</h2>
+        <p class="dash-sub">{{ 'reparationDashboard.welcome' | translate }}, <strong>{{ login }}</strong> — {{ 'reparationDashboard.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="header-actions">
-      <a routerLink="/planning/add" class="dash-btn btn-rep"><i class="bi bi-calendar-plus-fill"></i> Planifier</a>
-      <a routerLink="/reparations" class="dash-btn btn-dark-rep"><i class="bi bi-eye-fill"></i> Superviser</a>
+      <a routerLink="/planning/add" class="dash-btn btn-rep"><i class="bi bi-calendar-plus-fill"></i> {{ 'reparationDashboard.schedule' | translate }}</a>
+      <a routerLink="/reparations" class="dash-btn btn-dark-rep"><i class="bi bi-eye-fill"></i> {{ 'reparationDashboard.supervise' | translate }}</a>
     </div>
   </div>
 
@@ -19,22 +19,22 @@
   <div class="kpi-row">
     <div class="kpi-card kpi-rep">
       <div class="kpi-icon"><i class="bi bi-tools"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Total réparations</span><span class="kpi-value">{{ totalRep }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'reparationDashboard.kpi.totalRepairs' | translate }}</span><span class="kpi-value">{{ totalRep }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-amber">
       <div class="kpi-icon"><i class="bi bi-hourglass-split"></i></div>
-      <div class="kpi-body"><span class="kpi-label">En cours</span><span class="kpi-value">{{ enCours }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'reparationDashboard.kpi.inProgress' | translate }}</span><span class="kpi-value">{{ enCours }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-green">
       <div class="kpi-icon"><i class="bi bi-check-circle-fill"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Terminées</span><span class="kpi-value">{{ terminees }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'reparationDashboard.kpi.completed' | translate }}</span><span class="kpi-value">{{ terminees }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-indigo">
       <div class="kpi-icon"><i class="bi bi-calendar-event-fill"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Plannings</span><span class="kpi-value">{{ totalPlan }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'reparationDashboard.kpi.plannings' | translate }}</span><span class="kpi-value">{{ totalPlan }}</span></div>
       <div class="kpi-glow"></div>
     </div>
   </div>
@@ -42,8 +42,8 @@
   <!-- PROGRESS BAR -->
   <div class="dash-card progress-card">
     <div class="dash-card-header">
-      <h5><i class="bi bi-bar-chart-fill me-2"></i>Taux d'avancement global</h5>
-      <span class="pct-badge">{{ donePercent() }}% terminées</span>
+      <h5><i class="bi bi-bar-chart-fill me-2"></i>{{ 'reparationDashboard.globalProgress' | translate }}</h5>
+      <span class="pct-badge">{{ donePercent() }}% {{ 'reparationDashboard.kpi.completed' | translate }}</span>
     </div>
     <div class="progress-body">
       <div class="prog-bar-wrap">
@@ -51,8 +51,8 @@
           <div class="prog-bar-fill" [style.width.%]="donePercent()"></div>
         </div>
         <div class="prog-labels">
-          <span>Terminées ({{ terminees }})</span>
-          <span>En cours ({{ enCours }})</span>
+          <span>{{ 'reparationDashboard.kpi.completed' | translate }} ({{ terminees }})</span>
+          <span>{{ 'reparationDashboard.kpi.inProgress' | translate }} ({{ enCours }})</span>
         </div>
       </div>
     </div>
@@ -61,30 +61,30 @@
   <!-- ANOMALIES DETECTION -->
   <div class="dash-card anomaly-card">
     <div class="dash-card-header">
-      <h5><i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>Détection d'anomalies appareil</h5>
-      <span class="ai-badge"><i class="bi bi-robot me-1"></i>Agent IA</span>
+      <h5><i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>{{ 'reparationDashboard.anomalyDetection' | translate }}</h5>
+      <span class="ai-badge"><i class="bi bi-robot me-1"></i>{{ 'reparationDashboard.aiAgent' | translate }}</span>
     </div>
     <div class="anomaly-body">
       <div class="anomaly-row" *ngFor="let r of reparations | slice:0:4">
         <ng-container *ngIf="!r.estReparable">
           <div class="anomaly-icon anomaly-critical"><i class="bi bi-x-circle-fill"></i></div>
           <div class="anomaly-info">
-            <p class="anomaly-title">Appareil non réparable — Réparation #{{ r.id }}</p>
-            <p class="anomaly-desc">{{ r.descriptionReparation || 'Anomalie détectée' }}</p>
+            <p class="anomaly-title">{{ 'reparationDashboard.anomaly.notRepairable' | translate }} — {{ 'reparationDashboard.repairNo' | translate }}{{ r.id }}</p>
+            <p class="anomaly-desc">{{ r.descriptionReparation || ('reparationDashboard.anomaly.detected' | translate) }}</p>
           </div>
-          <span class="anomaly-badge badge-critical">Non réparable</span>
+          <span class="anomaly-badge badge-critical">{{ 'reparationDashboard.anomaly.notRepairableBadge' | translate }}</span>
         </ng-container>
         <ng-container *ngIf="r.estReparable && r.status !== 'DONE'">
           <div class="anomaly-icon anomaly-warn"><i class="bi bi-exclamation-circle-fill"></i></div>
           <div class="anomaly-info">
-            <p class="anomaly-title">En attente de traitement — Réparation #{{ r.id }}</p>
-            <p class="anomaly-desc">{{ r.descriptionReparation || 'Vérification recommandée' }}</p>
+            <p class="anomaly-title">{{ 'reparationDashboard.anomaly.awaitingProcessing' | translate }} — {{ 'reparationDashboard.repairNo' | translate }}{{ r.id }}</p>
+            <p class="anomaly-desc">{{ r.descriptionReparation || ('reparationDashboard.anomaly.checkRecommended' | translate) }}</p>
           </div>
-          <span class="anomaly-badge badge-warn">En attente</span>
+          <span class="anomaly-badge badge-warn">{{ 'reparationDashboard.status.pending' | translate }}</span>
         </ng-container>
       </div>
       <div *ngIf="reparations.length === 0" class="empty-msg">
-        <i class="bi bi-check-circle-fill text-success"></i> Aucune anomalie détectée
+        <i class="bi bi-check-circle-fill text-success"></i> {{ 'reparationDashboard.anomaly.none' | translate }}
       </div>
     </div>
   </div>
@@ -95,27 +95,27 @@
     <!-- RÉPARATIONS -->
     <div class="dash-card">
       <div class="dash-card-header">
-        <h5><i class="bi bi-tools me-2"></i>Réparations à superviser</h5>
-        <a routerLink="/reparations" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+        <h5><i class="bi bi-tools me-2"></i>{{ 'reparationDashboard.repairsToSupervise' | translate }}</h5>
+        <a routerLink="/reparations" class="see-all">{{ 'reparationDashboard.seeAll' | translate }} <i class="bi bi-arrow-right"></i></a>
       </div>
       <div class="rep-list">
         <div class="rep-item" *ngFor="let r of reparations">
           <div class="rep-icon"><i class="bi bi-wrench-adjustable"></i></div>
           <div class="rep-info">
-            <p class="rep-desc">{{ r.descriptionReparation || 'Réparation #' + r.id }}</p>
-            <p class="rep-meta">Durée MO: {{ r.tempsMainOeuvre || '—' }}h</p>
+            <p class="rep-desc">{{ r.descriptionReparation || ('reparationDashboard.repairNo' | translate) + r.id }}</p>
+            <p class="rep-meta">{{ 'reparationDashboard.laborTime' | translate }} {{ r.tempsMainOeuvre || '—' }}h</p>
           </div>
           <span class="status-chip" [ngClass]="statusClass(r.status)">{{ statusLabel(r.status) }}</span>
         </div>
-        <div *ngIf="reparations.length === 0" class="empty-msg"><i class="bi bi-inbox"></i> Aucune réparation</div>
+        <div *ngIf="reparations.length === 0" class="empty-msg"><i class="bi bi-inbox"></i> {{ 'reparationDashboard.empty.noRepairs' | translate }}</div>
       </div>
     </div>
 
     <!-- PLANNING -->
     <div class="dash-card">
       <div class="dash-card-header">
-        <h5><i class="bi bi-calendar-event-fill me-2"></i>Plannings récents</h5>
-        <a routerLink="/planning" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+        <h5><i class="bi bi-calendar-event-fill me-2"></i>{{ 'reparationDashboard.recentPlannings' | translate }}</h5>
+        <a routerLink="/planning" class="see-all">{{ 'reparationDashboard.seeAll' | translate }} <i class="bi bi-arrow-right"></i></a>
       </div>
       <div class="plan-list">
         <div class="plan-item" *ngFor="let p of plannings">
@@ -124,12 +124,12 @@
             <span class="plan-mon">{{ p.dateDebut | date:'MMM' }}</span>
           </div>
           <div class="plan-info">
-            <p class="plan-title">Planning #{{ p.id }}</p>
-            <p class="plan-sub">{{ p.description || 'Sans description' }}</p>
+            <p class="plan-title">{{ 'reparationDashboard.planningNo' | translate }}{{ p.id }}</p>
+            <p class="plan-sub">{{ p.description || ('reparationDashboard.noDescription' | translate) }}</p>
           </div>
           <a [routerLink]="['/planning/edit', p.id]" class="icon-btn"><i class="bi bi-pencil-fill"></i></a>
         </div>
-        <div *ngIf="plannings.length === 0" class="empty-msg"><i class="bi bi-calendar-x"></i> Aucun planning</div>
+        <div *ngIf="plannings.length === 0" class="empty-msg"><i class="bi bi-calendar-x"></i> {{ 'reparationDashboard.empty.noPlanning' | translate }}</div>
       </div>
     </div>
 

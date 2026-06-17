@@ -5,8 +5,8 @@
     <div class="logo-circle mb-2">
       <i class="bi bi-tools"></i>
     </div>
-    <h4 class="title">TechDoctor</h4>
-    <small class="subtitle">Atelier de Réparation</small>
+    <h4 class="title">{{ 'app.title' | translate }}</h4>
+    <small class="subtitle">{{ 'sidebar.subtitle' | translate }}</small>
   </div>
 
   <!-- USER CHIP -->
@@ -14,7 +14,7 @@
     <div class="user-av">{{ displayName.charAt(0).toUpperCase() }}</div>
     <div class="user-info">
       <span class="user-name">{{ displayName }}</span>
-      <span class="user-role">{{ roleLabel }}</span>
+      <span class="user-role">{{ roleKey ? (roleKey | translate) : '' }}</span>
     </div>
   </div>
 
@@ -26,7 +26,7 @@
          [routerLinkActiveOptions]="{ exact: item.route.endsWith('dashboard') }"
          class="nav-link">
         <i class="bi {{ item.icon }}"></i>
-        <span>{{ item.label }}</span>
+        <span>{{ item.label | translate }}</span>
       </a>
     </li>
   </ul>
@@ -36,7 +36,7 @@
     <div class="logout-box">
       <button class="btn logout-btn w-100" (click)="logout()">
         <i class="bi bi-box-arrow-right"></i>
-        Déconnexion
+        {{ 'navbar.logout' | translate }}
       </button>
     </div>
   </div>

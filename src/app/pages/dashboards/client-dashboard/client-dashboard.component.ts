@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { ReparationService } from '../../../core/services/reparation.service';
 import { FactureService } from '../../../core/services/facture.service';
@@ -8,7 +9,7 @@ import { FactureService } from '../../../core/services/facture.service';
 @Component({
   selector: 'app-client-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './client-dashboard.component.html'
 })
 export class ClientDashboardComponent implements OnInit {
@@ -41,16 +42,17 @@ export class ClientDashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private reparationService: ReparationService,
-    private factureService: FactureService
+    private factureService: FactureService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.login    = this.authService.getUserLogin() ?? 'Client';
+    this.login    = this.authService.getUserLogin() ?? this.translate.instant('clientDashboard.fallbackLogin');
     this.clientId = this.authService.getClientId();
 
     if (!this.clientId) {
       this.loading = false;
-      this.error   = "Profil client introuvable. Contactez l'administration.";
+      this.error   = this.translate.instant('clientDashboard.errors.profileNotFound');
       return;
     }
 
@@ -79,7 +81,7 @@ export class ClientDashboardComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.error   = 'Impossible de charger vos réparations.';
+        this.error   = this.translate.instant('clientDashboard.errors.loadRepairs');
         this.loading = false;
       }
     });
@@ -115,23 +117,23 @@ export class ClientDashboardComponent implements OnInit {
 
   statusLabel(status: string): string {
     const m: Record<string, string> = {
-      DONE: 'Terminée',
-      IN_PROGRESS: 'En cours',
-      PENDING: 'En attente',
-      EN_ATTENTE_DEVIS: 'Devis en attente',
-      REFUSEE_CLIENT: 'Devis refusé'
+      DONE: this.translate.instant('clientDashboard.status.done'),
+      IN_PROGRESS: this.translate.instant('clientDashboard.status.inProgress'),
+      PENDING: this.translate.instant('clientDashboard.status.pending'),
+      EN_ATTENTE_DEVIS: this.translate.instant('clientDashboard.status.quotePending'),
+      REFUSEE_CLIENT: this.translate.instant('clientDashboard.status.quoteRefused')
     };
     return m[status] ?? status;
   }
 
   getAppareil(rep: any): string {
     const a = rep?.Demande?.Appareil ?? rep?.DemandeReparation?.Appareil;
-    return a ? `${a.marque ?? ''} ${a.modele ?? ''}`.trim() : 'Appareil';
+    return a ? `${a.marque ?? ''} ${a.modele ?? ''}`.trim() : this.translate.instant('clientDashboard.device');
   }
 
   getFactureAppareil(f: any): string {
     const a = f?.Reparation?.Demande?.Appareil ?? f?.Reparation?.DemandeReparation?.Appareil;
-    return a ? `${a.marque ?? ''} ${a.modele ?? ''}`.trim() : 'Appareil';
+    return a ? `${a.marque ?? ''} ${a.modele ?? ''}`.trim() : this.translate.instant('clientDashboard.device');
   }
 
   get reparationsEnCours(): any[] {

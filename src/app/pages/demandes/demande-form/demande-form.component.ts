@@ -4,12 +4,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DemandeService } from '../../../core/services/demande.service';
 import { AppareilService } from '../../../core/services/appareil.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-demande-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './demande-form.component.html',
   styleUrls: ['./demande-form.component.css']
 })
@@ -34,7 +35,8 @@ export class DemandeFormComponent implements OnInit {
     private demandeService: DemandeService,
     private appareilService: AppareilService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -77,7 +79,11 @@ export class DemandeFormComponent implements OnInit {
     console.log("dateDepot =", this.demande.dateDepot);
 
     if (!this.demande.symptomesPanne || !this.demande.dateDepot) {
-      Swal.fire('Warning', 'Remplir symptômes + date dépôt', 'warning');
+      Swal.fire(
+        this.translate.instant('demandeForm.warningTitle'),
+        this.translate.instant('demandeForm.fillSymptomsDate'),
+        'warning'
+      );
       return;
     }
 
@@ -96,7 +102,11 @@ export class DemandeFormComponent implements OnInit {
         console.log("🟢 RESPONSE =", res);
 
         if (!res) {
-          Swal.fire('Erreur', 'Backend ne répond pas', 'error');
+          Swal.fire(
+            this.translate.instant('demandeForm.errorTitle'),
+            this.translate.instant('demandeForm.backendNoResponse'),
+            'error'
+          );
           this.loading = false;
           return;
         }
@@ -104,7 +114,11 @@ export class DemandeFormComponent implements OnInit {
         const raw = res.datePrevueRep;
 
         if (!raw) {
-          Swal.fire('Erreur', 'Date invalide reçue', 'error');
+          Swal.fire(
+            this.translate.instant('demandeForm.errorTitle'),
+            this.translate.instant('demandeForm.invalidDateReceived'),
+            'error'
+          );
           this.loading = false;
           return;
         }
@@ -122,7 +136,7 @@ export class DemandeFormComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: 'Date prédite',
+          title: this.translate.instant('demandeForm.datePredicted'),
           text: cleanDate
         });
       },
@@ -135,8 +149,8 @@ export class DemandeFormComponent implements OnInit {
 
         Swal.fire({
           icon: 'warning',
-          title: 'Prédiction indisponible',
-          text: 'Le service de prédiction ne répond pas. Vous pouvez saisir la date prévue manuellement.'
+          title: this.translate.instant('demandeForm.predictionUnavailable'),
+          text: this.translate.instant('demandeForm.predictionUnavailableText')
         });
       }
 
@@ -153,7 +167,11 @@ export class DemandeFormComponent implements OnInit {
         }
       });
 
-      Swal.fire('Formulaire invalide', 'Remplir les champs obligatoires', 'warning');
+      Swal.fire(
+        this.translate.instant('demandeForm.invalidFormTitle'),
+        this.translate.instant('demandeForm.fillRequiredFields'),
+        'warning'
+      );
       return;
     }
 
@@ -161,8 +179,8 @@ export class DemandeFormComponent implements OnInit {
     if (!this.demande.datePrevueRep) {
       Swal.fire({
         icon: 'warning',
-        title: 'Date prévue manquante',
-        text: 'Cliquez sur "Prédire la date" ou saisissez une date prévue manuellement'
+        title: this.translate.instant('demandeForm.missingExpectedDate'),
+        text: this.translate.instant('demandeForm.missingExpectedDateText')
       });
       return;
     }
@@ -170,8 +188,8 @@ export class DemandeFormComponent implements OnInit {
     if (new Date(this.demande.datePrevueRep) < new Date(this.demande.dateDepot)) {
       Swal.fire({
         icon: 'warning',
-        title: 'Dates incohérentes',
-        text: 'La date prévue ne peut pas être avant la date de dépôt'
+        title: this.translate.instant('demandeForm.inconsistentDates'),
+        text: this.translate.instant('demandeForm.inconsistentDatesText')
       });
       return;
     }
@@ -193,15 +211,21 @@ export class DemandeFormComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: 'Succès',
-          text: this.id ? 'Demande modifiée' : 'Demande ajoutée'
+          title: this.translate.instant('demandeForm.successTitle'),
+          text: this.id
+            ? this.translate.instant('demandeForm.demandeUpdated')
+            : this.translate.instant('demandeForm.demandeAdded')
         });
 
         this.router.navigate(['/demandes']);
       },
       error: () => {
         this.loading = false;
-        Swal.fire('Erreur', 'Operation échouée', 'error');
+        Swal.fire(
+          this.translate.instant('demandeForm.errorTitle'),
+          this.translate.instant('demandeForm.operationFailed'),
+          'error'
+        );
       }
     });
   }

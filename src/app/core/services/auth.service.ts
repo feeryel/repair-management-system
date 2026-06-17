@@ -48,6 +48,20 @@ login(data: { login: string; motDePasse: string }) {
     clientName?: string;
   }>(`${this.apiUrl}/login`, data);
 }
+
+  /**
+   * Changement de mot de passe par l'utilisateur connecté
+   */
+  changePassword(data: { ancienMotDePasse: string; nouveauMotDePasse: string }) {
+    return this.http.patch<{ message: string }>(`${this.apiUrl}/change-password`, data);
+  }
+
+  /**
+   * Mot de passe oublié — envoie un nouveau mot de passe par email
+   */
+  forgotPassword(login: string) {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/forgot-password`, { login });
+  }
   // ─────────────────────────────────────────
   // SAUVEGARDE — écriture dans localStorage
   // ─────────────────────────────────────────

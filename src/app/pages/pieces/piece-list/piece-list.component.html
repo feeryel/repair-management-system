@@ -4,12 +4,12 @@
   <div class="topbar">
 
     <div>
-      <h1><i class="bi bi-tools"></i> Pièces de rechange</h1>
-      <p>Gestion intelligente du stock</p>
+      <h1><i class="bi bi-tools"></i> {{ 'pieceList.title' | translate }}</h1>
+      <p>{{ 'pieceList.subtitle' | translate }}</p>
     </div>
 
     <a routerLink="/pieces/add" class="add-btn">
-      + Nouvelle pièce
+      + {{ 'pieceList.newPiece' | translate }}
     </a>
 
   </div>
@@ -19,17 +19,17 @@
 
     <input
       type="text"
-      placeholder="Rechercher une pièce..."
+      [placeholder]="'pieceList.searchPlaceholder' | translate"
       [(ngModel)]="searchText"
       (input)="resetPage()"
     />
 
     <select [(ngModel)]="filterType" (change)="resetPage()">
 
-      <option value="ALL">Tous</option>
-      <option value="OK">OK</option>
-      <option value="CRITIQUE">Critiques</option>
-      <option value="RUPTURE">Rupture</option>
+      <option value="ALL">{{ 'common.all' | translate }}</option>
+      <option value="OK">{{ 'pieceList.filterOk' | translate }}</option>
+      <option value="CRITIQUE">{{ 'pieceList.filterCritical' | translate }}</option>
+      <option value="RUPTURE">{{ 'pieceList.filterOut' | translate }}</option>
 
     </select>
 
@@ -39,22 +39,22 @@
   <div class="stats">
 
     <div class="card blue">
-      <i class="bi bi-box-seam-fill"></i> <span>Stock total</span>
+      <i class="bi bi-box-seam-fill"></i> <span>{{ 'pieceList.statTotalStock' | translate }}</span>
       <h2>{{ stockTotal }}</h2>
     </div>
 
     <div class="card orange">
-      <i class="bi bi-exclamation-triangle-fill"></i> <span>Critiques</span>
+      <i class="bi bi-exclamation-triangle-fill"></i> <span>{{ 'pieceList.statCritical' | translate }}</span>
       <h2>{{ piecesCritiques }}</h2>
     </div>
 
     <div class="card green">
-      <i class="bi bi-check-circle-fill"></i> <span>OK</span>
+      <i class="bi bi-check-circle-fill"></i> <span>{{ 'pieceList.statOk' | translate }}</span>
       <h2>{{ piecesOK }}</h2>
     </div>
 
     <div class="card red">
-      <i class="bi bi-slash-circle-fill"></i> <span>Rupture</span>
+      <i class="bi bi-slash-circle-fill"></i> <span>{{ 'pieceList.statOut' | translate }}</span>
       <h2>{{ ruptureStock }}</h2>
     </div>
 
@@ -80,7 +80,7 @@
           'danger': p.quantiteEnStock === 0
         }">
 
-        Stock: {{ p.quantiteEnStock }}
+        {{ 'pieceList.stock' | translate }}: {{ p.quantiteEnStock }}
 
       </div>
 
@@ -102,7 +102,7 @@
 
   <!-- EMPTY -->
   <div class="empty" *ngIf="paginatedPieces.length === 0">
-    <i class="bi bi-inbox"></i> Aucune pièce trouvée
+    <i class="bi bi-inbox"></i> {{ 'pieceList.empty' | translate }}
   </div>
 
   <!-- PAGINATION -->

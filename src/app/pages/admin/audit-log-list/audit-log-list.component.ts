@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuditLogService } from '../../../core/services/audit-log.service';
 
 @Component({
   selector: 'app-audit-log-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './audit-log-list.component.html'
 })
 export class AuditLogListComponent implements OnInit {
@@ -25,12 +26,12 @@ export class AuditLogListComponent implements OnInit {
   filterDateTo   = '';
 
   entities = [
-    { value: 'Reparation', label: 'Réparation' },
-    { value: 'Demande',    label: 'Demande' },
-    { value: 'Client',     label: 'Client' },
-    { value: 'Planning',   label: 'Planning' },
-    { value: 'User',       label: 'Utilisateur' },
-    { value: 'Devis',      label: 'Devis' },
+    { value: 'Reparation', labelKey: 'auditLog.entityReparation' },
+    { value: 'Demande',    labelKey: 'auditLog.entityDemande' },
+    { value: 'Client',     labelKey: 'auditLog.entityClient' },
+    { value: 'Planning',   labelKey: 'auditLog.entityPlanning' },
+    { value: 'User',       labelKey: 'auditLog.entityUser' },
+    { value: 'Devis',      labelKey: 'auditLog.entityDevis' },
   ];
 
   constructor(private auditLogService: AuditLogService) {}

@@ -6,8 +6,8 @@
     <div class="form-header">
 
       <div>
-        <h2>Nouvelle Ligne de Réparation</h2>
-        <p>Ajouter une pièce détachée utilisée pour une intervention</p>
+        <h2>{{ 'ligneForm.title' | translate }}</h2>
+        <p>{{ 'ligneForm.subtitle' | translate }}</p>
       </div>
 
       <div class="header-icon"><i class="bi bi-puzzle-fill"></i></div>
@@ -20,7 +20,7 @@
 
         <!-- REPARATION -->
         <div class="input-group-custom">
-          <label>Réparation concernée</label>
+          <label>{{ 'ligneForm.repair' | translate }}</label>
 
           <div class="input-box">
             <select
@@ -30,13 +30,13 @@
               required
               #reparation="ngModel">
 
-              <option value="" disabled selected>— Sélectionner une réparation —</option>
+              <option value="" disabled selected>{{ 'ligneForm.selectRepair' | translate }}</option>
 
               <option
                 *ngFor="let r of reparations"
                 [value]="r.id">
 
-                Réparation #{{ r.id }} — {{ r.descriptionReparation || 'Sans description' }}
+                {{ 'ligneForm.repairLabel' | translate }} #{{ r.id }} — {{ r.descriptionReparation || ('ligneForm.noDescription' | translate) }}
 
               </option>
 
@@ -44,7 +44,7 @@
           </div>
 
           <div class="error" *ngIf="reparation.invalid && reparation.touched">
-            <small>Veuillez choisir une réparation</small>
+            <small>{{ 'ligneForm.repairError' | translate }}</small>
           </div>
         </div>
 
@@ -52,7 +52,7 @@
         <div class="grid-2">
 
           <div class="input-group-custom">
-            <label>Pièce détachée</label>
+            <label>{{ 'ligneForm.piece' | translate }}</label>
 
             <div class="input-box">
               <select
@@ -62,7 +62,7 @@
                 required
                 #piece="ngModel">
 
-                <option value="" disabled selected>— Sélectionner une pièce —</option>
+                <option value="" disabled selected>{{ 'ligneForm.selectPiece' | translate }}</option>
 
                 <option
                   *ngFor="let p of pieces"
@@ -75,12 +75,12 @@
             </div>
 
             <div class="error" *ngIf="piece.invalid && piece.touched">
-              <small>Veuillez choisir une pièce</small>
+              <small>{{ 'ligneForm.pieceError' | translate }}</small>
             </div>
           </div>
 
           <div class="input-group-custom">
-            <label>Quantité</label>
+            <label>{{ 'ligneForm.quantity' | translate }}</label>
 
             <div class="input-box">
               <input
@@ -93,7 +93,7 @@
             </div>
 
             <div class="error" *ngIf="quantite.invalid && quantite.touched">
-              <small>Quantité invalide</small>
+              <small>{{ 'ligneForm.quantityError' | translate }}</small>
             </div>
           </div>
 
@@ -103,31 +103,31 @@
         <div class="preview-card" *ngIf="selectedPiece">
 
           <div class="preview-title">
-            <i class="bi bi-clipboard-data"></i> Récapitulatif de la ligne
+            <i class="bi bi-clipboard-data"></i> {{ 'ligneForm.summary' | translate }}
           </div>
 
           <div class="preview-row">
-            <span>Pièce</span>
+            <span>{{ 'ligneForm.piece' | translate }}</span>
             <strong>{{ selectedPiece.nom }} <small *ngIf="selectedPiece.code">({{ selectedPiece.code }})</small></strong>
           </div>
 
           <div class="preview-row">
-            <span>Prix unitaire</span>
+            <span>{{ 'ligneForm.unitPrice' | translate }}</span>
             <strong>{{ selectedPiece.prixHT | number:'1.2-2' }} DT</strong>
           </div>
 
           <div class="preview-row">
-            <span>Stock disponible</span>
-            <strong [class.stock-low]="stockInsuffisant">{{ selectedPiece.quantiteEnStock }} pcs</strong>
+            <span>{{ 'ligneForm.availableStock' | translate }}</span>
+            <strong [class.stock-low]="stockInsuffisant">{{ selectedPiece.quantiteEnStock }} {{ 'ligneForm.pcs' | translate }}</strong>
           </div>
 
           <div class="preview-row total">
-            <span>Total ligne</span>
+            <span>{{ 'ligneForm.lineTotal' | translate }}</span>
             <strong>{{ subtotal | number:'1.2-2' }} DT</strong>
           </div>
 
           <div class="warning" *ngIf="stockInsuffisant">
-            <i class="bi bi-exclamation-triangle-fill"></i> La quantité demandée dépasse le stock disponible
+            <i class="bi bi-exclamation-triangle-fill"></i> {{ 'ligneForm.stockWarning' | translate }}
           </div>
 
         </div>
@@ -136,11 +136,11 @@
         <div class="actions">
 
           <button type="button" class="btn-cancel" routerLink="/ligne-reparations">
-            Annuler
+            {{ 'common.cancel' | translate }}
           </button>
 
           <button type="submit" class="btn-save" [disabled]="f.invalid">
-            + Ajouter la ligne
+            + {{ 'ligneForm.addLine' | translate }}
           </button>
 
         </div>

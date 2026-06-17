@@ -32,6 +32,18 @@
 
   /* Layout */
   --sidebar-width: 260px;
+
+  /* Surfaces "verre" / dégradés décoratifs (s'adaptent au thème) */
+  --page-gradient:   linear-gradient(135deg, #f8fafc, #eef2ff);
+  --glass-bg:        rgba(255, 255, 255, 0.8);
+  --glass-border:    rgba(255, 255, 255, 0.5);
+  --icon-soft-bg:    #eef2ff;
+  --icon-accent:     #6366f1;
+  --success-soft-bg:     linear-gradient(135deg, #f0fdf4, #ecfdf5);
+  --success-soft-border: #d1fae5;
+
+  /* Indique au navigateur d'utiliser les contrôles natifs clairs (selects, etc.) */
+  color-scheme: light;
 }
 
 [data-theme="dark"] {
@@ -55,6 +67,18 @@
   --danger-bg:  rgba(248, 113, 113, 0.15);
   --info:       #60a5fa;
   --info-bg:    rgba(96, 165, 250, 0.15);
+
+  /* Surfaces "verre" / dégradés décoratifs — variantes sombres */
+  --page-gradient:   linear-gradient(135deg, #0f172a, #1e293b);
+  --glass-bg:        rgba(30, 41, 59, 0.6);
+  --glass-border:    rgba(255, 255, 255, 0.08);
+  --icon-soft-bg:    rgba(99, 102, 241, 0.18);
+  --icon-accent:     #a5b4fc;
+  --success-soft-bg:     linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(74, 222, 128, 0.06));
+  --success-soft-border: rgba(74, 222, 128, 0.25);
+
+  /* Contrôles natifs (selects, cases à cocher, scrollbars…) en thème sombre */
+  color-scheme: dark;
 }
 
 html, body {

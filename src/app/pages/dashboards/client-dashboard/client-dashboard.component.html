@@ -5,8 +5,8 @@
     <div class="dash-header-left">
       <div class="dash-avatar client-av"><i class="bi bi-person-circle"></i></div>
       <div>
-        <h2 class="dash-title">Mon Espace</h2>
-        <p class="dash-sub">Bienvenue, <strong>{{ login }}</strong></p>
+        <h2 class="dash-title">{{ 'clientDashboard.title' | translate }}</h2>
+        <p class="dash-sub">{{ 'clientDashboard.welcome' | translate }}, <strong>{{ login }}</strong></p>
       </div>
     </div>
     <!-- Badge notifications -->
@@ -23,7 +23,7 @@
 
   <!-- ── CHARGEMENT ────────────────────────────────────────────────────────── -->
   <div class="loading-row" *ngIf="loading && !error">
-    <div class="spinner"></div><span>Chargement…</span>
+    <div class="spinner"></div><span>{{ 'clientDashboard.loading' | translate }}</span>
   </div>
 
   <ng-container *ngIf="!loading && !error">
@@ -34,7 +34,7 @@
       <div class="kpi-card kpi-blue" (click)="setTab('reparations')" [class.kpi-active]="activeTab==='reparations'">
         <div class="kpi-icon"><i class="bi bi-tools"></i></div>
         <div class="kpi-body">
-          <span class="kpi-label">En cours</span>
+          <span class="kpi-label">{{ 'clientDashboard.kpi.inProgress' | translate }}</span>
           <span class="kpi-value">{{ enCours + enAttente }}</span>
         </div>
         <div class="kpi-glow"></div>
@@ -43,7 +43,7 @@
       <div class="kpi-card kpi-green" (click)="setTab('historique')" [class.kpi-active]="activeTab==='historique'">
         <div class="kpi-icon"><i class="bi bi-check-circle-fill"></i></div>
         <div class="kpi-body">
-          <span class="kpi-label">Terminées</span>
+          <span class="kpi-label">{{ 'clientDashboard.kpi.completed' | translate }}</span>
           <span class="kpi-value">{{ terminees }}</span>
         </div>
         <div class="kpi-glow"></div>
@@ -52,7 +52,7 @@
       <div class="kpi-card kpi-purple" (click)="setTab('factures')" [class.kpi-active]="activeTab==='factures'">
         <div class="kpi-icon"><i class="bi bi-receipt-cutoff"></i></div>
         <div class="kpi-body">
-          <span class="kpi-label">Factures</span>
+          <span class="kpi-label">{{ 'clientDashboard.kpi.invoices' | translate }}</span>
           <span class="kpi-value">{{ totalFac }}</span>
         </div>
         <div class="kpi-glow"></div>
@@ -61,7 +61,7 @@
       <div class="kpi-card kpi-orange" (click)="setTab('notifications')" [class.kpi-active]="activeTab==='notifications'">
         <div class="kpi-icon"><i class="bi bi-bell-fill"></i></div>
         <div class="kpi-body">
-          <span class="kpi-label">Notifications</span>
+          <span class="kpi-label">{{ 'clientDashboard.kpi.notifications' | translate }}</span>
           <span class="kpi-value">{{ notifications.length }}</span>
         </div>
         <div class="kpi-glow"></div>
@@ -72,16 +72,16 @@
     <!-- ── TABS ──────────────────────────────────────────────────────────────── -->
     <div class="tabs-bar">
       <button class="tab-btn" [class.active]="activeTab==='reparations'"  (click)="setTab('reparations')">
-        <i class="bi bi-tools me-1"></i> État réparation
+        <i class="bi bi-tools me-1"></i> {{ 'clientDashboard.tabs.repairState' | translate }}
       </button>
       <button class="tab-btn" [class.active]="activeTab==='historique'"   (click)="setTab('historique')">
-        <i class="bi bi-clock-history me-1"></i> Historique
+        <i class="bi bi-clock-history me-1"></i> {{ 'clientDashboard.tabs.history' | translate }}
       </button>
       <button class="tab-btn" [class.active]="activeTab==='factures'"     (click)="setTab('factures')">
-        <i class="bi bi-receipt-cutoff me-1"></i> Devis & Factures
+        <i class="bi bi-receipt-cutoff me-1"></i> {{ 'clientDashboard.tabs.quotesInvoices' | translate }}
       </button>
       <button class="tab-btn" [class.active]="activeTab==='notifications'" (click)="setTab('notifications')">
-        <i class="bi bi-bell me-1"></i> Notifications
+        <i class="bi bi-bell me-1"></i> {{ 'clientDashboard.kpi.notifications' | translate }}
         <span class="tab-badge" *ngIf="notifications.length > 0">{{ notifications.length }}</span>
       </button>
     </div>
@@ -91,7 +91,7 @@
     <!-- ══════════════════════════════════════════════════════════════════════ -->
     <div class="dash-card" *ngIf="activeTab === 'reparations'">
       <div class="dash-card-header">
-        <h5><i class="bi bi-tools me-2"></i>État de mes réparations</h5>
+        <h5><i class="bi bi-tools me-2"></i>{{ 'clientDashboard.myRepairsState' | translate }}</h5>
         <span class="badge-count">{{ reparationsEnCours.length }}</span>
       </div>
       <div class="rep-list">
@@ -103,7 +103,7 @@
             <p class="rep-title">{{ getAppareil(r) }}</p>
             <p class="rep-desc">{{ r.descriptionReparation || '—' }}</p>
             <p class="rep-date" *ngIf="r.dateFinRep">
-              <i class="bi bi-calendar3 me-1"></i>Fin prévue : {{ r.dateFinRep | date:'dd/MM/yyyy' }}
+              <i class="bi bi-calendar3 me-1"></i>{{ 'clientDashboard.expectedEnd' | translate }} {{ r.dateFinRep | date:'dd/MM/yyyy' }}
             </p>
           </div>
           <div class="rep-status">
@@ -116,7 +116,7 @@
         </div>
         <div *ngIf="reparationsEnCours.length === 0" class="empty-msg">
           <i class="bi bi-check-circle-fill text-success fs-2"></i>
-          <span>Aucune réparation en cours</span>
+          <span>{{ 'clientDashboard.empty.noRepairsInProgress' | translate }}</span>
         </div>
       </div>
     </div>
@@ -126,7 +126,7 @@
     <!-- ══════════════════════════════════════════════════════════════════════ -->
     <div class="dash-card" *ngIf="activeTab === 'historique'">
       <div class="dash-card-header">
-        <h5><i class="bi bi-clock-history me-2"></i>Historique réparations</h5>
+        <h5><i class="bi bi-clock-history me-2"></i>{{ 'clientDashboard.repairHistory' | translate }}</h5>
         <span class="badge-count">{{ historiqueReparations.length }}</span>
       </div>
       <div class="rep-list">
@@ -139,16 +139,16 @@
             <p class="rep-desc">{{ r.descriptionReparation || '—' }}</p>
             <p class="rep-date">
               <i class="bi bi-calendar-check me-1"></i>
-              Terminée le {{ r.dateFinRep | date:'dd/MM/yyyy' }}
+              {{ 'clientDashboard.completedOn' | translate }} {{ r.dateFinRep | date:'dd/MM/yyyy' }}
             </p>
           </div>
           <span class="status-chip large st-done">
-            <i class="bi bi-check2-circle me-1"></i>Terminée
+            <i class="bi bi-check2-circle me-1"></i>{{ 'clientDashboard.status.done' | translate }}
           </span>
         </div>
         <div *ngIf="historiqueReparations.length === 0" class="empty-msg">
           <i class="bi bi-inbox fs-2"></i>
-          <span>Aucun historique disponible</span>
+          <span>{{ 'clientDashboard.empty.noHistory' | translate }}</span>
         </div>
       </div>
     </div>
@@ -158,37 +158,37 @@
     <!-- ══════════════════════════════════════════════════════════════════════ -->
     <div class="dash-card" *ngIf="activeTab === 'factures'">
       <div class="dash-card-header">
-        <h5><i class="bi bi-receipt-cutoff me-2"></i>Devis & Factures</h5>
+        <h5><i class="bi bi-receipt-cutoff me-2"></i>{{ 'clientDashboard.tabs.quotesInvoices' | translate }}</h5>
         <div class="header-right">
           <span class="badge-count">{{ totalFac }}</span>
           <span class="total-tag" *ngIf="montantTotal > 0">
-            Total : <strong>{{ montantTotal | number:'1.2-2' }} DT</strong>
+            {{ 'clientDashboard.total' | translate }} <strong>{{ montantTotal | number:'1.2-2' }} DT</strong>
           </span>
         </div>
       </div>
 
       <div *ngIf="loadingFactures" class="loading-row">
-        <div class="spinner small"></div><span>Chargement…</span>
+        <div class="spinner small"></div><span>{{ 'clientDashboard.loading' | translate }}</span>
       </div>
 
       <div class="fac-list" *ngIf="!loadingFactures">
         <div class="fac-item" *ngFor="let f of factures">
           <div class="fac-icon"><i class="bi bi-file-earmark-text"></i></div>
           <div class="fac-info">
-            <p class="fac-num">Facture N° {{ f.numero || ('#' + f.id) }}</p>
+            <p class="fac-num">{{ 'clientDashboard.invoiceNo' | translate }} {{ f.numero || ('#' + f.id) }}</p>
             <p class="fac-appareil">{{ getFactureAppareil(f) }}</p>
             <p class="fac-date" *ngIf="f.date">
               <i class="bi bi-calendar3 me-1"></i>{{ f.date | date:'dd/MM/yyyy' }}
             </p>
           </div>
           <div class="fac-amounts">
-            <span class="fac-ht"   *ngIf="f.montantHT">HT : {{ f.montantHT | number:'1.2-2' }} DT</span>
+            <span class="fac-ht"   *ngIf="f.montantHT">{{ 'clientDashboard.beforeTax' | translate }} {{ f.montantHT | number:'1.2-2' }} DT</span>
             <span class="fac-total">{{ f.montantTotal | number:'1.2-2' }} DT</span>
           </div>
         </div>
         <div *ngIf="factures.length === 0" class="empty-msg">
           <i class="bi bi-receipt fs-2"></i>
-          <span>Aucune facture disponible</span>
+          <span>{{ 'clientDashboard.empty.noInvoices' | translate }}</span>
         </div>
       </div>
     </div>
@@ -198,9 +198,9 @@
     <!-- ══════════════════════════════════════════════════════════════════════ -->
     <div class="dash-card" *ngIf="activeTab === 'notifications'">
       <div class="dash-card-header">
-        <h5><i class="bi bi-bell-fill me-2"></i>Notifications</h5>
+        <h5><i class="bi bi-bell-fill me-2"></i>{{ 'clientDashboard.kpi.notifications' | translate }}</h5>
         <span class="badge-count notif-badge-cnt" *ngIf="notifications.length > 0">
-          {{ notifications.length }} nouvelle(s)
+          {{ 'clientDashboard.newCount' | translate:{ value: notifications.length } }}
         </span>
       </div>
       <div class="notif-list">
@@ -209,24 +209,24 @@
           <div class="notif-body">
             <p class="notif-title">
               <i class="bi bi-check-circle-fill me-2 text-success"></i>
-              Votre réparation est prête !
+              {{ 'clientDashboard.notif.ready' | translate }}
             </p>
             <p class="notif-msg">
               <strong>{{ getAppareil(r) }}</strong>
               <ng-container *ngIf="r.dateFinRep">
-                — terminée le {{ r.dateFinRep | date:'dd/MM/yyyy' }}
+                — {{ 'clientDashboard.notif.completedOn' | translate }} {{ r.dateFinRep | date:'dd/MM/yyyy' }}
               </ng-container>
             </p>
             <p class="notif-hint">
               <i class="bi bi-envelope me-1"></i>
-              Un email et/ou SMS vous a été envoyé(e) automatiquement.
+              {{ 'clientDashboard.notif.emailSmsSent' | translate }}
             </p>
           </div>
-          <span class="status-chip st-done">Prête</span>
+          <span class="status-chip st-done">{{ 'clientDashboard.notif.readyChip' | translate }}</span>
         </div>
         <div *ngIf="notifications.length === 0" class="empty-msg">
           <i class="bi bi-bell-slash fs-2"></i>
-          <span>Aucune notification</span>
+          <span>{{ 'clientDashboard.empty.noNotifications' | translate }}</span>
         </div>
       </div>
     </div>

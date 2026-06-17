@@ -5,11 +5,11 @@
 
     <div>
       <h2>
-        {{ id ? 'Modifier Appareil' : 'Ajouter Appareil' }}
+        {{ (id ? 'appareilForm.titleEdit' : 'appareilForm.titleAdd') | translate }}
       </h2>
 
       <p>
-        Gestion intelligente des appareils Repair System
+        {{ 'appareilForm.subtitle' | translate }}
       </p>
     </div>
 
@@ -31,7 +31,7 @@
 
           <div class="input-group-custom">
 
-            <label>Marque</label>
+            <label>{{ 'appareilForm.fields.brand' | translate }}</label>
 
             <div class="input-box">
 
@@ -41,7 +41,7 @@
                 type="text"
                 [(ngModel)]="appareil.marque"
                 name="marque"
-                placeholder="Entrer la marque">
+                [placeholder]="'appareilForm.placeholders.brand' | translate">
 
             </div>
 
@@ -54,7 +54,7 @@
 
           <div class="input-group-custom">
 
-            <label>Modèle</label>
+            <label>{{ 'appareilForm.fields.model' | translate }}</label>
 
             <div class="input-box">
 
@@ -64,7 +64,7 @@
                 type="text"
                 [(ngModel)]="appareil.modele"
                 name="modele"
-                placeholder="Entrer le modèle">
+                [placeholder]="'appareilForm.placeholders.model' | translate">
 
             </div>
 
@@ -77,7 +77,7 @@
 
           <div class="input-group-custom">
 
-            <label>Numéro Série</label>
+            <label>{{ 'appareilForm.fields.serialNumber' | translate }}</label>
 
             <div class="input-box">
 
@@ -87,7 +87,7 @@
                 type="text"
                 [(ngModel)]="appareil.numSerie"
                 name="numSerie"
-                placeholder="Entrer le numéro série">
+                [placeholder]="'appareilForm.placeholders.serialNumber' | translate">
 
             </div>
 
@@ -100,17 +100,77 @@
 
           <div class="input-group-custom">
 
-            <label>Type Appareil</label>
+            <label>{{ 'appareilForm.fields.deviceType' | translate }}</label>
 
             <div class="input-box">
 
               <i class="bi bi-tools"></i>
 
+              <select
+                [(ngModel)]="typeSelect"
+                name="typeSelect"
+                required>
+
+                <option value="" disabled>{{ 'appareilForm.placeholders.chooseType' | translate }}</option>
+
+                <option *ngFor="let t of types" [value]="t">
+                  {{ t }}
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- TYPE PERSONNALISE (si "Autre") -->
+        <div class="col-md-6" *ngIf="typeSelect === 'Autre'">
+
+          <div class="input-group-custom">
+
+            <label>{{ 'appareilForm.fields.customType' | translate }}</label>
+
+            <div class="input-box">
+
+              <i class="bi bi-pencil"></i>
+
               <input
                 type="text"
-                [(ngModel)]="appareil.type"
-                name="type"
-                placeholder="Entrer le type appareil">
+                [(ngModel)]="customType"
+                name="customType"
+                [placeholder]="'appareilForm.placeholders.customType' | translate">
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- CLIENT PROPRIETAIRE -->
+        <div class="col-md-6">
+
+          <div class="input-group-custom">
+
+            <label>{{ 'appareilForm.fields.ownerClient' | translate }}</label>
+
+            <div class="input-box">
+
+              <i class="bi bi-person-fill"></i>
+
+              <select
+                [(ngModel)]="appareil.clientId"
+                name="clientId"
+                required>
+
+                <option [ngValue]="null" disabled>{{ 'appareilForm.placeholders.chooseClient' | translate }}</option>
+
+                <option *ngFor="let c of clients" [ngValue]="c.id">
+                  {{ c.nom }}
+                </option>
+
+              </select>
 
             </div>
 
@@ -127,7 +187,7 @@
 
           <i class="bi bi-check-circle-fill"></i>
 
-          {{ id ? 'Modifier Appareil' : 'Ajouter Appareil' }}
+          {{ (id ? 'appareilForm.titleEdit' : 'appareilForm.titleAdd') | translate }}
 
         </button>
 

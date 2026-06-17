@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { ReparationService } from '../../../core/services/reparation.service';
 import { PlanningService } from '../../../core/services/planning.service';
@@ -9,7 +10,7 @@ import { LigneReparationService } from '../../../core/services/ligne-reparation.
 @Component({
   selector: 'app-technicien-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './technicien-dashboard.component.html'
 })
 export class TechnicienDashboardComponent implements OnInit {
@@ -25,11 +26,12 @@ export class TechnicienDashboardComponent implements OnInit {
     private authService: AuthService,
     private reparationService: ReparationService,
     private planningService: PlanningService,
-    private ligneService: LigneReparationService
+    private ligneService: LigneReparationService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.login = this.authService.getUserLogin() ?? 'Technicien';
+    this.login = this.authService.getUserLogin() ?? this.translate.instant('technicienDashboard.fallbackLogin');
 
     this.reparationService.getAll().subscribe({
       next: (r: any) => {
@@ -63,18 +65,22 @@ export class TechnicienDashboardComponent implements OnInit {
   }
   statusLabel(s: string): string {
     const m: Record<string, string> = {
-      DONE: 'Terminée',
-      IN_PROGRESS: 'En cours',
-      EN_ATTENTE_DEVIS: 'Devis en attente',
-      REFUSEE_CLIENT: 'Devis refusé'
+      DONE: this.translate.instant('technicienDashboard.status.done'),
+      IN_PROGRESS: this.translate.instant('technicienDashboard.status.inProgress'),
+      EN_ATTENTE_DEVIS: this.translate.instant('technicienDashboard.status.quotePending'),
+      REFUSEE_CLIENT: this.translate.instant('technicienDashboard.status.quoteRefused')
     };
-    return m[s] ?? 'En attente';
+    return m[s] ?? this.translate.instant('technicienDashboard.status.pending');
   }
 
   planningStatusClass(s: string): string {
     return s === 'TERMINE' ? 'st-done' : s === 'EN_COURS' ? 'st-progress' : 'st-pending';
   }
   planningStatusLabel(s: string): string {
-    return s === 'TERMINE' ? 'Terminé' : s === 'EN_COURS' ? 'En cours' : 'Planifié';
+    return s === 'TERMINE'
+      ? this.translate.instant('technicienDashboard.planningStatus.done')
+      : s === 'EN_COURS'
+        ? this.translate.instant('technicienDashboard.planningStatus.inProgress')
+        : this.translate.instant('technicienDashboard.planningStatus.scheduled');
   }
 }

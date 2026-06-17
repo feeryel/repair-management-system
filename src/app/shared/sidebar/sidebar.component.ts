@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService, Role } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface NavItem {
   label: string;
@@ -12,51 +13,51 @@ export interface NavItem {
 
 const NAV: Record<Role, NavItem[]> = {
   [Role.ADMIN]: [
-    { label: 'Dashboard',        icon: 'bi-grid-1x2-fill',           route: '/admin/dashboard' },
-    { label: 'Comptes',          icon: 'bi-people-fill',             route: '/admin/users' },
-    { label: 'Historique',       icon: 'bi-clock-history',           route: '/admin/audit-logs' },
+    { label: 'nav.dashboard',        icon: 'bi-grid-1x2-fill',           route: '/admin/dashboard' },
+    { label: 'nav.accounts',         icon: 'bi-people-fill',             route: '/admin/users' },
+    { label: 'nav.history',          icon: 'bi-clock-history',           route: '/admin/audit-logs' },
   ],
   [Role.CLIENT]: [
-    { label: 'Dashboard',        icon: 'bi-grid-1x2-fill',           route: '/client/dashboard' },
-    { label: 'Réparations',      icon: 'bi-wrench-adjustable-circle',route: '/reparations' },
-    { label: 'Factures',         icon: 'bi-receipt-cutoff',          route: '/factures' },
+    { label: 'nav.dashboard',        icon: 'bi-grid-1x2-fill',           route: '/client/dashboard' },
+    { label: 'nav.repairs',          icon: 'bi-wrench-adjustable-circle',route: '/reparations' },
+    { label: 'nav.invoices',         icon: 'bi-receipt-cutoff',          route: '/factures' },
   ],
   [Role.RECEPTION]: [
-    { label: 'Dashboard',        icon: 'bi-grid-1x2-fill',           route: '/reception/dashboard' },
-    { label: 'Clients',          icon: 'bi-people-fill',             route: '/clients' },
-    { label: 'Appareils',        icon: 'bi-laptop-fill',             route: '/appareils' },
-    { label: 'Demandes',         icon: 'bi-clipboard-check-fill',    route: '/demandes' },
-    { label: 'Factures',         icon: 'bi-receipt-cutoff',          route: '/factures' },
+    { label: 'nav.dashboard',        icon: 'bi-grid-1x2-fill',           route: '/reception/dashboard' },
+    { label: 'nav.clients',          icon: 'bi-people-fill',             route: '/clients' },
+    { label: 'nav.devices',          icon: 'bi-laptop-fill',             route: '/appareils' },
+    { label: 'nav.requests',         icon: 'bi-clipboard-check-fill',    route: '/demandes' },
+    { label: 'nav.invoices',         icon: 'bi-receipt-cutoff',          route: '/factures' },
   ],
   [Role.TECHNICIEN]: [
-    { label: 'Dashboard',             icon: 'bi-grid-1x2-fill',                route: '/technicien/dashboard' },
-    { label: 'Réparations',           icon: 'bi-wrench-adjustable-circle-fill',route: '/reparations' },
-    { label: 'Détails réparation',    icon: 'bi-list-check',                   route: '/ligne-reparations' },
-    { label: 'Planning',              icon: 'bi-calendar-event-fill',          route: '/planning' },
+    { label: 'nav.dashboard',             icon: 'bi-grid-1x2-fill',                route: '/technicien/dashboard' },
+    { label: 'nav.repairs',               icon: 'bi-wrench-adjustable-circle-fill',route: '/reparations' },
+    { label: 'nav.repairDetails',         icon: 'bi-list-check',                   route: '/ligne-reparations' },
+    { label: 'nav.planning',              icon: 'bi-calendar-event-fill',          route: '/planning' },
   ],
   [Role.RESPONSABLE_REPARATION]: [
-    { label: 'Dashboard',             icon: 'bi-grid-1x2-fill',                route: '/reparation/dashboard' },
-    { label: 'Planning réparation',   icon: 'bi-calendar-event-fill',          route: '/planning' },
-    { label: 'Supervision',           icon: 'bi-wrench-adjustable-circle-fill',route: '/reparations' },
+    { label: 'nav.dashboard',             icon: 'bi-grid-1x2-fill',                route: '/reparation/dashboard' },
+    { label: 'nav.repairPlanning',        icon: 'bi-calendar-event-fill',          route: '/planning' },
+    { label: 'nav.supervision',           icon: 'bi-wrench-adjustable-circle-fill',route: '/reparations' },
   ],
   [Role.ACHAT_STOCK]: [
-    { label: 'Dashboard',             icon: 'bi-grid-1x2-fill',                route: '/stock/dashboard' },
-    { label: 'Catalogue pièces',      icon: 'bi-box-seam-fill',                route: '/pieces' },
-    { label: 'Pièces utilisées',      icon: 'bi-list-check',                   route: '/ligne-reparations' },
+    { label: 'nav.dashboard',             icon: 'bi-grid-1x2-fill',                route: '/stock/dashboard' },
+    { label: 'nav.partsCatalog',          icon: 'bi-box-seam-fill',                route: '/pieces' },
+    { label: 'nav.usedParts',             icon: 'bi-list-check',                   route: '/ligne-reparations' },
   ],
 };
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, TranslateModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
   navItems: NavItem[] = [];
   userLogin = '';
-  roleLabel = '';
+  roleKey = '';
 clientName =''  ;
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -66,19 +67,7 @@ clientName =''  ;
     this.userLogin = this.authService.getUserLogin() ?? 'Utilisateur';
       this.clientName = this.authService.getClientName() ?? '';
 
-    this.roleLabel = this.getRoleLabel(role);
-  }
-
-  private getRoleLabel(role: Role): string {
-    const labels: Record<Role, string> = {
-      [Role.ADMIN]:                  'Administrateur',
-      [Role.CLIENT]:                 'Client',
-      [Role.RECEPTION]:  'Resp. Réception',
-      [Role.TECHNICIEN]:             'Technicien',
-      [Role.RESPONSABLE_REPARATION]: 'Resp. Réparation',
-      [Role.ACHAT_STOCK]:'Resp. Stock',
-    };
-    return labels[role] ?? role;
+    this.roleKey = role ? 'roles.' + role : '';
   }
 
   get displayName(): string {

@@ -3,12 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DevisService } from '../../../core/services/devis.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-devis-public',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './devis-public.component.html',
   styleUrls: ['./devis-public.component.css']
 })
@@ -25,7 +26,8 @@ export class DevisPublicComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private devisService: DevisService
+    private devisService: DevisService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +36,7 @@ export class DevisPublicComponent implements OnInit {
 
       if (!token) {
         this.loading = false;
-        this.error = 'Lien de devis invalide.';
+        this.error = this.translate.instant('devisPublic.errInvalidLink');
         return;
       }
 
@@ -47,7 +49,7 @@ export class DevisPublicComponent implements OnInit {
         },
         error: () => {
           this.loading = false;
-          this.error = 'Devis introuvable.';
+          this.error = this.translate.instant('devisPublic.errNotFound');
         }
       });
     });
@@ -79,12 +81,12 @@ export class DevisPublicComponent implements OnInit {
 
   accept(): void {
     Swal.fire({
-      title: 'Accepter ce devis ?',
-      text: 'La réparation pourra reprendre dès votre confirmation.',
+      title: this.translate.instant('devisPublic.acceptTitle'),
+      text: this.translate.instant('devisPublic.acceptText'),
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Oui, accepter',
-      cancelButtonText: 'Annuler',
+      confirmButtonText: this.translate.instant('devisPublic.acceptConfirm'),
+      cancelButtonText: this.translate.instant('common.cancel'),
       confirmButtonColor: '#10b981'
     }).then(result => {
       if (!result.isConfirmed) return;
@@ -94,14 +96,14 @@ export class DevisPublicComponent implements OnInit {
 
   reject(): void {
     Swal.fire({
-      title: 'Refuser ce devis ?',
-      text: 'Vous pouvez préciser le motif ci-dessous.',
+      title: this.translate.instant('devisPublic.rejectTitle'),
+      text: this.translate.instant('devisPublic.rejectText'),
       input: 'textarea',
-      inputPlaceholder: 'Motif (optionnel)',
+      inputPlaceholder: this.translate.instant('devisPublic.motifPlaceholder'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Confirmer le refus',
-      cancelButtonText: 'Annuler',
+      confirmButtonText: this.translate.instant('devisPublic.rejectConfirm'),
+      cancelButtonText: this.translate.instant('common.cancel'),
       confirmButtonColor: '#dc2626'
     }).then(result => {
       if (!result.isConfirmed) return;
@@ -121,15 +123,15 @@ export class DevisPublicComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: action === 'accept' ? 'Devis accepté' : 'Devis refusé',
-          text: 'Votre réponse a bien été enregistrée.',
+          title: action === 'accept' ? this.translate.instant('devisPublic.acceptedTitle') : this.translate.instant('devisPublic.refusedTitle'),
+          text: this.translate.instant('devisPublic.responseSaved'),
           timer: 2500,
           showConfirmButton: false
         });
       },
       error: (err) => {
         this.responding = false;
-        Swal.fire('Erreur', err?.error?.message || "Impossible d'enregistrer votre réponse.", 'error');
+        Swal.fire(this.translate.instant('devisPublic.errorTitle'), err?.error?.message || this.translate.instant('devisPublic.errSaveResponse'), 'error');
       }
     });
   }

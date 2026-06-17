@@ -5,13 +5,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ClientFilterPipe } from "../../../pipes/client-filter.pipe";
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-client-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ClientFilterPipe],
+  imports: [CommonModule, RouterModule, FormsModule, ClientFilterPipe, TranslateModule],
   templateUrl: './client-list.component.html',
   styleUrls: ['./client-list.component.scss']
 })
@@ -51,7 +52,7 @@ sortOrder: string = '';
     'Kébili'
 
   ];
-  constructor(private clientService: ClientService) {}
+  constructor(private clientService: ClientService, private translate: TranslateService) {}
 
   ngOnInit(): void {
     this.loadClients();
@@ -117,8 +118,8 @@ filteredClients() {
 
     Swal.fire({
 
-      title: 'Modification',
-      text: 'Redirection vers la page de modification...',
+      title: this.translate.instant('clientList.editAlert.title'),
+      text: this.translate.instant('clientList.editAlert.text'),
       icon: 'info',
 
       confirmButtonColor: '#667eea',

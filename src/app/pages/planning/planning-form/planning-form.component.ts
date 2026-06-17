@@ -8,11 +8,12 @@ import { PlanningService } from '../../../core/services/planning.service';
 import { UserService } from '../../../core/services/user.service';
 import { DemandeService } from '../../../core/services/demande.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-planning-form',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule, TranslateModule],
   templateUrl: './planning-form.component.html',
   styleUrls: ['./planning-form.component.css']
 })
@@ -39,7 +40,8 @@ export class PlanningFormComponent implements OnInit {
     private demandeService: DemandeService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -88,8 +90,8 @@ export class PlanningFormComponent implements OnInit {
 
       Swal.fire({
         icon: 'warning',
-        title: 'Formulaire incomplet',
-        text: 'Veuillez remplir tous les champs correctement'
+        title: this.translate.instant('planningForm.incompleteTitle'),
+        text: this.translate.instant('planningForm.incompleteText')
       });
 
       return;
@@ -115,8 +117,10 @@ export class PlanningFormComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: this.id ? 'Modifié' : 'Ajouté',
-          text: 'Opération réussie'
+          title: this.id
+            ? this.translate.instant('planningForm.updatedTitle')
+            : this.translate.instant('planningForm.addedTitle'),
+          text: this.translate.instant('planningForm.successText')
         });
 
         this.router.navigate(['/planning']);
@@ -127,8 +131,8 @@ export class PlanningFormComponent implements OnInit {
 
         Swal.fire({
           icon: 'error',
-          title: 'Erreur',
-          text: 'Une erreur est survenue'
+          title: this.translate.instant('planningForm.errorTitle'),
+          text: this.translate.instant('planningForm.errorText')
         });
       }
     });

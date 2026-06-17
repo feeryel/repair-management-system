@@ -5,13 +5,13 @@
     <div class="dash-header-left">
       <div class="dash-avatar stock-av"><i class="bi bi-boxes"></i></div>
       <div>
-        <h2 class="dash-title">Gestion Stock & Achats</h2>
-        <p class="dash-sub">Bienvenue, <strong>{{ login }}</strong> — Catalogue, stock et tarification</p>
+        <h2 class="dash-title">{{ 'stockDashboard.title' | translate }}</h2>
+        <p class="dash-sub">{{ 'stockDashboard.welcome' | translate }}, <strong>{{ login }}</strong> — {{ 'stockDashboard.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="header-actions">
-      <a routerLink="/pieces/add" class="dash-btn btn-stock"><i class="bi bi-plus-circle-fill"></i> Nouvelle pièce</a>
-      <a routerLink="/pieces" class="dash-btn btn-slate"><i class="bi bi-boxes"></i> Catalogue</a>
+      <a routerLink="/pieces/add" class="dash-btn btn-stock"><i class="bi bi-plus-circle-fill"></i> {{ 'stockDashboard.newPart' | translate }}</a>
+      <a routerLink="/pieces" class="dash-btn btn-slate"><i class="bi bi-boxes"></i> {{ 'stockDashboard.catalog' | translate }}</a>
     </div>
   </div>
 
@@ -19,22 +19,22 @@
   <div class="kpi-row">
     <div class="kpi-card kpi-stock">
       <div class="kpi-icon"><i class="bi bi-box-seam-fill"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Total pièces</span><span class="kpi-value">{{ totalPieces }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'stockDashboard.kpi.totalParts' | translate }}</span><span class="kpi-value">{{ totalPieces }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-green">
       <div class="kpi-icon"><i class="bi bi-check-circle-fill"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Stock OK</span><span class="kpi-value">{{ stockOk }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'stockDashboard.kpi.stockOk' | translate }}</span><span class="kpi-value">{{ stockOk }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-red">
       <div class="kpi-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Stock faible</span><span class="kpi-value">{{ stockFaible }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'stockDashboard.kpi.lowStock' | translate }}</span><span class="kpi-value">{{ stockFaible }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-amber">
       <div class="kpi-icon"><i class="bi bi-currency-exchange"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Valeur stock</span><span class="kpi-value kpi-small">{{ valeurStock | number:'1.0-0' }} DT</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'stockDashboard.kpi.stockValue' | translate }}</span><span class="kpi-value kpi-small">{{ valeurStock | number:'1.0-0' }} DT</span></div>
       <div class="kpi-glow"></div>
     </div>
   </div>
@@ -42,20 +42,20 @@
   <!-- STOCK TABLE -->
   <div class="dash-card">
     <div class="dash-card-header">
-      <h5><i class="bi bi-boxes me-2"></i>Catalogue des pièces de rechange</h5>
-      <a routerLink="/pieces" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+      <h5><i class="bi bi-boxes me-2"></i>{{ 'stockDashboard.catalogTitle' | translate }}</h5>
+      <a routerLink="/pieces" class="see-all">{{ 'stockDashboard.seeAll' | translate }} <i class="bi bi-arrow-right"></i></a>
     </div>
     <div class="table-wrap">
       <table class="dtable">
         <thead>
           <tr>
-            <th>Code</th>
-            <th>Désignation</th>
-            <th>Prix Achat</th>
-            <th>Prix Vente HT</th>
-            <th>Qté stock</th>
-            <th>Statut</th>
-            <th>Actions</th>
+            <th>{{ 'stockDashboard.table.code' | translate }}</th>
+            <th>{{ 'stockDashboard.table.designation' | translate }}</th>
+            <th>{{ 'stockDashboard.table.purchasePrice' | translate }}</th>
+            <th>{{ 'stockDashboard.table.salePriceHT' | translate }}</th>
+            <th>{{ 'stockDashboard.table.qtyStock' | translate }}</th>
+            <th>{{ 'common.status' | translate }}</th>
+            <th>{{ 'common.actions' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -79,7 +79,7 @@
             </td>
           </tr>
           <tr *ngIf="pieces.length === 0">
-            <td colspan="7" class="empty-row">Aucune pièce dans le catalogue</td>
+            <td colspan="7" class="empty-row">{{ 'stockDashboard.empty.noParts' | translate }}</td>
           </tr>
         </tbody>
       </table>
@@ -89,11 +89,11 @@
   <!-- QUICK ACTIONS -->
   <div class="dash-card mt-card">
     <div class="dash-card-header">
-      <h5><i class="bi bi-lightning-fill me-2"></i>Actions rapides</h5>
+      <h5><i class="bi bi-lightning-fill me-2"></i>{{ 'stockDashboard.quickActions' | translate }}</h5>
     </div>
     <div class="quick-grid quick-grid-2">
-      <a routerLink="/pieces" class="quick-item q-stock"><i class="bi bi-boxes"></i><span>Catalogue pièces</span></a>
-      <a routerLink="/pieces/add" class="quick-item q-green"><i class="bi bi-plus-square-fill"></i><span>Ajouter pièce</span></a>
+      <a routerLink="/pieces" class="quick-item q-stock"><i class="bi bi-boxes"></i><span>{{ 'stockDashboard.quick.partsCatalog' | translate }}</span></a>
+      <a routerLink="/pieces/add" class="quick-item q-green"><i class="bi bi-plus-square-fill"></i><span>{{ 'stockDashboard.quick.addPart' | translate }}</span></a>
     </div>
   </div>
 

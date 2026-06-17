@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { PieceService } from '../../../core/services/piece.service';
 
 @Component({
   selector: 'app-stock-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './stock-dashboard.component.html'
 })
 export class StockDashboardComponent implements OnInit {
@@ -20,11 +21,12 @@ export class StockDashboardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private pieceService: PieceService
+    private pieceService: PieceService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.login = this.authService.getUserLogin() ?? 'Responsable Stock';
+    this.login = this.authService.getUserLogin() ?? this.translate.instant('stockDashboard.fallbackLogin');
     this.pieceService.getAll().subscribe({
       next: (r: any) => {
         this.pieces     = r;
@@ -42,8 +44,8 @@ export class StockDashboardComponent implements OnInit {
     return 'stock-ok';
   }
   stockLabel(qty: number): string {
-    if (qty === 0) return 'Rupture';
-    if (qty < 5)  return 'Faible';
-    return 'Disponible';
+    if (qty === 0) return this.translate.instant('stockDashboard.stock.outOfStock');
+    if (qty < 5)  return this.translate.instant('stockDashboard.stock.low');
+    return this.translate.instant('stockDashboard.stock.available');
   }
 }

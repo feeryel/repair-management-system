@@ -34,6 +34,7 @@ import { LigneFormComponent }      from './pages/ligne-reparations/ligne-form/li
 import { GarantieComponent }       from './pages/garantie/garantie.component';
 import { DevisPublicComponent }    from './pages/devis/devis-public/devis-public.component';
 import { DashboardComponent }      from './pages/dashboard/dashboard.component';
+import { ChangePasswordComponent } from './pages/auth/change-password/change-password.component';
 
 // ── Alias courts ─────────────────────────────────────────────────────────────
 const A   = Role.ADMIN;
@@ -106,6 +107,9 @@ export const routes: Routes = [
 
       // ── GARANTIE ─────────────────────────────────────────────────────────
       { path: 'garantie', component: GarantieComponent, canActivate: [roleGuard([REC, REP])] },
+
+      // ── MOT DE PASSE (tous sauf ADMIN) ───────────────────────────────────
+      { path: 'changer-mot-de-passe', component: ChangePasswordComponent, canActivate: [roleGuard([C, T, REC, REP, STK])] },
 
       // ── Legacy ───────────────────────────────────────────────────────────
       { path: 'dashboard', component: DashboardComponent }

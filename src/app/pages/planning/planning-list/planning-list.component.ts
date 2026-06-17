@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { PlanningService } from '../../../core/services/planning.service';
 import { AuthService, Role } from '../../../core/services/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 export interface CalendarDay {
   date: Date;
@@ -17,7 +18,7 @@ export interface CalendarDay {
 @Component({
   selector: 'app-planning-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './planning-list.component.html',
   styleUrls: ['./planning-list.component.css']
 })
@@ -39,12 +40,21 @@ role: Role | '' = '';
   currentMonth: number = new Date().getMonth();
   currentYear: number = new Date().getFullYear();
   calendarWeeks: CalendarDay[][] = [];
-  weekDayLabels = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  weekDayLabels = [
+    'planningList.weekday.mon',
+    'planningList.weekday.tue',
+    'planningList.weekday.wed',
+    'planningList.weekday.thu',
+    'planningList.weekday.fri',
+    'planningList.weekday.sat',
+    'planningList.weekday.sun'
+  ];
 
   constructor(
     private service: PlanningService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -84,8 +94,8 @@ role: Role | '' = '';
 
         Swal.fire({
           icon: 'error',
-          title: 'Erreur',
-          text: 'Impossible de charger les plannings',
+          title: this.translate.instant('planningList.errorTitle'),
+          text: this.translate.instant('planningList.loadError'),
           confirmButtonColor: '#6366f1'
         });
 
@@ -99,7 +109,12 @@ role: Role | '' = '';
   // STATUT (TECHNICIEN)
   // =========================
   statusLabel(s: string): string {
-    return s === 'TERMINE' ? 'Terminé' : s === 'EN_COURS' ? 'En cours' : 'Planifié';
+    const key = s === 'TERMINE'
+      ? 'planningList.statusDone'
+      : s === 'EN_COURS'
+        ? 'planningList.statusInProgress'
+        : 'planningList.statusPlanned';
+    return this.translate.instant(key);
   }
 
   statusClass(s: string): string {
@@ -112,13 +127,13 @@ role: Role | '' = '';
 
       next: () => {
         p.statut = statut;
-        Swal.fire({ icon: 'success', title: 'Statut mis à jour', timer: 1500, showConfirmButton: false });
+        Swal.fire({ icon: 'success', title: this.translate.instant('planningList.statusUpdated'), timer: 1500, showConfirmButton: false });
       },
 
       error: () => Swal.fire({
         icon: 'error',
-        title: 'Erreur',
-        text: 'Impossible de mettre à jour le statut',
+        title: this.translate.instant('planningList.errorTitle'),
+        text: this.translate.instant('planningList.statusUpdateError'),
         confirmButtonColor: '#6366f1'
       })
 
@@ -133,16 +148,16 @@ role: Role | '' = '';
 
     Swal.fire({
 
-      title: 'Supprimer ce planning ?',
-      text: 'Cette action est irréversible',
+      title: this.translate.instant('planningList.deleteTitle'),
+      text: this.translate.instant('planningList.deleteText'),
       icon: 'warning',
 
       showCancelButton: true,
       confirmButtonColor: '#ef4444',
       cancelButtonColor: '#6b7280',
 
-      confirmButtonText: 'Oui, supprimer',
-      cancelButtonText: 'Annuler'
+      confirmButtonText: this.translate.instant('planningList.deleteConfirm'),
+      cancelButtonText: this.translate.instant('common.cancel')
 
     }).then((result) => {
 
@@ -154,8 +169,8 @@ role: Role | '' = '';
 
             Swal.fire({
               icon: 'success',
-              title: 'Supprimé',
-              text: 'Planning supprimé avec succès',
+              title: this.translate.instant('planningList.deletedTitle'),
+              text: this.translate.instant('planningList.deletedText'),
               timer: 2000,
               showConfirmButton: false
             });
@@ -168,8 +183,8 @@ role: Role | '' = '';
 
             Swal.fire({
               icon: 'error',
-              title: 'Erreur',
-              text: 'Suppression impossible',
+              title: this.translate.instant('planningList.errorTitle'),
+              text: this.translate.instant('planningList.deleteError'),
               confirmButtonColor: '#6366f1'
             });
 

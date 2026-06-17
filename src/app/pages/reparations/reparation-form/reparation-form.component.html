@@ -2,8 +2,8 @@
 
   <div class="header">
     <div>
-      <h2>Nouvelle Réparation</h2>
-      <p>Créer une intervention technique</p>
+      <h2>{{ 'reparationForm.title' | translate }}</h2>
+      <p>{{ 'reparationForm.subtitle' | translate }}</p>
     </div>
     <div class="icon"><i class="bi bi-tools"></i></div>
   </div>
@@ -14,21 +14,21 @@
 
       <!-- Description -->
       <div class="input-group">
-        <label>Description</label>
+        <label>{{ 'reparationForm.description' | translate }}</label>
         <textarea
           [(ngModel)]="reparation.descriptionReparation"
           name="descriptionReparation"
           required
           #desc="ngModel">
         </textarea>
-        <small *ngIf="desc.invalid && desc.touched">Champ obligatoire</small>
+        <small *ngIf="desc.invalid && desc.touched">{{ 'reparationForm.requiredField' | translate }}</small>
       </div>
 
       <!-- Date fin + Temps -->
       <div class="grid-2">
 
         <div class="input-group">
-          <label>Date Fin</label>
+          <label>{{ 'reparationForm.endDate' | translate }}</label>
           <input type="date"
                  [(ngModel)]="reparation.dateFinRep"
                  name="dateFinRep"
@@ -36,7 +36,7 @@
         </div>
 
         <div class="input-group">
-          <label>Temps (h)</label>
+          <label>{{ 'reparationForm.timeHours' | translate }}</label>
           <input type="number"
                  [(ngModel)]="reparation.tempsMainOeuvre"
                  name="tempsMainOeuvre"
@@ -48,14 +48,14 @@
 
       <!-- ✅ Demande — sélecteur dynamique (remplace le champ texte hardcodé) -->
       <div class="input-group">
-        <label>Demande de réparation</label>
+        <label>{{ 'reparationForm.repairRequest' | translate }}</label>
 
         <ng-select
           [items]="demandes"
           bindValue="id"
           [(ngModel)]="reparation.demandeId"
           name="demandeId"
-          placeholder="Sélectionner une demande"
+          [placeholder]="'reparationForm.selectRequest' | translate"
           [searchable]="true"
           [clearable]="false"
           required>
@@ -74,7 +74,7 @@
 
       <!-- Technicien -->
       <div class="input-group">
-        <label>Technicien</label>
+        <label>{{ 'reparationForm.technician' | translate }}</label>
 
         <ng-select
           [items]="techniciens"
@@ -82,7 +82,7 @@
           bindValue="id"
           [(ngModel)]="reparation.technicienId"
           name="technicienId"
-          placeholder="Choisir un technicien"
+          [placeholder]="'reparationForm.selectTechnician' | translate"
           [searchable]="true"
           [clearable]="false"
           required>
@@ -111,23 +111,23 @@
       <div class="grid-2">
 
         <div class="input-group">
-          <label>Status</label>
+          <label>{{ 'reparationForm.status' | translate }}</label>
           <select [(ngModel)]="reparation.status" name="status">
-            <option value="IN_PROGRESS">IN PROGRESS</option>
-            <option value="DONE">DONE</option>
-            <option value="FAILED">FAILED</option>
+            <option value="IN_PROGRESS">{{ 'reparationForm.statusInProgress' | translate }}</option>
+            <option value="DONE">{{ 'reparationForm.statusDone' | translate }}</option>
+            <option value="FAILED">{{ 'reparationForm.statusFailed' | translate }}</option>
           </select>
         </div>
 
         <div class="input-group switch-box">
-          <label>Réparable</label>
+          <label>{{ 'reparationForm.repairable' | translate }}</label>
           <div class="switch-wrapper">
             <input type="checkbox"
                    [(ngModel)]="reparation.estReparable"
                    name="estReparable"
                    id="repSwitch">
             <label for="repSwitch" class="switch"></label>
-            <span class="switch-text">{{ reparation.estReparable ? 'Oui' : 'Non' }}</span>
+            <span class="switch-text">{{ (reparation.estReparable ? 'common.yes' : 'common.no') | translate }}</span>
           </div>
         </div>
 
@@ -137,11 +137,11 @@
       <div class="actions">
 
         <button type="button" class="btn-cancel" (click)="cancel()">
-          Annuler
+          {{ 'common.cancel' | translate }}
         </button>
 
         <button type="submit" class="btn-save" [disabled]="f.invalid || loading">
-          {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
+          {{ (loading ? 'reparationForm.saving' : 'common.save') | translate }}
         </button>
 
       </div>

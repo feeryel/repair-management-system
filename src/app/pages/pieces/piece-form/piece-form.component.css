@@ -149,13 +149,13 @@ input.ng-invalid.ng-touched {
   margin-bottom: 25px;
   padding: 20px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
-  border: 1px solid #d1fae5;
+  background: var(--success-soft-bg);
+  border: 1px solid var(--success-soft-border);
 }
 
 .preview-title {
   font-weight: 700;
-  color: #16a34a;
+  color: var(--success);
   margin-bottom: 14px;
   font-size: 14px;
 }
@@ -187,12 +187,12 @@ input.ng-invalid.ng-touched {
 
 .preview-row.total span {
   font-weight: 700;
-  color: #16a34a;
+  color: var(--success);
 }
 
 .preview-row.total strong {
   font-size: 18px;
-  color: #16a34a;
+  color: var(--success);
 }
 
 .marge-negative {

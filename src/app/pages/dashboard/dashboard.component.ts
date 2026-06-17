@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { ClientService } from '../../core/services/client.service';
 import { ReparationService } from '../../core/services/reparation.service';
@@ -9,7 +10,7 @@ import { PieceService } from '../../core/services/piece.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -31,7 +32,8 @@ notifications: any[] = [];
     private clientService: ClientService,
     private reparationService: ReparationService,
     private factureService: FactureService,
-    private pieceService: PieceService
+    private pieceService: PieceService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -65,8 +67,8 @@ toggleNotifications() {
 this.notifications = res.slice(0, 5).map((r: any) => {
   return {
     title: r.status === 'DONE'
-      ? 'Réparation terminée'
-      : 'Réparation en cours',
+      ? this.translate.instant('dashboard.notif.repairDone')
+      : this.translate.instant('dashboard.notif.repairInProgress'),
 
     message: r.descriptionReparation,
 

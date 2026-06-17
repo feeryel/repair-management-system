@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { FactureService } from '../../../core/services/facture.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector:'app-facture-add',
   standalone:true,
-  imports:[FormsModule,CommonModule],
+  imports:[FormsModule,CommonModule,TranslateModule],
   templateUrl:'./facture-add.component.html'
 })
 export class FactureAddComponent {

@@ -8,11 +8,12 @@ import { ReparationService } from '../../../core/services/reparation.service';
 import { UserService }       from '../../../core/services/user.service';
 import { DemandeService }    from '../../../core/services/demande.service';
 import { NgSelectModule }    from '@ng-select/ng-select';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reparation-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule],
+  imports: [CommonModule, FormsModule, NgSelectModule, TranslateModule],
   templateUrl: './reparation-form.component.html',
   styleUrls: ['./reparation-form.component.css']
 })
@@ -37,7 +38,8 @@ export class ReparationFormComponent implements OnInit {
     private service:        ReparationService,
     private userService:    UserService,
     private demandeService: DemandeService, // ✅ injecté pour charger les demandes
-    private router:         Router
+    private router:         Router,
+    private translate:      TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +53,11 @@ export class ReparationFormComponent implements OnInit {
       next:  (res) => { this.techniciens = res ?? []; },
       error: ()    => {
         this.techniciens = [];
-        Swal.fire('Erreur', 'Impossible de charger les techniciens', 'error');
+        Swal.fire(
+          this.translate.instant('reparationForm.errorTitle'),
+          this.translate.instant('reparationForm.loadTechniciansError'),
+          'error'
+        );
       }
     });
   }
@@ -68,7 +74,11 @@ export class ReparationFormComponent implements OnInit {
   save(form: any) {
 
     if (form.invalid) {
-      Swal.fire('Erreur', 'Formulaire invalide', 'warning');
+      Swal.fire(
+        this.translate.instant('reparationForm.errorTitle'),
+        this.translate.instant('reparationForm.invalidForm'),
+        'warning'
+      );
       return;
     }
 
@@ -77,7 +87,11 @@ export class ReparationFormComponent implements OnInit {
       !this.reparation.demandeId      ||
       !this.reparation.technicienId
     ) {
-      Swal.fire('Erreur', 'Veuillez sélectionner une demande et un technicien', 'error');
+      Swal.fire(
+        this.translate.instant('reparationForm.errorTitle'),
+        this.translate.instant('reparationForm.selectDemandeTechnician'),
+        'error'
+      );
       return;
     }
 
@@ -87,13 +101,13 @@ export class ReparationFormComponent implements OnInit {
 
       next: () => {
         this.loading = false;
-        Swal.fire({ icon: 'success', title: 'Succès', text: 'Réparation ajoutée' });
+        Swal.fire({ icon: 'success', title: this.translate.instant('reparationForm.successTitle'), text: this.translate.instant('reparationForm.reparationAdded') });
         this.router.navigate(['/reparations']);
       },
 
       error: () => {
         this.loading = false;
-        Swal.fire({ icon: 'error', title: 'Erreur', text: 'Échec de l\'ajout' });
+        Swal.fire({ icon: 'error', title: this.translate.instant('reparationForm.errorTitle'), text: this.translate.instant('reparationForm.addFailed') });
       }
     });
   }

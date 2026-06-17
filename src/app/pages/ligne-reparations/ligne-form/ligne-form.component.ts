@@ -14,10 +14,12 @@ from '../../../core/services/piece.service';
 import { ReparationService }
 from '../../../core/services/reparation.service';
 
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-ligne-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './ligne-form.component.html',
   styleUrls: ['./ligne-form.component.css']
 })

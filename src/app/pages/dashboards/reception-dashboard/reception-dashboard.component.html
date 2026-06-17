@@ -5,13 +5,13 @@
     <div class="dash-header-left">
       <div class="dash-avatar recep-av"><i class="bi bi-reception-4"></i></div>
       <div>
-        <h2 class="dash-title">Tableau de bord Réception</h2>
-        <p class="dash-sub">Bienvenue, <strong>{{ login }}</strong> — Gestion clients, appareils & fiches réparation</p>
+        <h2 class="dash-title">{{ 'receptionDashboard.title' | translate }}</h2>
+        <p class="dash-sub">{{ 'receptionDashboard.welcome' | translate }}, <strong>{{ login }}</strong> — {{ 'receptionDashboard.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="header-actions">
-      <a routerLink="/clients/add" class="dash-btn btn-teal"><i class="bi bi-person-plus-fill"></i> Nouveau client</a>
-      <a routerLink="/demandes/add" class="dash-btn btn-indigo"><i class="bi bi-clipboard-plus"></i> Nouvelle fiche</a>
+      <a routerLink="/clients/add" class="dash-btn btn-teal"><i class="bi bi-person-plus-fill"></i> {{ 'receptionDashboard.newClient' | translate }}</a>
+      <a routerLink="/demandes/add" class="dash-btn btn-indigo"><i class="bi bi-clipboard-plus"></i> {{ 'receptionDashboard.newSheet' | translate }}</a>
     </div>
   </div>
 
@@ -19,22 +19,22 @@
   <div class="kpi-row">
     <div class="kpi-card kpi-teal">
       <div class="kpi-icon"><i class="bi bi-people-fill"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Clients</span><span class="kpi-value">{{ totalClients }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'receptionDashboard.kpi.clients' | translate }}</span><span class="kpi-value">{{ totalClients }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-blue">
       <div class="kpi-icon"><i class="bi bi-laptop-fill"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Appareils</span><span class="kpi-value">{{ totalAppareils }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'receptionDashboard.kpi.devices' | translate }}</span><span class="kpi-value">{{ totalAppareils }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-indigo">
       <div class="kpi-icon"><i class="bi bi-clipboard-check-fill"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Demandes</span><span class="kpi-value">{{ totalDemandes }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'receptionDashboard.kpi.requests' | translate }}</span><span class="kpi-value">{{ totalDemandes }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-amber">
       <div class="kpi-icon"><i class="bi bi-receipt-cutoff"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Factures</span><span class="kpi-value">{{ totalFactures }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'receptionDashboard.kpi.invoices' | translate }}</span><span class="kpi-value">{{ totalFactures }}</span></div>
       <div class="kpi-glow"></div>
     </div>
   </div>
@@ -45,28 +45,28 @@
     <!-- QUICK ACTIONS -->
     <div class="dash-card">
       <div class="dash-card-header">
-        <h5><i class="bi bi-lightning-fill me-2"></i>Actions rapides</h5>
+        <h5><i class="bi bi-lightning-fill me-2"></i>{{ 'receptionDashboard.quickActions' | translate }}</h5>
       </div>
       <div class="quick-grid quick-grid-3col">
         <a routerLink="/clients" class="quick-item q-teal">
           <i class="bi bi-people-fill"></i>
-          <span>Gérer les clients</span>
+          <span>{{ 'receptionDashboard.quick.manageClients' | translate }}</span>
         </a>
         <a routerLink="/appareils" class="quick-item q-blue">
           <i class="bi bi-laptop-fill"></i>
-          <span>Gérer les appareils</span>
+          <span>{{ 'receptionDashboard.quick.manageDevices' | translate }}</span>
         </a>
         <a routerLink="/demandes" class="quick-item q-indigo">
           <i class="bi bi-clipboard-check-fill"></i>
-          <span>Fiche de réparation</span>
+          <span>{{ 'receptionDashboard.quick.repairSheet' | translate }}</span>
         </a>
         <a routerLink="/demandes/add" class="quick-item q-violet">
           <i class="bi bi-tag-fill"></i>
-          <span>Générer étiquette</span>
+          <span>{{ 'receptionDashboard.quick.generateLabel' | translate }}</span>
         </a>
         <a routerLink="/factures" class="quick-item q-amber">
           <i class="bi bi-receipt-cutoff"></i>
-          <span>Gérer les factures</span>
+          <span>{{ 'receptionDashboard.quick.manageInvoices' | translate }}</span>
         </a>
       </div>
     </div>
@@ -74,20 +74,20 @@
     <!-- RECENT DEMANDES -->
     <div class="dash-card">
       <div class="dash-card-header">
-        <h5><i class="bi bi-clipboard-check-fill me-2"></i>Dernières demandes</h5>
-        <a routerLink="/demandes" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+        <h5><i class="bi bi-clipboard-check-fill me-2"></i>{{ 'receptionDashboard.latestRequests' | translate }}</h5>
+        <a routerLink="/demandes" class="see-all">{{ 'receptionDashboard.seeAll' | translate }} <i class="bi bi-arrow-right"></i></a>
       </div>
       <div class="dem-list">
         <div class="dem-item" *ngFor="let d of recentDemandes">
           <div class="dem-icon"><i class="bi bi-clipboard"></i></div>
           <div class="dem-info">
-            <p class="dem-title">{{ d.symptomesPanne || 'Demande #' + d.id }}</p>
+            <p class="dem-title">{{ d.symptomesPanne || ('receptionDashboard.requestNo' | translate) + d.id }}</p>
             <p class="dem-date">{{ d['dateDépôtAppareil'] | date:'dd/MM/yyyy' }}</p>
           </div>
           <span class="status-chip" [ngClass]="etatClass(d['état'])">{{ d['état'] }}</span>
         </div>
         <div *ngIf="recentDemandes.length === 0" class="empty-msg">
-          <i class="bi bi-inbox"></i> Aucune demande
+          <i class="bi bi-inbox"></i> {{ 'receptionDashboard.empty.noRequests' | translate }}
         </div>
       </div>
     </div>

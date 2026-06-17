@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AppareilService } from '../../../core/services/appareil.service';
 
@@ -11,7 +12,8 @@ import { AppareilService } from '../../../core/services/appareil.service';
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ],
   templateUrl: './appareil-list.component.html',
   styleUrls: ['./appareil-list.component.scss']
@@ -40,7 +42,7 @@ types: string[] = [
   'Console',
   'Autre'
 ];
-  constructor(private appareilService: AppareilService) {}
+  constructor(private appareilService: AppareilService, private translate: TranslateService) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -147,7 +149,7 @@ previousPage(){
 }
   delete(id: number) {
 
-    if(confirm('Supprimer cet appareil ?')){
+    if(confirm(this.translate.instant('appareilList.confirmDelete'))){
 
       this.appareilService.delete(id).subscribe({
 

@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-admin-users',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './admin-users.component.html'
 })
 export class AdminUsersComponent implements OnInit {
@@ -21,11 +22,11 @@ export class AdminUsersComponent implements OnInit {
   newUser = { login: '', motDePasse: '', role: 'technicien' };
 
   roles = [
-    { value: 'admin',                  label: 'Administrateur' },
-    { value: 'technicien',             label: 'Technicien' },
-    { value: 'reception',              label: 'Réception' },
-    { value: 'responsable_reparation', label: 'Responsable Réparation' },
-    { value: 'achat_stock',            label: 'Achat & Stock' },
+    { value: 'admin',                  labelKey: 'roles.ADMIN' },
+    { value: 'technicien',             labelKey: 'roles.TECHNICIEN' },
+    { value: 'reception',              labelKey: 'roles.RECEPTION' },
+    { value: 'responsable_reparation', labelKey: 'roles.RESPONSABLE_REPARATION' },
+    { value: 'achat_stock',            labelKey: 'roles.ACHAT_STOCK' },
   ];
 
   // ── Filters ──────────────────────────────────────────────────────
@@ -40,7 +41,7 @@ export class AdminUsersComponent implements OnInit {
   currentPage = 1;
   pageSizes   = [5, 10, 25, 50];
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private translate: TranslateService) {}
 
   ngOnInit(): void { this.load(); }
 
@@ -127,43 +128,43 @@ export class AdminUsersComponent implements OnInit {
   add(): void {
     this.errorMsg = '';
     if (!this.newUser.login.trim() || !this.newUser.motDePasse.trim()) {
-      this.errorMsg = 'Login et mot de passe obligatoires.'; return;
+      this.errorMsg = this.translate.instant('adminUsers.errLoginPwdRequired'); return;
     }
     this.userService.add(this.newUser).subscribe({
       next: (response: any) => {
         const emailPart = response.emailSent
-          ? "Un email a été envoyé à l'utilisateur."
-          : "Le compte est créé, mais l'email n'a pas pu être envoyé.";
-        this.successMsg = `Compte ${this.newUser.login} créé. ${emailPart}`;
+          ? this.translate.instant('adminUsers.emailSent')
+          : this.translate.instant('adminUsers.emailNotSent');
+        this.successMsg = this.translate.instant('adminUsers.accountCreated', { value: this.newUser.login }) + ' ' + emailPart;
         this.showForm   = false;
         this.newUser    = { login: '', motDePasse: '', role: 'technicien' };
         this.load();
         setTimeout(() => this.successMsg = '', 3000);
       },
-      error: (e) => this.errorMsg = e.error?.message ?? 'Erreur lors de la création.'
+      error: (e) => this.errorMsg = e.error?.message ?? this.translate.instant('adminUsers.errCreate')
     });
   }
 
   desactiver(u: any): void {
-    if (!confirm(`Désactiver le compte de ${u.login} ?`)) return;
+    if (!confirm(this.translate.instant('adminUsers.confirmDeactivate', { value: u.login }))) return;
     this.userService.desactiver(u.id).subscribe({
-      next: () => { this.flash(`Compte ${u.login} désactivé.`); this.load(); },
-      error: (e) => this.flash(e.error?.message ?? 'Erreur', true)
+      next: () => { this.flash(this.translate.instant('adminUsers.accountDeactivated', { value: u.login })); this.load(); },
+      error: (e) => this.flash(e.error?.message ?? this.translate.instant('adminUsers.error'), true)
     });
   }
 
   reactiver(u: any): void {
     this.userService.reactiver(u.id).subscribe({
-      next: () => { this.flash(`Compte ${u.login} réactivé.`); this.load(); },
-      error: (e) => this.flash(e.error?.message ?? 'Erreur', true)
+      next: () => { this.flash(this.translate.instant('adminUsers.accountReactivated', { value: u.login })); this.load(); },
+      error: (e) => this.flash(e.error?.message ?? this.translate.instant('adminUsers.error'), true)
     });
   }
 
   bannir(u: any): void {
-    if (!confirm(`Bannir définitivement le compte de ${u.login} ?`)) return;
+    if (!confirm(this.translate.instant('adminUsers.confirmBan', { value: u.login }))) return;
     this.userService.bannir(u.id).subscribe({
-      next: () => { this.flash(`Compte ${u.login} banni.`); this.load(); },
-      error: (e) => this.flash(e.error?.message ?? 'Erreur', true)
+      next: () => { this.flash(this.translate.instant('adminUsers.accountBanned', { value: u.login })); this.load(); },
+      error: (e) => this.flash(e.error?.message ?? this.translate.instant('adminUsers.error'), true)
     });
   }
 
@@ -176,9 +177,9 @@ export class AdminUsersComponent implements OnInit {
   }
 
   statusLabel(u: any): string {
-    if (u.bannit) return 'Banni';
-    if (!u.actif) return 'Inactif';
-    return 'Actif';
+    if (u.bannit) return this.translate.instant('adminUsers.statusBanned');
+    if (!u.actif) return this.translate.instant('adminUsers.statusInactive');
+    return this.translate.instant('adminUsers.statusActive');
   }
 
   roleBadge(r: string): string {
@@ -190,7 +191,8 @@ export class AdminUsersComponent implements OnInit {
   }
 
   roleLabel(r: string): string {
-    return this.roles.find(x => x.value === r)?.label ?? r;
+    const key = this.roles.find(x => x.value === r)?.labelKey;
+    return key ? this.translate.instant(key) : r;
   }
 
   private flash(msg: string, isError = false): void {

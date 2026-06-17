@@ -5,6 +5,7 @@ import { AuthService, Role } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 
 const TARIF_HORAIRE_MAIN_OEUVRE = 30; // TND / heure
@@ -12,7 +13,7 @@ const TARIF_HORAIRE_MAIN_OEUVRE = 30; // TND / heure
 @Component({
   selector: 'app-reparation-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './reparation-list.component.html',
   styleUrls: ['./reparation-list.component.css']
 })
@@ -33,7 +34,8 @@ isTechnicien = false;
   constructor(
     private service: ReparationService,
     private devisService: DevisService,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
   ) {}
 
 ngOnInit(): void {
@@ -117,12 +119,12 @@ ngOnInit(): void {
 
   changeStatus(id: number, newStatus: string) {
     Swal.fire({
-      title: 'Confirmer',
-      text: 'Marquer cette réparation comme terminée ? Un email sera envoyé au client.',
+      title: this.translate.instant('reparationList.confirm'),
+      text: this.translate.instant('reparationList.confirmDoneText'),
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Oui, terminer',
-      cancelButtonText: 'Annuler',
+      confirmButtonText: this.translate.instant('reparationList.yesFinish'),
+      cancelButtonText: this.translate.instant('common.cancel'),
       confirmButtonColor: '#7c3aed'
     }).then(result => {
       if (!result.isConfirmed) return;
@@ -131,19 +133,23 @@ ngOnInit(): void {
         next: () => {
           const rep = this.reparations.find((r: any) => r.id === id);
           if (rep) rep.status = newStatus;
-          Swal.fire({ icon: 'success', title: 'Terminée !', text: 'Le client sera notifié par email.', timer: 2500, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: this.translate.instant('reparationList.finishedTitle'), text: this.translate.instant('reparationList.clientNotifiedEmail'), timer: 2500, showConfirmButton: false });
         },
-        error: () => Swal.fire('Erreur', 'Impossible de mettre à jour le statut.', 'error')
+        error: () => Swal.fire(
+          this.translate.instant('reparationList.errorTitle'),
+          this.translate.instant('reparationList.updateStatusError'),
+          'error'
+        )
       });
     });
   }
 
   statusLabel(status: string): string {
-    const labels: Record<string, string> = {
-      EN_ATTENTE_DEVIS: 'Devis en attente',
-      REFUSEE_CLIENT: 'Devis refusé'
+    const keys: Record<string, string> = {
+      EN_ATTENTE_DEVIS: 'reparationList.statusQuotePending',
+      REFUSEE_CLIENT: 'reparationList.statusQuoteRefused'
     };
-    return labels[status] ?? status;
+    return keys[status] ? this.translate.instant(keys[status]) : status;
   }
 
   canSendDevis(r: any): boolean {
@@ -168,21 +174,21 @@ ngOnInit(): void {
     const { montantPieces, montantMainOeuvre, montantHT, montantTVA, timbreFiscale, montantTotal } = this.calculateMontant(r);
 
     Swal.fire({
-      title: 'Envoyer le devis ?',
+      title: this.translate.instant('reparationList.sendQuoteTitle'),
       html: `
         <div style="text-align:left">
-          <p>Pièces&nbsp;: <strong>${montantPieces.toFixed(2)} TND</strong></p>
-          <p>Main d'œuvre (${r.tempsMainOeuvre || 0} h)&nbsp;: <strong>${montantMainOeuvre.toFixed(2)} TND</strong></p>
-          <p>Montant HT&nbsp;: <strong>${montantHT.toFixed(2)} TND</strong></p>
-          <p>TVA (19%)&nbsp;: <strong>${montantTVA.toFixed(2)} TND</strong></p>
-          <p>Timbre fiscal&nbsp;: <strong>${timbreFiscale.toFixed(2)} TND</strong></p>
-          <p>Total&nbsp;: <strong>${montantTotal.toFixed(2)} TND</strong></p>
-          <p>Le client recevra un email/WhatsApp avec un lien pour accepter ou refuser ce devis.</p>
+          <p>${this.translate.instant('reparationList.quoteParts')}&nbsp;: <strong>${montantPieces.toFixed(2)} TND</strong></p>
+          <p>${this.translate.instant('reparationList.quoteLabor', { value: r.tempsMainOeuvre || 0 })}&nbsp;: <strong>${montantMainOeuvre.toFixed(2)} TND</strong></p>
+          <p>${this.translate.instant('reparationList.quoteHT')}&nbsp;: <strong>${montantHT.toFixed(2)} TND</strong></p>
+          <p>${this.translate.instant('reparationList.quoteTVA')}&nbsp;: <strong>${montantTVA.toFixed(2)} TND</strong></p>
+          <p>${this.translate.instant('reparationList.quoteStamp')}&nbsp;: <strong>${timbreFiscale.toFixed(2)} TND</strong></p>
+          <p>${this.translate.instant('reparationList.quoteTotal')}&nbsp;: <strong>${montantTotal.toFixed(2)} TND</strong></p>
+          <p>${this.translate.instant('reparationList.quoteClientNotice')}</p>
         </div>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Envoyer',
-      cancelButtonText: 'Annuler',
+      confirmButtonText: this.translate.instant('reparationList.send'),
+      cancelButtonText: this.translate.instant('common.cancel'),
       confirmButtonColor: '#7c3aed'
     }).then(result => {
       if (!result.isConfirmed) return;
@@ -191,9 +197,13 @@ ngOnInit(): void {
         next: (devis: any) => {
           r.Devis = devis;
           r.status = 'EN_ATTENTE_DEVIS';
-          Swal.fire({ icon: 'success', title: 'Devis envoyé', text: 'Le client a été notifié par email/WhatsApp.', timer: 2500, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: this.translate.instant('reparationList.quoteSentTitle'), text: this.translate.instant('reparationList.clientNotifiedEmailWhatsapp'), timer: 2500, showConfirmButton: false });
         },
-        error: (err) => Swal.fire('Erreur', err?.error?.message || "Impossible d'envoyer le devis.", 'error')
+        error: (err) => Swal.fire(
+          this.translate.instant('reparationList.errorTitle'),
+          err?.error?.message || this.translate.instant('reparationList.sendQuoteError'),
+          'error'
+        )
       });
     });
   }

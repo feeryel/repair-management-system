@@ -6,8 +6,8 @@
     <div class="form-header">
 
       <div>
-        <h2>{{ id ? 'Modifier Planning' : 'Nouveau Planning' }}</h2>
-        <p>Assigner une intervention à un technicien</p>
+        <h2>{{ (id ? 'planningForm.editTitle' : 'planningForm.newTitle') | translate }}</h2>
+        <p>{{ 'planningForm.subtitle' | translate }}</p>
       </div>
 
       <div class="header-icon"><i class="bi bi-calendar-event"></i></div>
@@ -21,11 +21,11 @@
 
         <!-- DESCRIPTION -->
         <div class="input-group-custom">
-          <label>Description de l'intervention</label>
+          <label>{{ 'planningForm.description' | translate }}</label>
 
           <div class="input-box">
             <input type="text"
-                   placeholder="Ex: Diagnostic et remplacement écran"
+                   [placeholder]="'planningForm.descriptionPlaceholder' | translate"
                    [(ngModel)]="planning.description"
                    name="description"
                    required
@@ -33,7 +33,7 @@
           </div>
 
           <div class="error" *ngIf="description.invalid && description.touched">
-            <small>Champ obligatoire</small>
+            <small>{{ 'planningForm.requiredField' | translate }}</small>
           </div>
         </div>
 
@@ -42,7 +42,7 @@
 
           <!-- TECHNICIEN -->
           <div class="input-group-custom">
-            <label>Technicien assigné</label>
+            <label>{{ 'planningForm.technician' | translate }}</label>
 
             <div class="input-box">
               <select [(ngModel)]="planning.technicienId"
@@ -50,7 +50,7 @@
                       required
                       #technicienId="ngModel">
 
-                <option [ngValue]="null" disabled>— Choisir un technicien —</option>
+                <option [ngValue]="null" disabled>{{ 'planningForm.chooseTechnician' | translate }}</option>
 
                 <option *ngFor="let t of techniciens" [ngValue]="t.id">
                   {{ t.login }}
@@ -60,13 +60,13 @@
             </div>
 
             <div class="error" *ngIf="technicienId.invalid && technicienId.touched">
-              <small>Veuillez choisir un technicien</small>
+              <small>{{ 'planningForm.technicianError' | translate }}</small>
             </div>
           </div>
 
           <!-- DEMANDE -->
           <div class="input-group-custom">
-            <label>Demande de réparation</label>
+            <label>{{ 'planningForm.repairRequest' | translate }}</label>
 
             <div class="input-box">
               <select [(ngModel)]="planning.DemandeReparationId"
@@ -75,17 +75,17 @@
                       (change)="onDemandeChange()"
                       #demandeId="ngModel">
 
-                <option [ngValue]="null" disabled>— Choisir une demande —</option>
+                <option [ngValue]="null" disabled>{{ 'planningForm.chooseRequest' | translate }}</option>
 
                 <option *ngFor="let d of demandes" [ngValue]="d.id">
-                  Demande #{{ d.id }} — {{ d.symptomesPanne | slice:0:40 }}
+                  {{ 'planningForm.requestLabel' | translate }} #{{ d.id }} — {{ d.symptomesPanne | slice:0:40 }}
                 </option>
 
               </select>
             </div>
 
             <div class="error" *ngIf="demandeId.invalid && demandeId.touched">
-              <small>Veuillez choisir une demande</small>
+              <small>{{ 'planningForm.requestError' | translate }}</small>
             </div>
           </div>
 
@@ -96,7 +96,7 @@
 
           <!-- DATE DEBUT -->
           <div class="input-group-custom">
-            <label>Date début <small>(date de dépôt de la demande)</small></label>
+            <label>{{ 'planningForm.startDate' | translate }} <small>{{ 'planningForm.startDateHint' | translate }}</small></label>
 
             <div class="input-box">
               <input type="date"
@@ -108,13 +108,13 @@
             </div>
 
             <div class="error" *ngIf="dateDebut.invalid && dateDebut.touched">
-              <small>Veuillez d'abord choisir une demande</small>
+              <small>{{ 'planningForm.chooseRequestFirst' | translate }}</small>
             </div>
           </div>
 
           <!-- DATE FIN -->
           <div class="input-group-custom">
-            <label>Date fin <small>(date prévue de la demande)</small></label>
+            <label>{{ 'planningForm.endDate' | translate }} <small>{{ 'planningForm.endDateHint' | translate }}</small></label>
 
             <div class="input-box">
               <input type="date"
@@ -126,7 +126,7 @@
             </div>
 
             <div class="error" *ngIf="dateFin.invalid && dateFin.touched">
-              <small>Veuillez d'abord choisir une demande</small>
+              <small>{{ 'planningForm.chooseRequestFirst' | translate }}</small>
             </div>
           </div>
 
@@ -134,13 +134,13 @@
 
         <!-- STATUT -->
         <div class="input-group-custom" *ngIf="id">
-          <label>Statut</label>
+          <label>{{ 'common.status' | translate }}</label>
 
           <div class="input-box">
             <select [(ngModel)]="planning.statut" name="statut">
-              <option value="PLANIFIE">Planifié</option>
-              <option value="EN_COURS">En cours</option>
-              <option value="TERMINE">Terminé</option>
+              <option value="PLANIFIE">{{ 'planningForm.statusPlanned' | translate }}</option>
+              <option value="EN_COURS">{{ 'planningForm.statusInProgress' | translate }}</option>
+              <option value="TERMINE">{{ 'planningForm.statusDone' | translate }}</option>
             </select>
           </div>
         </div>
@@ -151,14 +151,14 @@
           <button type="button"
                   class="btn-cancel"
                   routerLink="/planning">
-            Annuler
+            {{ 'common.cancel' | translate }}
           </button>
 
           <button type="submit"
                   class="btn-save"
                   [disabled]="f.invalid || loading">
 
-            {{ id ? 'Modifier' : 'Enregistrer' }}
+            {{ (id ? 'planningForm.editButton' : 'common.save') | translate }}
 
           </button>
 

@@ -5,17 +5,23 @@
     <div class="dash-header-left">
       <div class="dash-avatar admin-av"><i class="bi bi-shield-lock-fill"></i></div>
       <div>
-        <h2 class="dash-title">Tableau de bord Administrateur</h2>
-        <p class="dash-sub">Bienvenue, <strong>{{ login }}</strong> — Supervision complète du système</p>
+        <h2 class="dash-title">{{ 'adminDashboard.title' | translate }}</h2>
+        <p class="dash-sub">{{ 'adminDashboard.welcome' | translate }}, <strong>{{ login }}</strong> — {{ 'adminDashboard.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="dash-header-actions">
+      <span class="last-updated" *ngIf="lastUpdated">
+        <i class="bi bi-clock-history"></i> {{ 'adminDashboard.updatedAt' | translate }} {{ lastUpdated | date:'HH:mm:ss' }}
+      </span>
+      <button class="dash-btn dash-btn-outline" (click)="refresh()" [disabled]="loading || refreshing">
+        <i class="bi bi-arrow-clockwise" [class.spin]="refreshing"></i> {{ 'adminDashboard.refresh' | translate }}
+      </button>
       <button class="dash-btn dash-btn-outline" (click)="exportPDF()" [disabled]="exporting || loading">
-        <span *ngIf="!exporting"><i class="bi bi-file-earmark-pdf-fill"></i> Exporter PDF</span>
-        <span *ngIf="exporting"><i class="bi bi-hourglass-split"></i> Génération…</span>
+        <span *ngIf="!exporting"><i class="bi bi-file-earmark-pdf-fill"></i> {{ 'adminDashboard.exportPdf' | translate }}</span>
+        <span *ngIf="exporting"><i class="bi bi-hourglass-split"></i> {{ 'adminDashboard.generating' | translate }}</span>
       </button>
       <a routerLink="/admin/users" class="dash-btn">
-        <i class="bi bi-person-plus-fill"></i> Gérer les comptes
+        <i class="bi bi-person-plus-fill"></i> {{ 'adminDashboard.manageAccounts' | translate }}
       </a>
     </div>
   </div>
@@ -23,7 +29,7 @@
   <!-- LOADING -->
   <div *ngIf="loading" class="loading-wrap">
     <div class="spinner"></div>
-    <p>Chargement des statistiques…</p>
+    <p>{{ 'adminDashboard.loadingStats' | translate }}</p>
   </div>
 
   <ng-container *ngIf="!loading">
@@ -33,16 +39,16 @@
       <div class="kpi-card kpi-purple">
         <div class="kpi-icon"><i class="bi bi-people-fill"></i></div>
         <div class="kpi-body">
-          <span class="kpi-label">Utilisateurs</span>
+          <span class="kpi-label">{{ 'adminDashboard.kpi.users' | translate }}</span>
           <span class="kpi-value">{{ totalUsers }}</span>
-          <span class="kpi-sub">{{ activeUsers }} actifs</span>
+          <span class="kpi-sub">{{ activeUsers }} {{ 'adminDashboard.kpi.active' | translate }}</span>
         </div>
         <div class="kpi-glow"></div>
       </div>
       <div class="kpi-card kpi-blue">
         <div class="kpi-icon"><i class="bi bi-person-circle"></i></div>
         <div class="kpi-body">
-          <span class="kpi-label">Clients</span>
+          <span class="kpi-label">{{ 'adminDashboard.kpi.clients' | translate }}</span>
           <span class="kpi-value">{{ totalClients }}</span>
         </div>
         <div class="kpi-glow"></div>
@@ -50,18 +56,27 @@
       <div class="kpi-card kpi-green">
         <div class="kpi-icon"><i class="bi bi-tools"></i></div>
         <div class="kpi-body">
-          <span class="kpi-label">Réparations</span>
+          <span class="kpi-label">{{ 'adminDashboard.kpi.repairs' | translate }}</span>
           <span class="kpi-value">{{ totalReparations }}</span>
-          <span class="kpi-sub">{{ completionRate }}% terminées</span>
+          <span class="kpi-sub">{{ completionRate }}% {{ 'adminDashboard.kpi.completed' | translate }}</span>
         </div>
         <div class="kpi-glow"></div>
       </div>
       <div class="kpi-card kpi-orange">
         <div class="kpi-icon"><i class="bi bi-receipt"></i></div>
         <div class="kpi-body">
-          <span class="kpi-label">Factures</span>
+          <span class="kpi-label">{{ 'adminDashboard.kpi.invoices' | translate }}</span>
           <span class="kpi-value">{{ totalFactures }}</span>
           <span class="kpi-sub">{{ formatRevenue(totalRevenue) }}</span>
+        </div>
+        <div class="kpi-glow"></div>
+      </div>
+      <div class="kpi-card kpi-teal">
+        <div class="kpi-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-label">{{ 'adminDashboard.kpi.quotes' | translate }}</span>
+          <span class="kpi-value">{{ devisTotal }}</span>
+          <span class="kpi-sub">{{ tauxAcceptation }}% {{ 'adminDashboard.kpi.accepted' | translate }}</span>
         </div>
         <div class="kpi-glow"></div>
       </div>
@@ -72,29 +87,29 @@
 
       <div class="dash-card chart-card">
         <div class="dash-card-header">
-          <h5><i class="bi bi-pie-chart-fill me-2"></i>Réparations par statut</h5>
+          <h5><i class="bi bi-pie-chart-fill me-2"></i>{{ 'adminDashboard.repairsByStatus' | translate }}</h5>
         </div>
         <div class="chart-legend" id="statusLegend"></div>
-        <div class="chart-wrap" style="height:220px">
+        <div class="chart-wrap" style="height:240px">
           <canvas id="statusChart" role="img"
-            aria-label="Donut des réparations par statut">
-            Répartition des réparations par statut.
+            [attr.aria-label]="'adminDashboard.a11y.statusDonut' | translate">
+            {{ 'adminDashboard.a11y.statusDonutDesc' | translate }}
           </canvas>
         </div>
         <div *ngIf="totalReparations === 0" class="empty-chart">
-          <i class="bi bi-inbox"></i><p>Aucune réparation</p>
+          <i class="bi bi-inbox"></i><p>{{ 'adminDashboard.empty.noRepairs' | translate }}</p>
         </div>
       </div>
 
       <div class="dash-card chart-card">
         <div class="dash-card-header">
-          <h5><i class="bi bi-bar-chart-line-fill me-2"></i>Activité mensuelle</h5>
+          <h5><i class="bi bi-bar-chart-line-fill me-2"></i>{{ 'adminDashboard.monthlyActivity' | translate }}</h5>
           <span class="badge-year">{{ currentYear }}</span>
         </div>
-        <div class="chart-wrap" style="height:220px">
+        <div class="chart-wrap" style="height:240px">
           <canvas id="monthlyChart" role="img"
-            aria-label="Barres du nombre de réparations par mois">
-            Nombre de réparations par mois.
+            [attr.aria-label]="'adminDashboard.a11y.monthlyBars' | translate">
+            {{ 'adminDashboard.a11y.monthlyBarsDesc' | translate }}
           </canvas>
         </div>
       </div>
@@ -106,19 +121,19 @@
 
       <div class="dash-card chart-card">
         <div class="dash-card-header">
-          <h5><i class="bi bi-bar-chart-fill me-2"></i>Équipe par rôle</h5>
+          <h5><i class="bi bi-bar-chart-fill me-2"></i>{{ 'adminDashboard.teamByRole' | translate }}</h5>
         </div>
         <div class="chart-wrap" [style.height.px]="roleChartHeight">
           <canvas id="rolesChart" role="img"
-            aria-label="Barres horizontales du nombre de membres par rôle">
-            Répartition des rôles dans l'équipe.
+            [attr.aria-label]="'adminDashboard.a11y.rolesBars' | translate">
+            {{ 'adminDashboard.a11y.rolesBarsDesc' | translate }}
           </canvas>
         </div>
       </div>
 
       <div class="dash-card chart-card">
         <div class="dash-card-header">
-          <h5><i class="bi bi-speedometer2 me-2"></i>Taux de complétion</h5>
+          <h5><i class="bi bi-speedometer2 me-2"></i>{{ 'adminDashboard.completionRate' | translate }}</h5>
         </div>
         <div class="gauge-container">
           <div class="gauge-ring">
@@ -132,28 +147,38 @@
             </svg>
             <div class="gauge-center">
               <span class="gauge-pct">{{ completionRate }}%</span>
-              <span class="gauge-lbl">done</span>
+              <span class="gauge-lbl">{{ 'adminDashboard.gauge.completed' | translate }}</span>
             </div>
           </div>
           <div class="gauge-stats">
             <div class="gstat">
               <span class="gstat-dot" style="background:#059669"></span>
-              <span>Done</span>
+              <span>{{ 'adminDashboard.status.done' | translate }}</span>
               <strong>{{ reparationsTerminees }}</strong>
             </div>
             <div class="gstat">
               <span class="gstat-dot" style="background:#2563eb"></span>
-              <span>En cours</span>
+              <span>{{ 'adminDashboard.status.inProgress' | translate }}</span>
               <strong>{{ reparationsEnCours }}</strong>
             </div>
             <div class="gstat">
               <span class="gstat-dot" style="background:#d97706"></span>
-              <span>En attente</span>
+              <span>{{ 'adminDashboard.status.pending' | translate }}</span>
               <strong>{{ reparationsEnAttente }}</strong>
             </div>
             <div class="gstat">
+              <span class="gstat-dot" style="background:#7c3aed"></span>
+              <span>{{ 'adminDashboard.gauge.quoteSent' | translate }}</span>
+              <strong>{{ reparationsEnAttenteDevis }}</strong>
+            </div>
+            <div class="gstat">
+              <span class="gstat-dot" style="background:#ec4899"></span>
+              <span>{{ 'adminDashboard.gauge.refused' | translate }}</span>
+              <strong>{{ reparationsRefuseeClient }}</strong>
+            </div>
+            <div class="gstat">
               <span class="gstat-dot" style="background:#dc2626"></span>
-              <span>Échoué</span>
+              <span>{{ 'adminDashboard.status.failed' | translate }}</span>
               <strong>{{ reparationsFailed }}</strong>
             </div>
           </div>
@@ -162,19 +187,112 @@
 
       <div class="dash-card chart-card">
         <div class="dash-card-header">
-          <h5><i class="bi bi-trophy-fill me-2"></i>Top techniciens</h5>
+          <h5><i class="bi bi-trophy-fill me-2"></i>{{ 'adminDashboard.topTechnicians' | translate }}</h5>
         </div>
         <div class="chart-wrap" style="height:220px">
           <canvas id="techChart" role="img"
-            aria-label="Barres verticales des réparations par technicien">
-            Réparations réalisées par technicien.
+            [attr.aria-label]="'adminDashboard.a11y.techBars' | translate">
+            {{ 'adminDashboard.a11y.techBarsDesc' | translate }}
           </canvas>
         </div>
         <div *ngIf="techData.length === 0" class="empty-chart">
-          <i class="bi bi-person-x"></i><p>Aucune donnée technicien</p>
+          <i class="bi bi-person-x"></i><p>{{ 'adminDashboard.empty.noTechData' | translate }}</p>
         </div>
       </div>
 
+    </div>
+
+    <!-- CHARTS ROW 3 : Revenue trend + Devis breakdown -->
+    <div class="charts-grid charts-grid-rev">
+
+      <div class="dash-card chart-card">
+        <div class="dash-card-header">
+          <h5><i class="bi bi-graph-up-arrow me-2"></i>{{ 'adminDashboard.monthlyRevenue' | translate }}</h5>
+          <span class="badge-year">{{ currentYear }}</span>
+        </div>
+        <div class="chart-wrap" style="height:240px">
+          <canvas id="revenueChart" role="img"
+            [attr.aria-label]="'adminDashboard.a11y.revenueLine' | translate">
+            {{ 'adminDashboard.a11y.revenueLineDesc' | translate }}
+          </canvas>
+        </div>
+        <div *ngIf="totalFactures === 0" class="empty-chart">
+          <i class="bi bi-cash-coin"></i><p>{{ 'adminDashboard.empty.noInvoices' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="dash-card chart-card devis-card">
+        <div class="dash-card-header">
+          <h5><i class="bi bi-file-earmark-text-fill me-2"></i>{{ 'adminDashboard.devis.title' | translate }}</h5>
+        </div>
+
+        <ng-container *ngIf="devisTotal > 0; else noDevis">
+          <div class="devis-body">
+            <div class="devis-stat-row">
+              <span class="devis-dot" style="background:#7c3aed"></span>
+              <span class="devis-stat-label">{{ 'adminDashboard.devis.pending' | translate }}</span>
+              <strong>{{ devisEnAttente }}</strong>
+            </div>
+            <div class="devis-stat-row">
+              <span class="devis-dot" style="background:#059669"></span>
+              <span class="devis-stat-label">{{ 'adminDashboard.devis.accepted' | translate }}</span>
+              <strong>{{ devisAccepte }}</strong>
+            </div>
+            <div class="devis-stat-row">
+              <span class="devis-dot" style="background:#dc2626"></span>
+              <span class="devis-stat-label">{{ 'adminDashboard.devis.refused' | translate }}</span>
+              <strong>{{ devisRefuse }}</strong>
+            </div>
+
+            <div class="devis-taux">
+              <div class="devis-taux-label">
+                <span>{{ 'adminDashboard.devis.acceptanceRate' | translate }}</span>
+                <strong>{{ tauxAcceptation }}%</strong>
+              </div>
+              <div class="devis-taux-bar">
+                <div class="devis-taux-fill" [style.width.%]="tauxAcceptation"></div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #noDevis>
+          <div class="empty-chart">
+            <i class="bi bi-file-earmark-text"></i><p>{{ 'adminDashboard.empty.noQuotes' | translate }}</p>
+          </div>
+        </ng-template>
+      </div>
+
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="dash-card activity-card">
+      <div class="dash-card-header">
+        <h5><i class="bi bi-activity me-2"></i>{{ 'adminDashboard.recentActivity' | translate }}</h5>
+        <a routerLink="/admin/audit-logs" class="link-more">{{ 'adminDashboard.seeAll' | translate }} <i class="bi bi-arrow-right"></i></a>
+      </div>
+
+      <div class="activity-list" *ngIf="recentActivity.length; else noActivity">
+        <div class="activity-item" *ngFor="let log of recentActivity">
+          <div class="activity-icon" [ngClass]="actionClass(log.action)">
+            <i class="bi" [ngClass]="actionIcon(log.action)"></i>
+          </div>
+          <div class="activity-body">
+            <span class="activity-text">
+              <strong>{{ log.userLogin || ('adminDashboard.system' | translate) }}</strong>
+              {{ actionVerb(log.action) }}
+              {{ entityLabel(log.entity) }} <strong>#{{ log.entityId }}</strong>
+            </span>
+            <span class="activity-time"><i class="bi bi-clock"></i> {{ timeAgo(log.createdAt) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noActivity>
+        <div class="empty-chart">
+          <i class="bi bi-inbox"></i><p>{{ 'adminDashboard.empty.noActivity' | translate }}</p>
+        </div>
+      </ng-template>
     </div>
 
   </ng-container>
@@ -182,36 +300,53 @@
 </div>
 
 <style>
-.dash-page { padding:2rem; background:var(--bg-page); min-height:100vh; margin-left:250px; }
+.dash-page { padding:2rem; background:var(--bg-page); min-height:100vh; margin-left:var(--sidebar-width); }
 
 /* Header */
-.dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; }
+.dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
 .dash-header-left { display:flex; align-items:center; gap:1rem; }
 .dash-avatar { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; }
 .admin-av { background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; }
 .dash-title { font-size:1.5rem; font-weight:700; margin:0; color:var(--text-primary); }
 .dash-sub { margin:0; color:var(--text-muted); font-size:.9rem; }
-.dash-header-actions { display:flex; align-items:center; gap:.75rem; }
+.dash-header-actions { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; }
 .dash-btn { background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; border:none; border-radius:10px; padding:.6rem 1.2rem; text-decoration:none; font-weight:600; font-size:.875rem; display:flex; align-items:center; gap:.4rem; transition:opacity .2s; cursor:pointer; }
 .dash-btn:hover:not(:disabled) { opacity:.85; color:#fff; }
 .dash-btn:disabled { opacity:.5; cursor:not-allowed; }
 .dash-btn-outline { background:transparent; border:2px solid #7c3aed; color:#7c3aed; }
 .dash-btn-outline:hover:not(:disabled) { background:#7c3aed; color:#fff; opacity:1; }
+.last-updated { font-size:.8rem; color:var(--text-muted); display:flex; align-items:center; gap:.4rem; white-space:nowrap; }
 
 /* Loading */
 .loading-wrap { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem; gap:1rem; color:var(--text-muted); }
 .spinner { width:40px; height:40px; border:4px solid #e9ecef; border-top-color:#7c3aed; border-radius:50%; animation:spin .8s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
+.spin { display:inline-block; animation: spin 1s linear infinite; }
+
+/* Entrance animation */
+@keyframes fadeInUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+.kpi-card, .dash-card { animation: fadeInUp .5s ease both; }
+.kpi-card:nth-child(2), .dash-card:nth-child(2) { animation-delay:.06s; }
+.kpi-card:nth-child(3), .dash-card:nth-child(3) { animation-delay:.12s; }
+.kpi-card:nth-child(4) { animation-delay:.18s; }
+.kpi-card:nth-child(5) { animation-delay:.24s; }
+.activity-card { animation-delay:.2s; }
+
+/* Hover lift */
+.kpi-card, .dash-card { transition: transform .25s ease, box-shadow .25s ease; }
+.kpi-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,.16); }
+.dash-card:hover { transform:translateY(-3px); box-shadow:0 12px 30px var(--shadow-color); }
 
 /* KPI */
-.kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:2rem; }
+.kpi-row { display:grid; grid-template-columns:repeat(5,1fr); gap:1.25rem; margin-bottom:2rem; }
 .kpi-card { border-radius:16px; padding:1.5rem; display:flex; align-items:center; gap:1rem; position:relative; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.08); }
 .kpi-purple { background:linear-gradient(135deg,#7c3aed,#a855f7); }
 .kpi-blue   { background:linear-gradient(135deg,#2563eb,#60a5fa); }
 .kpi-green  { background:linear-gradient(135deg,#059669,#34d399); }
 .kpi-orange { background:linear-gradient(135deg,#d97706,#fbbf24); }
+.kpi-teal   { background:linear-gradient(135deg,#0891b2,#22d3ee); }
 .kpi-icon { font-size:2rem; color:rgba(255,255,255,.85); flex-shrink:0; }
-.kpi-body { display:flex; flex-direction:column; }
+.kpi-body { display:flex; flex-direction:column; min-width:0; }
 .kpi-label { font-size:.78rem; color:rgba(255,255,255,.75); font-weight:500; text-transform:uppercase; letter-spacing:.5px; }
 .kpi-value { font-size:2rem; font-weight:800; color:#fff; line-height:1.1; }
 .kpi-sub   { font-size:.75rem; color:rgba(255,255,255,.8); margin-top:.1rem; }
@@ -220,6 +355,7 @@
 /* Charts grids */
 .charts-grid { display:grid; grid-template-columns:1fr 2fr; gap:1.25rem; margin-bottom:1.25rem; }
 .charts-grid-3 { grid-template-columns:repeat(3,1fr); }
+.charts-grid-rev { grid-template-columns:2fr 1fr; }
 .chart-card { display:flex; flex-direction:column; }
 .chart-wrap { position:relative; width:100%; }
 .chart-legend { display:flex; flex-wrap:wrap; gap:10px; padding:.75rem 1.5rem 0; font-size:.75rem; color:var(--text-muted); }
@@ -237,7 +373,7 @@
 .gauge-center { position:absolute; display:flex; flex-direction:column; align-items:center; line-height:1.2; }
 .gauge-pct { font-size:1.5rem; font-weight:800; color:var(--text-primary); }
 .gauge-lbl { font-size:.7rem; color:var(--text-muted); font-weight:500; }
-.gauge-stats { width:100%; display:flex; flex-direction:column; gap:.5rem; }
+.gauge-stats { width:100%; display:grid; grid-template-columns:1fr 1fr; gap:.5rem .75rem; }
 .gstat { display:flex; align-items:center; gap:.5rem; font-size:.82rem; color:var(--text-secondary); }
 .gstat-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
 .gstat strong { margin-left:auto; font-weight:700; color:var(--text-primary); }
@@ -248,10 +384,43 @@
 .dash-card-header h5 { margin:0; font-weight:700; color:var(--text-primary); }
 
 /* canvas padding */
-#statusChart,#monthlyChart,#rolesChart,#techChart { padding:.75rem 1.5rem 1.25rem; }
+#statusChart,#monthlyChart,#rolesChart,#techChart,#revenueChart { padding:.75rem 1.5rem 1.25rem; }
 
-@media(max-width:1100px){ .charts-grid{grid-template-columns:1fr;} .charts-grid-3{grid-template-columns:1fr 1fr;} }
+/* Devis card */
+.devis-body { padding:1rem 1.5rem 1.5rem; }
+.devis-stat-row { display:flex; align-items:center; gap:.6rem; padding:.55rem 0; border-bottom:1px solid var(--border-color); font-size:.9rem; color:var(--text-secondary); }
+.devis-stat-row:last-of-type { border-bottom:none; }
+.devis-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.devis-stat-label { flex:1; }
+.devis-stat-row strong { font-weight:700; color:var(--text-primary); }
+.devis-taux { margin-top:1rem; }
+.devis-taux-label { display:flex; justify-content:space-between; align-items:center; font-size:.85rem; color:var(--text-secondary); margin-bottom:.4rem; }
+.devis-taux-label strong { color:var(--text-primary); font-weight:700; }
+.devis-taux-bar { width:100%; height:8px; border-radius:999px; background:var(--border-color); overflow:hidden; }
+.devis-taux-fill { height:100%; border-radius:999px; background:linear-gradient(135deg,#059669,#34d399); transition:width 1s ease; }
+
+/* Recent activity */
+.activity-list { padding:.5rem 1rem; }
+.activity-item { display:flex; align-items:flex-start; gap:1rem; padding:.85rem .5rem; border-bottom:1px solid var(--border-color); }
+.activity-item:last-child { border-bottom:none; }
+.activity-icon { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+.activity-body { display:flex; flex-direction:column; gap:.25rem; min-width:0; }
+.activity-text { font-size:.9rem; color:var(--text-secondary); line-height:1.4; }
+.activity-text strong { color:var(--text-primary); }
+.activity-time { font-size:.75rem; color:var(--text-muted); display:flex; align-items:center; gap:.3rem; }
+.link-more { font-size:.85rem; color:#7c3aed; text-decoration:none; font-weight:600; display:flex; align-items:center; gap:.3rem; }
+.link-more:hover { text-decoration:underline; }
+
+.act-create  { background:var(--success-bg); color:var(--success); }
+.act-update  { background:var(--info-bg);    color:var(--info); }
+.act-delete  { background:var(--danger-bg);  color:var(--danger); }
+.act-status  { background:var(--warning-bg); color:var(--warning); }
+.act-default { background:var(--border-color); color:var(--text-muted); }
+
+@media(max-width:1300px){ .kpi-row{grid-template-columns:repeat(3,1fr);} }
+@media(max-width:1100px){ .charts-grid{grid-template-columns:1fr;} .charts-grid-3{grid-template-columns:1fr 1fr;} .charts-grid-rev{grid-template-columns:1fr;} }
 @media(max-width:900px) { .kpi-row{grid-template-columns:repeat(2,1fr);} }
 @media(max-width:700px) { .charts-grid-3{grid-template-columns:1fr;} }
 @media(max-width:600px) { .kpi-row{grid-template-columns:1fr;} .dash-header{flex-direction:column;gap:1rem;align-items:flex-start;} }
+@media(max-width:480px) { .gauge-stats{grid-template-columns:1fr;} }
 </style>

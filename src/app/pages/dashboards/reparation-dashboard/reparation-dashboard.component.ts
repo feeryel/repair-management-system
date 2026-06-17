@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { ReparationService } from '../../../core/services/reparation.service';
 import { PlanningService } from '../../../core/services/planning.service';
@@ -8,7 +9,7 @@ import { PlanningService } from '../../../core/services/planning.service';
 @Component({
   selector: 'app-reparation-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './reparation-dashboard.component.html'
 })
 export class ReparationDashboardComponent implements OnInit {
@@ -23,11 +24,12 @@ export class ReparationDashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private reparationService: ReparationService,
-    private planningService: PlanningService
+    private planningService: PlanningService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.login = this.authService.getUserLogin() ?? 'Responsable Réparation';
+    this.login = this.authService.getUserLogin() ?? this.translate.instant('reparationDashboard.fallbackLogin');
     this.reparationService.getAll().subscribe({
       next: (r: any) => {
         this.totalRep  = r.length;
@@ -52,12 +54,12 @@ export class ReparationDashboardComponent implements OnInit {
   }
   statusLabel(s: string): string {
     const m: Record<string, string> = {
-      DONE: 'Terminée',
-      IN_PROGRESS: 'En cours',
-      EN_ATTENTE_DEVIS: 'Devis en attente',
-      REFUSEE_CLIENT: 'Devis refusé'
+      DONE: this.translate.instant('reparationDashboard.status.done'),
+      IN_PROGRESS: this.translate.instant('reparationDashboard.status.inProgress'),
+      EN_ATTENTE_DEVIS: this.translate.instant('reparationDashboard.status.quotePending'),
+      REFUSEE_CLIENT: this.translate.instant('reparationDashboard.status.quoteRefused')
     };
-    return m[s] ?? 'En attente';
+    return m[s] ?? this.translate.instant('reparationDashboard.status.pending');
   }
   donePercent(): number {
     return this.totalRep ? Math.round((this.terminees / this.totalRep) * 100) : 0;

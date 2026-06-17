@@ -5,12 +5,12 @@
     <div class="dash-header-left">
       <div class="dash-avatar tech-av"><i class="bi bi-wrench-adjustable-circle-fill"></i></div>
       <div>
-        <h2 class="dash-title">Espace Technicien</h2>
-        <p class="dash-sub">Bienvenue, <strong>{{ login }}</strong> — Gérez vos réparations et plannings</p>
+        <h2 class="dash-title">{{ 'technicienDashboard.title' | translate }}</h2>
+        <p class="dash-sub">{{ 'technicienDashboard.welcome' | translate }}, <strong>{{ login }}</strong> — {{ 'technicienDashboard.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="header-actions">
-      <a routerLink="/planning" class="dash-btn btn-slate"><i class="bi bi-calendar-event-fill"></i> Mon planning</a>
+      <a routerLink="/planning" class="dash-btn btn-slate"><i class="bi bi-calendar-event-fill"></i> {{ 'technicienDashboard.myPlanning' | translate }}</a>
     </div>
   </div>
 
@@ -18,17 +18,17 @@
   <div class="kpi-row">
     <div class="kpi-card kpi-emerald">
       <div class="kpi-icon"><i class="bi bi-tools"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Total réparations</span><span class="kpi-value">{{ totalRep }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'technicienDashboard.kpi.totalRepairs' | translate }}</span><span class="kpi-value">{{ totalRep }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-amber">
       <div class="kpi-icon"><i class="bi bi-hourglass-split"></i></div>
-      <div class="kpi-body"><span class="kpi-label">En cours</span><span class="kpi-value">{{ enCours }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'technicienDashboard.kpi.inProgress' | translate }}</span><span class="kpi-value">{{ enCours }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <div class="kpi-card kpi-blue">
       <div class="kpi-icon"><i class="bi bi-check2-circle"></i></div>
-      <div class="kpi-body"><span class="kpi-label">Terminées</span><span class="kpi-value">{{ terminees }}</span></div>
+      <div class="kpi-body"><span class="kpi-label">{{ 'technicienDashboard.kpi.completed' | translate }}</span><span class="kpi-value">{{ terminees }}</span></div>
       <div class="kpi-glow"></div>
     </div>
     <!-- <div class="kpi-card kpi-rose">
@@ -44,27 +44,27 @@
     <!-- MES RÉPARATIONS -->
     <div class="dash-card">
       <div class="dash-card-header">
-        <h5><i class="bi bi-tools me-2"></i>Mes réparations assignées</h5>
-        <a routerLink="/reparations" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+        <h5><i class="bi bi-tools me-2"></i>{{ 'technicienDashboard.assignedRepairs' | translate }}</h5>
+        <a routerLink="/reparations" class="see-all">{{ 'technicienDashboard.seeAll' | translate }} <i class="bi bi-arrow-right"></i></a>
       </div>
       <div class="rep-list">
         <div class="rep-item" *ngFor="let r of mesReparations">
           <div class="rep-icon"><i class="bi bi-wrench-adjustable"></i></div>
           <div class="rep-info">
-            <p class="rep-desc">{{ r.descriptionReparation || 'Réparation #' + r.id }}</p>
-            <p class="rep-meta">Durée: {{ r.tempsMainOeuvre || '—' }}h</p>
+            <p class="rep-desc">{{ r.descriptionReparation || ('technicienDashboard.repairNo' | translate) + r.id }}</p>
+            <p class="rep-meta">{{ 'technicienDashboard.duration' | translate }} {{ r.tempsMainOeuvre || '—' }}h</p>
           </div>
           <span class="status-chip" [ngClass]="statusClass(r.status)">{{ statusLabel(r.status) }}</span>
         </div>
-        <div *ngIf="mesReparations.length === 0" class="empty-msg"><i class="bi bi-inbox"></i> Aucune réparation</div>
+        <div *ngIf="mesReparations.length === 0" class="empty-msg"><i class="bi bi-inbox"></i> {{ 'technicienDashboard.empty.noRepairs' | translate }}</div>
       </div>
     </div>
 
     <!-- PLANNING -->
     <div class="dash-card">
       <div class="dash-card-header">
-        <h5><i class="bi bi-calendar-event-fill me-2"></i>Planning du jour</h5>
-        <a routerLink="/planning" class="see-all">Voir tout <i class="bi bi-arrow-right"></i></a>
+        <h5><i class="bi bi-calendar-event-fill me-2"></i>{{ 'technicienDashboard.todayPlanning' | translate }}</h5>
+        <a routerLink="/planning" class="see-all">{{ 'technicienDashboard.seeAll' | translate }} <i class="bi bi-arrow-right"></i></a>
       </div>
       <div class="plan-list">
         <div class="plan-item" *ngFor="let p of plannings">
@@ -73,12 +73,12 @@
             <span class="plan-mon">{{ p.dateDebut | date:'MMM' }}</span>
           </div>
           <div class="plan-info">
-            <p class="plan-title">{{ p.description || 'Planning #' + p.id }}</p>
+            <p class="plan-title">{{ p.description || ('technicienDashboard.planningNo' | translate) + p.id }}</p>
             <p class="plan-sub">{{ p.dateDebut | date:'dd/MM/yyyy' }} → {{ p.dateFin | date:'dd/MM/yyyy' }}</p>
           </div>
           <span class="status-chip" [ngClass]="planningStatusClass(p.statut)">{{ planningStatusLabel(p.statut) }}</span>
         </div>
-        <div *ngIf="plannings.length === 0" class="empty-msg"><i class="bi bi-calendar-x"></i> Aucun planning</div>
+        <div *ngIf="plannings.length === 0" class="empty-msg"><i class="bi bi-calendar-x"></i> {{ 'technicienDashboard.empty.noPlanning' | translate }}</div>
       </div>
     </div>
 
@@ -87,12 +87,12 @@
   <!-- QUICK LINKS -->
   <div class="dash-card mt-quick">
     <div class="dash-card-header">
-      <h5><i class="bi bi-lightning-fill me-2"></i>Accès rapide</h5>
+      <h5><i class="bi bi-lightning-fill me-2"></i>{{ 'technicienDashboard.quickAccess' | translate }}</h5>
     </div>
     <div class="quick-grid quick-grid-3">
-      <a routerLink="/reparations" class="quick-item q-emerald"><i class="bi bi-wrench-adjustable-circle-fill"></i><span>Réparations</span></a>
-      <a routerLink="/ligne-reparations" class="quick-item q-rose"><i class="bi bi-list-check"></i><span>Pièces & Main d'œuvre</span></a>
-      <a routerLink="/planning" class="quick-item q-amber"><i class="bi bi-calendar-event-fill"></i><span>Planning</span></a>
+      <a routerLink="/reparations" class="quick-item q-emerald"><i class="bi bi-wrench-adjustable-circle-fill"></i><span>{{ 'technicienDashboard.quick.repairs' | translate }}</span></a>
+      <a routerLink="/ligne-reparations" class="quick-item q-rose"><i class="bi bi-list-check"></i><span>{{ 'technicienDashboard.quick.partsLabor' | translate }}</span></a>
+      <a routerLink="/planning" class="quick-item q-amber"><i class="bi bi-calendar-event-fill"></i><span>{{ 'technicienDashboard.quick.planning' | translate }}</span></a>
     </div>
   </div>
 

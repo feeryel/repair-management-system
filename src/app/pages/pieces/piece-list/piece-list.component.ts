@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PieceService } from '../../../core/services/piece.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-piece-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './piece-list.component.html',
   styleUrls: ['./piece-list.component.css']
 })
@@ -29,7 +30,7 @@ export class PieceListComponent implements OnInit {
   piecesOK = 0;
   ruptureStock = 0;
 
-  constructor(private service: PieceService) {}
+  constructor(private service: PieceService, private translate: TranslateService) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -132,7 +133,7 @@ export class PieceListComponent implements OnInit {
   // DELETE
   delete(id: number): void {
 
-    if (!confirm('Supprimer cette pièce ?')) return;
+    if (!confirm(this.translate.instant('pieceList.deleteConfirm'))) return;
 
     this.service.delete(id).subscribe({
       next: () => this.loadData(),

@@ -2,7 +2,7 @@
   padding:30px;
   margin-left:260px;
   min-height:100vh;
-  background:linear-gradient(135deg,#eef2ff,#f8fafc);
+  background:var(--page-gradient);
   font-family:system-ui;
 }
 
@@ -96,6 +96,8 @@
   border-radius:16px;
   border:1.5px solid var(--border-color);
   outline:none;
+  background:var(--surface-card);
+  color:var(--text-primary);
 }
 
 /* CARD */

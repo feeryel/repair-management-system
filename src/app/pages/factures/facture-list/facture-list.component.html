@@ -4,17 +4,17 @@
   <div class="header">
 
     <div>
-      <h2>Factures Dashboard</h2>
-      <p>Gestion avancée des factures de réparation</p>
+      <h2>{{ 'factureList.dashboard' | translate }}</h2>
+      <p>{{ 'factureList.subtitle' | translate }}</p>
     </div>
 
     <div class="actions">
 
-<a *ngIf="!isClient"
+<!-- <a *ngIf="!isClient"
    [routerLink]="['/factures/add']"
    class="btn-add">
   + Nouvelle facture
-</a>
+</a> -->
 
 
 
@@ -27,12 +27,12 @@
 
     <div class="stat-card">
       <h3>{{ validFactures.length }}</h3>
-      <p>Total Factures</p>
+      <p>{{ 'factureList.totalFactures' | translate }}</p>
     </div>
 
     <div class="stat-card green">
       <h3>{{ getTotal() }} TND</h3>
-      <p>Montant global</p>
+      <p>{{ 'factureList.montantGlobal' | translate }}</p>
     </div>
 
   </div>
@@ -40,7 +40,7 @@
   <!-- SEARCH -->
   <div class="search-box">
     <input type="text"
-           placeholder="Rechercher une facture..."
+           [placeholder]="'factureList.searchPlaceholder' | translate"
            [(ngModel)]="searchText">
   </div>
 
@@ -51,14 +51,14 @@
 
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Date</th>
-          <th>HT</th>
-          <th>TVA</th>
-          <th>Timbre</th>
-          <th>Total</th>
-          <th>Réparation ID</th>
-          <th>Actions</th>
+          <th>{{ 'factureList.id' | translate }}</th>
+          <th>{{ 'common.date' | translate }}</th>
+          <th>{{ 'factureList.ht' | translate }}</th>
+          <th>{{ 'factureList.tva' | translate }}</th>
+          <th>{{ 'factureList.timbre' | translate }}</th>
+          <th>{{ 'factureList.total' | translate }}</th>
+          <th>{{ 'factureList.reparationId' | translate }}</th>
+          <th>{{ 'common.actions' | translate }}</th>
         </tr>
       </thead>
 
@@ -96,7 +96,7 @@
 
     <!-- EMPTY -->
     <div class="empty" *ngIf="validFactures.length === 0">
-      <i class="bi bi-inbox"></i> Aucune facture trouvée
+      <i class="bi bi-inbox"></i> {{ 'factureList.empty' | translate }}
     </div>
 
   </div>

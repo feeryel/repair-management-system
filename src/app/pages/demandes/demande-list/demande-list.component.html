@@ -4,12 +4,12 @@
   <div class="header">
 
     <div>
-      <h2>Demandes Réparation</h2>
-      <p>Gestion intelligente des interventions</p>
+      <h2>{{ 'demandeList.title' | translate }}</h2>
+      <p>{{ 'demandeList.subtitle' | translate }}</p>
     </div>
 
     <a routerLink="/demandes/add" class="btn-primary">
-      + Nouvelle demande
+      + {{ 'demandeList.newDemande' | translate }}
     </a>
 
   </div>
@@ -19,17 +19,17 @@
 
     <div class="kpi blue">
       <h3>{{ count('En attente') }}</h3>
-      <p>En attente</p>
+      <p>{{ 'demandeList.statusPending' | translate }}</p>
     </div>
 
     <div class="kpi orange">
       <h3>{{ count('En cours') }}</h3>
-      <p>En cours</p>
+      <p>{{ 'demandeList.statusInProgress' | translate }}</p>
     </div>
 
     <div class="kpi green">
       <h3>{{ count('Terminée') }}</h3>
-      <p>Terminées</p>
+      <p>{{ 'demandeList.statusDonePlural' | translate }}</p>
     </div>
 
   </div>
@@ -39,17 +39,17 @@
 
     <input
       type="text"
-      placeholder="Rechercher..."
+      [placeholder]="'common.search' | translate"
       [(ngModel)]="searchText"
       (ngModelChange)="onSearchChange()"
       class="search">
 
     <div class="filters">
 
-      <button (click)="setFilter('all')" [class.active]="filter==='all'">Toutes</button>
-      <button (click)="setFilter('En attente')" [class.active]="filter==='En attente'">En attente</button>
-      <button (click)="setFilter('En cours')" [class.active]="filter==='En cours'">En cours</button>
-      <button (click)="setFilter('Terminée')" [class.active]="filter==='Terminée'">Terminées</button>
+      <button (click)="setFilter('all')" [class.active]="filter==='all'">{{ 'demandeList.filterAll' | translate }}</button>
+      <button (click)="setFilter('En attente')" [class.active]="filter==='En attente'">{{ 'demandeList.statusPending' | translate }}</button>
+      <button (click)="setFilter('En cours')" [class.active]="filter==='En cours'">{{ 'demandeList.statusInProgress' | translate }}</button>
+      <button (click)="setFilter('Terminée')" [class.active]="filter==='Terminée'">{{ 'demandeList.statusDonePlural' | translate }}</button>
 
     </div>
 
@@ -57,7 +57,7 @@
 
   <!-- LOADING -->
   <div *ngIf="loading" class="loading">
-    Chargement...
+    {{ 'common.loading' | translate }}
   </div>
 
   <!-- GRID -->
@@ -150,7 +150,7 @@
 
   <!-- EMPTY -->
   <div *ngIf="!loading && paginatedDemandes.length === 0" class="empty">
-    Aucun résultat trouvé
+    {{ 'demandeList.noResults' | translate }}
   </div>
 
 </div>

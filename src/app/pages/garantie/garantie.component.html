@@ -9,7 +9,7 @@
     <!-- LOADING -->
     <div class="state-block" *ngIf="loading">
       <div class="spinner-border" role="status"></div>
-      <p>Chargement du certificat...</p>
+      <p>{{ 'garantie.loading' | translate }}</p>
     </div>
 
     <!-- ERREUR -->
@@ -20,113 +20,113 @@
 
     <ng-container *ngIf="!loading && !error && facture">
 
-      <h1>Certificat de Garantie</h1>
+      <h1>{{ 'garantie.title' | translate }}</h1>
 
       <p class="intro">
-        <strong>Cette réparation est couverte par une garantie de 30 jours.</strong>
+        <strong>{{ 'garantie.intro' | translate }}</strong>
       </p>
 
       <!-- STATUT GARANTIE -->
       <div class="status-banner" [class.status-active]="isValidGarantie()" [class.status-expired]="!isValidGarantie()">
         <i class="bi" [class.bi-check-circle-fill]="isValidGarantie()" [class.bi-x-circle-fill]="!isValidGarantie()"></i>
-        <span>{{ isValidGarantie() ? 'Garantie ACTIVE' : 'Garantie EXPIRÉE' }}</span>
+        <span>{{ isValidGarantie() ? ('garantie.statusActiveBanner' | translate) : ('garantie.statusExpiredBanner' | translate) }}</span>
       </div>
 
       <!-- CLIENT -->
       <div class="card" *ngIf="client">
-        <h3><i class="bi bi-person-fill"></i> Informations Client</h3>
+        <h3><i class="bi bi-person-fill"></i> {{ 'garantie.clientInfo' | translate }}</h3>
 
         <div class="row">
-          <span class="label">Nom</span>
+          <span class="label">{{ 'common.name' | translate }}</span>
           <span class="value">{{ client.nom }}</span>
         </div>
 
         <div class="row" *ngIf="client.numTel">
-          <span class="label">Téléphone</span>
+          <span class="label">{{ 'garantie.phone' | translate }}</span>
           <span class="value">{{ client.numTel }}</span>
         </div>
 
         <div class="row" *ngIf="client.email">
-          <span class="label">Email</span>
+          <span class="label">{{ 'garantie.email' | translate }}</span>
           <span class="value">{{ client.email }}</span>
         </div>
       </div>
 
       <!-- APPAREIL -->
       <div class="card" *ngIf="appareil">
-        <h3><i class="bi bi-phone-fill"></i> Appareil Réparé</h3>
+        <h3><i class="bi bi-phone-fill"></i> {{ 'garantie.appareilRepare' | translate }}</h3>
 
         <div class="row">
-          <span class="label">Marque & Modèle</span>
+          <span class="label">{{ 'garantie.marqueModele' | translate }}</span>
           <span class="value">{{ appareil.marque }} {{ appareil.modele }}</span>
         </div>
 
         <div class="row" *ngIf="appareil.numSerie">
-          <span class="label">Numéro de Série</span>
+          <span class="label">{{ 'garantie.numSerie' | translate }}</span>
           <span class="value">{{ appareil.numSerie }}</span>
         </div>
 
         <div class="row">
-          <span class="label">Date Réparation</span>
+          <span class="label">{{ 'garantie.dateReparation' | translate }}</span>
           <span class="value">{{ facture.date | date:'shortDate' }}</span>
         </div>
       </div>
 
       <!-- GARANTIE -->
       <div class="card">
-        <h3><i class="bi bi-shield-check"></i> Détails de Garantie</h3>
+        <h3><i class="bi bi-shield-check"></i> {{ 'garantie.detailsGarantie' | translate }}</h3>
 
         <div class="row">
-          <span class="label">Durée</span>
-          <span class="highlight">30 JOURS</span>
+          <span class="label">{{ 'garantie.duree' | translate }}</span>
+          <span class="highlight">{{ 'garantie.trenteJours' | translate }}</span>
         </div>
 
         <div class="row">
-          <span class="label">Début</span>
+          <span class="label">{{ 'garantie.debut' | translate }}</span>
           <span class="value">{{ facture.date | date:'shortDate' }}</span>
         </div>
 
         <div class="row">
-          <span class="label">Fin</span>
+          <span class="label">{{ 'garantie.fin' | translate }}</span>
           <span class="value">
             {{ getDateFinGarantie(facture.date) | date:'shortDate' }}
           </span>
         </div>
 
         <div class="row">
-          <span class="label">Jours Restants</span>
+          <span class="label">{{ 'garantie.joursRestants' | translate }}</span>
           <span class="highlight">
-            {{ getJoursRestants(facture.date) }} jours
+            {{ getJoursRestants(facture.date) }} {{ 'garantie.jours' | translate }}
           </span>
         </div>
 
         <div class="row">
-          <span class="label">Statut</span>
+          <span class="label">{{ 'common.status' | translate }}</span>
           <span class="highlight">
-            {{ isValidGarantie() ? 'ACTIVE' : 'EXPIRÉE' }}
+            {{ isValidGarantie() ? ('garantie.statusActive' | translate) : ('garantie.statusExpired' | translate) }}
           </span>
         </div>
       </div>
 
       <!-- PIECES REMPLACÉES -->
       <div class="card" *ngIf="lignes.length">
-        <h3><i class="bi bi-tools"></i> Pièces remplacées (sous garantie)</h3>
+        <h3><i class="bi bi-tools"></i> {{ 'garantie.piecesRemplacees' | translate }}</h3>
 
         <div class="row" *ngFor="let ligne of lignes">
-          <span class="label">{{ ligne.Piece?.nom ?? 'Pièce' }}</span>
+          <span class="label">{{ ligne.Piece?.nom ?? ('garantie.piece' | translate) }}</span>
           <span class="value">x{{ ligne.quantite }}</span>
         </div>
       </div>
 
       <!-- CONDITIONS -->
       <div class="conditions">
-        <h3>Conditions Générales</h3>
+        <h3>{{ 'garantie.conditionsTitle' | translate }}</h3>
         <ul>
-          <li><i class="bi bi-arrow-right-circle-fill"></i> Couverture complète des réparations effectuées</li>
-          <li><i class="bi bi-arrow-right-circle-fill"></i> Non couvert : choc, casse, mauvaise utilisation</li>
-          <li><i class="bi bi-arrow-right-circle-fill"></i> Modification annule la garantie</li>
-          <li><i class="bi bi-arrow-right-circle-fill"></i> Pièces électroniques uniquement couvertes</li>
-          <li><i class="bi bi-arrow-right-circle-fill"></i> Retour atelier gratuit si problème couvert</li>
+          <li><i class="bi bi-arrow-right-circle-fill"></i> {{ 'garantie.condition1' | translate }}</li>
+          <li><i class="bi bi-arrow-right-circle-fill"></i> {{ 'garantie.condition2' | translate }}</li>
+          <li><i class="bi bi-arrow-right-circle-fill"></i> {{ 'garantie.condition3' | translate }}</li>
+          <li><i class="bi bi-arrow-right-circle-fill"></i> {{ 'garantie.condition4' | translate }}</li>
+          <li><i class="bi bi-arrow-right-circle-fill"></i> {{ 'garantie.condition5' | translate }}</li>
         </ul>
       </div>
 

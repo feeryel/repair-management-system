@@ -4,15 +4,15 @@
   <div class="topbar">
 
     <div>
-      <h1>Appareils</h1>
-      <p>Suivi intelligent des appareils en réparation</p>
+      <h1>{{ 'appareilList.title' | translate }}</h1>
+      <p>{{ 'appareilList.subtitle' | translate }}</p>
     </div>
 
     <a routerLink="/appareils/add" class="add-btn">
 
       <i class="bi bi-plus-lg"></i>
 
-      Ajouter appareil
+      {{ 'appareilList.addDevice' | translate }}
 
     </a>
 
@@ -25,7 +25,7 @@
 
     <input
       type="text"
-      placeholder="Rechercher appareil..."
+      [placeholder]="'appareilList.searchPlaceholder' | translate"
       [(ngModel)]="searchText">
 
   </div>
@@ -41,7 +41,7 @@
 
       <select [(ngModel)]="selectedType">
 
-        <option value="">Tous les types</option>
+        <option value="">{{ 'appareilList.allTypes' | translate }}</option>
 
         <option *ngFor="let t of types" [value]="t">
           {{ t }}
@@ -58,9 +58,9 @@
 
       <select [(ngModel)]="sortOrder">
 
-        <option value="">Trier</option>
-        <option value="asc">Modèle A → Z</option>
-        <option value="desc">Modèle Z → A</option>
+        <option value="">{{ 'appareilList.sort.label' | translate }}</option>
+        <option value="asc">{{ 'appareilList.sort.modelAsc' | translate }}</option>
+        <option value="desc">{{ 'appareilList.sort.modelDesc' | translate }}</option>
 
       </select>
 
@@ -78,7 +78,7 @@
     <div class="stat-card blue">
 
       <div>
-        <span>Total appareils</span>
+        <span>{{ 'appareilList.stats.totalDevices' | translate }}</span>
         <h3>{{ filteredAppareils().length }}</h3>
       </div>
 
@@ -89,7 +89,7 @@
     <div class="stat-card purple">
 
       <div>
-        <span>Réparations actives</span>
+        <span>{{ 'appareilList.stats.activeRepairs' | translate }}</span>
         <h3>12</h3>
       </div>
 
@@ -100,7 +100,7 @@
     <div class="stat-card orange">
 
       <div>
-        <span>Urgents</span>
+        <span>{{ 'appareilList.stats.urgent' | translate }}</span>
         <h3>4</h3>
       </div>
 
@@ -144,7 +144,7 @@
 
         <div class="info-item">
 
-          <small>Type</small>
+          <small>{{ 'appareilList.card.type' | translate }}</small>
 
           <span>{{ a.type }}</span>
 
@@ -152,7 +152,7 @@
 
         <div class="info-item">
 
-          <small>Série</small>
+          <small>{{ 'appareilList.card.serial' | translate }}</small>
 
           <span>{{ a.numSerie }}</span>
 
@@ -164,7 +164,7 @@
       <div class="status-row">
 
         <span class="status active">
-          Actif
+          {{ 'appareilList.card.active' | translate }}
         </span>
 
       </div>
@@ -178,7 +178,7 @@
 
           <i class="bi bi-pencil-square"></i>
 
-          Modifier
+          {{ 'common.edit' | translate }}
 
         </a>
 
@@ -234,9 +234,9 @@
 
     <i class="bi bi-inbox"></i>
 
-    <h4>Aucun appareil</h4>
+    <h4>{{ 'appareilList.empty.title' | translate }}</h4>
 
-    <p>Ajoutez votre premier appareil</p>
+    <p>{{ 'appareilList.empty.subtitle' | translate }}</p>
 
   </div>
 

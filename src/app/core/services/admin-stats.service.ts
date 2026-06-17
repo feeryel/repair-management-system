@@ -17,13 +17,23 @@ export interface AdminStats {
     inProgress: number;
     pending: number;
     failed: number;
+    enAttenteDevis: number;
+    refuseeClient: number;
     monthly: number[];
     completionRate: number;
   };
   topTechs: { label: string; value: number }[];
+  devis: {
+    total: number;
+    enAttente: number;
+    accepte: number;
+    refuse: number;
+    tauxAcceptation: number;
+  };
   revenue: {
     total: number;
     totalFactures: number;
+    monthly: number[];
   };
 }
 

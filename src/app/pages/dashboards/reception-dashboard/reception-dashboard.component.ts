@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { ClientService } from '../../../core/services/client.service';
 import { AppareilService } from '../../../core/services/appareil.service';
@@ -10,7 +11,7 @@ import { FactureService } from '../../../core/services/facture.service';
 @Component({
   selector: 'app-reception-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './reception-dashboard.component.html'
 })
 export class ReceptionDashboardComponent implements OnInit {
@@ -26,11 +27,12 @@ export class ReceptionDashboardComponent implements OnInit {
     private clientService: ClientService,
     private appareilService: AppareilService,
     private demandeService: DemandeService,
-    private factureService: FactureService
+    private factureService: FactureService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.login = this.authService.getUserLogin() ?? 'Responsable Réception';
+    this.login = this.authService.getUserLogin() ?? this.translate.instant('receptionDashboard.fallbackLogin');
     this.clientService.getClients().subscribe({ next: (r: any) => this.totalClients = r.length });
     this.appareilService.getAll().subscribe({ next: (r: any) => this.totalAppareils = r.length });
     this.demandeService.getAll().subscribe({

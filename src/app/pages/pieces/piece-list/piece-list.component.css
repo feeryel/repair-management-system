@@ -3,7 +3,7 @@
   margin-left: 260px;
   padding: 30px;
   min-height: 100vh;
-  background: linear-gradient(135deg,#f8fafc,#eef2ff);
+  background: var(--page-gradient);
   font-family: system-ui;
 }
 
@@ -13,7 +13,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 22px;
-  background: rgba(255,255,255,0.8);
+  background: var(--glass-bg);
+  color: var(--text-primary);
   backdrop-filter: blur(12px);
   border-radius: 20px;
   margin-bottom: 20px;
@@ -40,6 +41,8 @@
   padding: 14px;
   border-radius: 14px;
   border: 1px solid var(--border-color);
+  background: var(--surface-card);
+  color: var(--text-primary);
 }
 
 /* STATS */
@@ -69,7 +72,8 @@
 }
 
 .piece-card {
-  background: rgba(255,255,255,0.8);
+  background: var(--glass-bg);
+  color: var(--text-primary);
   padding: 18px;
   border-radius: 20px;
 }

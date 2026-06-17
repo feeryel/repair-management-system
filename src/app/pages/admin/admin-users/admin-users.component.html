@@ -5,44 +5,44 @@
     <div class="dash-header-left">
       <div class="dash-avatar admin-av"><i class="bi bi-people-fill"></i></div>
       <div>
-        <h2 class="dash-title">Gestion des comptes</h2>
-        <p class="dash-sub">Créer et gérer les comptes utilisateurs (hors CLIENT)</p>
+        <h2 class="dash-title">{{ 'adminUsers.title' | translate }}</h2>
+        <p class="dash-sub">{{ 'adminUsers.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="header-actions">
-      <a routerLink="/admin/dashboard" class="dash-btn btn-back"><i class="bi bi-arrow-left"></i> Dashboard</a>
+      <a routerLink="/admin/dashboard" class="dash-btn btn-back"><i class="bi bi-arrow-left"></i> {{ 'nav.dashboard' | translate }}</a>
       <button class="dash-btn btn-add" (click)="showForm = !showForm">
-        <i class="bi bi-person-plus-fill"></i> Nouveau compte
+        <i class="bi bi-person-plus-fill"></i> {{ 'adminUsers.newAccount' | translate }}
       </button>
     </div>
   </div>
 
   <!-- FORMULAIRE CRÉATION -->
   <div class="add-form" *ngIf="showForm">
-    <h5 class="form-title"><i class="bi bi-person-plus-fill me-2"></i>Créer un compte</h5>
+    <h5 class="form-title"><i class="bi bi-person-plus-fill me-2"></i>{{ 'adminUsers.createAccount' | translate }}</h5>
     <div class="info-box">
       <i class="bi bi-info-circle me-2"></i>
-      Les comptes <strong>CLIENT</strong> sont créés automatiquement par la <strong>Réception</strong> lors de l'ajout d'un client.
+      {{ 'adminUsers.clientInfo' | translate }}
     </div>
     <div class="form-grid">
       <div class="field">
-        <label>Identifiant / Email</label>
-        <input type="email" [(ngModel)]="newUser.login" placeholder="adresse email de l'utilisateur" />
+        <label>{{ 'adminUsers.loginEmail' | translate }}</label>
+        <input type="email" [(ngModel)]="newUser.login" [placeholder]="'adminUsers.loginPlaceholder' | translate" />
       </div>
       <div class="field">
-        <label>Mot de passe</label>
+        <label>{{ 'adminUsers.password' | translate }}</label>
         <input type="password" [(ngModel)]="newUser.motDePasse" placeholder="••••••••" />
       </div>
       <div class="field">
-        <label>Rôle</label>
+        <label>{{ 'adminUsers.role' | translate }}</label>
         <select [(ngModel)]="newUser.role">
-          <option *ngFor="let r of roles" [value]="r.value">{{ r.label }}</option>
+          <option *ngFor="let r of roles" [value]="r.value">{{ r.labelKey | translate }}</option>
         </select>
       </div>
     </div>
     <div class="form-actions">
-      <button class="btn-save"   (click)="add()">        <i class="bi bi-check-lg"></i> Créer</button>
-      <button class="btn-cancel" (click)="showForm=false"><i class="bi bi-x-lg"></i> Annuler</button>
+      <button class="btn-save"   (click)="add()">        <i class="bi bi-check-lg"></i> {{ 'adminUsers.create' | translate }}</button>
+      <button class="btn-cancel" (click)="showForm=false"><i class="bi bi-x-lg"></i> {{ 'common.cancel' | translate }}</button>
     </div>
     <div *ngIf="errorMsg" class="alert-error">{{ errorMsg }}</div>
   </div>
@@ -57,44 +57,44 @@
       <div class="filter-field filter-search">
         <i class="bi bi-search filter-icon"></i>
         <input type="text" [(ngModel)]="filterLogin" (ngModelChange)="currentPage=1"
-               placeholder="Rechercher par login…" />
+               [placeholder]="'adminUsers.searchByLogin' | translate" />
       </div>
 
       <!-- Role -->
       <div class="filter-field">
-        <label><i class="bi bi-person-badge me-1"></i>Rôle</label>
+        <label><i class="bi bi-person-badge me-1"></i>{{ 'adminUsers.role' | translate }}</label>
         <select [(ngModel)]="filterRole" (ngModelChange)="currentPage=1">
-          <option value="">Tous les rôles</option>
-          <option *ngFor="let r of roles" [value]="r.value">{{ r.label }}</option>
+          <option value="">{{ 'adminUsers.allRoles' | translate }}</option>
+          <option *ngFor="let r of roles" [value]="r.value">{{ r.labelKey | translate }}</option>
         </select>
       </div>
 
       <!-- Status -->
       <div class="filter-field">
-        <label><i class="bi bi-activity me-1"></i>Statut</label>
+        <label><i class="bi bi-activity me-1"></i>{{ 'common.status' | translate }}</label>
         <select [(ngModel)]="filterStatus" (ngModelChange)="currentPage=1">
-          <option value="">Tous</option>
-          <option value="actif">Actif</option>
-          <option value="inactif">Inactif</option>
-          <option value="banni">Banni</option>
+          <option value="">{{ 'common.all' | translate }}</option>
+          <option value="actif">{{ 'adminUsers.statusActive' | translate }}</option>
+          <option value="inactif">{{ 'adminUsers.statusInactive' | translate }}</option>
+          <option value="banni">{{ 'adminUsers.statusBanned' | translate }}</option>
         </select>
       </div>
 
       <!-- Date from -->
       <div class="filter-field">
-        <label><i class="bi bi-calendar-event me-1"></i>Créé après</label>
+        <label><i class="bi bi-calendar-event me-1"></i>{{ 'adminUsers.createdAfter' | translate }}</label>
         <input type="date" [(ngModel)]="filterDateFrom" (ngModelChange)="currentPage=1" />
       </div>
 
       <!-- Date to -->
       <div class="filter-field">
-        <label><i class="bi bi-calendar-check me-1"></i>Créé avant</label>
+        <label><i class="bi bi-calendar-check me-1"></i>{{ 'adminUsers.createdBefore' | translate }}</label>
         <input type="date" [(ngModel)]="filterDateTo" (ngModelChange)="currentPage=1" />
       </div>
 
       <!-- Reset -->
-      <button class="btn-reset" (click)="resetFilters()" *ngIf="hasActiveFilters" title="Effacer les filtres">
-        <i class="bi bi-x-circle-fill"></i> Réinitialiser
+      <button class="btn-reset" (click)="resetFilters()" *ngIf="hasActiveFilters" [title]="'adminUsers.clearFilters' | translate">
+        <i class="bi bi-x-circle-fill"></i> {{ 'adminUsers.reset' | translate }}
       </button>
 
     </div>
@@ -102,15 +102,15 @@
     <!-- Active filters summary -->
     <div class="filter-summary" *ngIf="!loading">
       <span class="result-count">
-        <strong>{{ totalFiltered }}</strong> compte{{ totalFiltered > 1 ? 's' : '' }}
-        <span *ngIf="hasActiveFilters"> trouvé{{ totalFiltered > 1 ? 's' : '' }} sur {{ users.length }} total</span>
+        <strong>{{ totalFiltered }}</strong> {{ 'adminUsers.accounts' | translate }}
+        <span *ngIf="hasActiveFilters"> {{ 'adminUsers.foundOf' | translate:{ value: users.length } }}</span>
       </span>
       <div class="page-size-wrap">
-        <span>Afficher</span>
+        <span>{{ 'adminUsers.show' | translate }}</span>
         <select [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
           <option *ngFor="let s of pageSizes" [value]="s">{{ s }}</option>
         </select>
-        <span>par page</span>
+        <span>{{ 'adminUsers.perPage' | translate }}</span>
       </div>
     </div>
   </div>
@@ -118,17 +118,17 @@
   <!-- TABLE -->
   <div class="dash-card">
     <div class="table-wrap">
-      <div *ngIf="loading" class="loading-row"><i class="bi bi-arrow-repeat spin"></i> Chargement…</div>
+      <div *ngIf="loading" class="loading-row"><i class="bi bi-arrow-repeat spin"></i> {{ 'common.loading' | translate }}</div>
 
       <table class="dtable" *ngIf="!loading">
         <thead>
           <tr>
             <th>#</th>
-            <th>Login</th>
-            <th>Rôle</th>
-            <th>Statut</th>
-            <th>Date création</th>
-            <th>Actions</th>
+            <th>{{ 'adminUsers.login' | translate }}</th>
+            <th>{{ 'adminUsers.role' | translate }}</th>
+            <th>{{ 'common.status' | translate }}</th>
+            <th>{{ 'adminUsers.creationDate' | translate }}</th>
+            <th>{{ 'common.actions' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -154,17 +154,17 @@
             <td class="td-actions">
               <button *ngIf="(!u.actif || u.bannit) && u.role !== 'admin'"
                       class="icon-btn icon-btn-reactiver"
-                      (click)="reactiver(u)" title="Réactiver">
+                      (click)="reactiver(u)" [title]="'adminUsers.reactivate' | translate">
                 <i class="bi bi-check-circle-fill"></i>
               </button>
               <button *ngIf="u.actif && !u.bannit && u.role !== 'admin'"
                       class="icon-btn icon-btn-desact"
-                      (click)="desactiver(u)" title="Désactiver">
+                      (click)="desactiver(u)" [title]="'adminUsers.deactivate' | translate">
                 <i class="bi bi-slash-circle-fill"></i>
               </button>
               <button *ngIf="!u.bannit && u.role !== 'admin'"
                       class="icon-btn icon-btn-ban"
-                      (click)="bannir(u)" title="Bannir">
+                      (click)="bannir(u)" [title]="'adminUsers.ban' | translate">
                 <i class="bi bi-ban-fill"></i>
               </button>
             </td>
@@ -172,7 +172,7 @@
           <tr *ngIf="paginatedUsers.length === 0">
             <td colspan="6" class="empty-row">
               <i class="bi bi-search" style="font-size:1.5rem;display:block;margin-bottom:.5rem"></i>
-              Aucun compte ne correspond aux filtres
+              {{ 'adminUsers.noAccountsMatch' | translate }}
             </td>
           </tr>
         </tbody>
@@ -182,18 +182,18 @@
     <!-- PAGINATION -->
     <div class="pagination-bar" *ngIf="!loading && totalFiltered > 0">
       <span class="page-info">
-        Page {{ currentPage }} / {{ totalPages }}
+        {{ 'adminUsers.page' | translate }} {{ currentPage }} / {{ totalPages }}
         &nbsp;·&nbsp;
-        {{ (currentPage - 1) * pageSize + 1 }}–{{ currentPage * pageSize > totalFiltered ? totalFiltered : currentPage * pageSize }} sur {{ totalFiltered }}
+        {{ (currentPage - 1) * pageSize + 1 }}–{{ currentPage * pageSize > totalFiltered ? totalFiltered : currentPage * pageSize }} {{ 'adminUsers.of' | translate }} {{ totalFiltered }}
       </span>
 
       <div class="page-nav">
         <!-- First -->
-        <button class="page-btn" (click)="goTo(1)" [disabled]="currentPage === 1" title="Première page">
+        <button class="page-btn" (click)="goTo(1)" [disabled]="currentPage === 1" [title]="'adminUsers.firstPage' | translate">
           <i class="bi bi-chevron-double-left"></i>
         </button>
         <!-- Prev -->
-        <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1" title="Précédent">
+        <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1" [title]="'adminUsers.previous' | translate">
           <i class="bi bi-chevron-left"></i>
         </button>
 
@@ -206,11 +206,11 @@
         <button *ngIf="pageNumbers[pageNumbers.length - 1] < totalPages" class="page-btn page-ellipsis" disabled>…</button>
 
         <!-- Next -->
-        <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages" title="Suivant">
+        <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages" [title]="'adminUsers.next' | translate">
           <i class="bi bi-chevron-right"></i>
         </button>
         <!-- Last -->
-        <button class="page-btn" (click)="goTo(totalPages)" [disabled]="currentPage === totalPages" title="Dernière page">
+        <button class="page-btn" (click)="goTo(totalPages)" [disabled]="currentPage === totalPages" [title]="'adminUsers.lastPage' | translate">
           <i class="bi bi-chevron-double-right"></i>
         </button>
       </div>

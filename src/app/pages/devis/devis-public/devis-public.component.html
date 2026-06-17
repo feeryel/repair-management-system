@@ -9,7 +9,7 @@
     <!-- LOADING -->
     <div class="state-block" *ngIf="loading">
       <div class="spinner-border" role="status"></div>
-      <p>Chargement du devis...</p>
+      <p>{{ 'devisPublic.loading' | translate }}</p>
     </div>
 
     <!-- ERREUR -->
@@ -20,104 +20,104 @@
 
     <ng-container *ngIf="!loading && !error && devis">
 
-      <h1>Devis de réparation</h1>
+      <h1>{{ 'devisPublic.title' | translate }}</h1>
 
       <p class="intro" *ngIf="devis.numero">
-        Référence <strong>{{ devis.numero }}</strong>
+        {{ 'devisPublic.reference' | translate }} <strong>{{ devis.numero }}</strong>
       </p>
 
       <!-- STATUT BANNER -->
       <div class="status-banner status-pending" *ngIf="devis.statut === 'EN_ATTENTE'">
         <i class="bi bi-hourglass-split"></i>
-        <span>Votre validation est requise</span>
+        <span>{{ 'devisPublic.validationRequired' | translate }}</span>
       </div>
 
       <div class="status-banner status-active" *ngIf="devis.statut === 'ACCEPTE'">
         <i class="bi bi-check-circle-fill"></i>
-        <span>Devis accepté{{ devis.dateReponse ? (' le ' + (devis.dateReponse | date:'shortDate')) : '' }}</span>
+        <span>{{ 'devisPublic.statusAccepted' | translate }}{{ devis.dateReponse ? (' ' + ('devisPublic.onDate' | translate) + ' ' + (devis.dateReponse | date:'shortDate')) : '' }}</span>
       </div>
 
       <div class="status-banner status-expired" *ngIf="devis.statut === 'REFUSE'">
         <i class="bi bi-x-circle-fill"></i>
-        <span>Devis refusé{{ devis.dateReponse ? (' le ' + (devis.dateReponse | date:'shortDate')) : '' }}</span>
+        <span>{{ 'devisPublic.statusRefused' | translate }}{{ devis.dateReponse ? (' ' + ('devisPublic.onDate' | translate) + ' ' + (devis.dateReponse | date:'shortDate')) : '' }}</span>
       </div>
 
       <!-- CLIENT -->
       <div class="card" *ngIf="client">
-        <h3><i class="bi bi-person-fill"></i> Informations Client</h3>
+        <h3><i class="bi bi-person-fill"></i> {{ 'devisPublic.clientInfo' | translate }}</h3>
 
         <div class="row">
-          <span class="label">Nom</span>
+          <span class="label">{{ 'common.name' | translate }}</span>
           <span class="value">{{ client.nom }}</span>
         </div>
 
         <div class="row" *ngIf="client.numTel">
-          <span class="label">Téléphone</span>
+          <span class="label">{{ 'devisPublic.phone' | translate }}</span>
           <span class="value">{{ client.numTel }}</span>
         </div>
 
         <div class="row" *ngIf="client.email">
-          <span class="label">Email</span>
+          <span class="label">{{ 'devisPublic.email' | translate }}</span>
           <span class="value">{{ client.email }}</span>
         </div>
       </div>
 
       <!-- APPAREIL -->
       <div class="card" *ngIf="appareil">
-        <h3><i class="bi bi-phone-fill"></i> Appareil concerné</h3>
+        <h3><i class="bi bi-phone-fill"></i> {{ 'devisPublic.appareilConcerne' | translate }}</h3>
 
         <div class="row">
-          <span class="label">Marque & Modèle</span>
+          <span class="label">{{ 'devisPublic.marqueModele' | translate }}</span>
           <span class="value">{{ appareil.marque }} {{ appareil.modele }}</span>
         </div>
 
         <div class="row" *ngIf="appareil.numSerie">
-          <span class="label">Numéro de Série</span>
+          <span class="label">{{ 'devisPublic.numSerie' | translate }}</span>
           <span class="value">{{ appareil.numSerie }}</span>
         </div>
 
         <div class="row" *ngIf="reparation?.descriptionReparation">
-          <span class="label">Description</span>
+          <span class="label">{{ 'devisPublic.description' | translate }}</span>
           <span class="value">{{ reparation.descriptionReparation }}</span>
         </div>
       </div>
 
       <!-- LIGNES -->
       <div class="card" *ngIf="lignes.length || devis.montantMainOeuvre">
-        <h3><i class="bi bi-list-check"></i> Détail des pièces & travaux</h3>
+        <h3><i class="bi bi-list-check"></i> {{ 'devisPublic.detailPieces' | translate }}</h3>
 
         <div class="row" *ngFor="let ligne of lignes">
-          <span class="label">{{ ligne.Piece?.nom ?? 'Pièce' }} x{{ ligne.quantite }}</span>
+          <span class="label">{{ ligne.Piece?.nom ?? ('devisPublic.piece' | translate) }} x{{ ligne.quantite }}</span>
           <span class="value">{{ (ligne.quantite * ligne.prixHT) | number:'1.2-2' }} TND</span>
         </div>
 
         <div class="row" *ngIf="devis.montantMainOeuvre">
-          <span class="label">Main d'œuvre ({{ reparation?.tempsMainOeuvre || 0 }} h)</span>
+          <span class="label">{{ 'devisPublic.mainOeuvre' | translate }} ({{ reparation?.tempsMainOeuvre || 0 }} h)</span>
           <span class="value">{{ devis.montantMainOeuvre | number:'1.2-2' }} TND</span>
         </div>
       </div>
 
       <!-- RÉCAPITULATIF -->
       <div class="card">
-        <h3><i class="bi bi-receipt"></i> Récapitulatif</h3>
+        <h3><i class="bi bi-receipt"></i> {{ 'devisPublic.recapitulatif' | translate }}</h3>
 
         <div class="row">
-          <span class="label">Montant HT</span>
+          <span class="label">{{ 'devisPublic.montantHT' | translate }}</span>
           <span class="value">{{ devis.montantHT | number:'1.2-2' }} TND</span>
         </div>
 
         <div class="row">
-          <span class="label">TVA (19%)</span>
+          <span class="label">{{ 'devisPublic.tva' | translate }}</span>
           <span class="value">{{ devis.montantTVA | number:'1.2-2' }} TND</span>
         </div>
 
         <div class="row">
-          <span class="label">Timbre fiscal</span>
+          <span class="label">{{ 'devisPublic.timbreFiscal' | translate }}</span>
           <span class="value">{{ devis.timbreFiscale | number:'1.2-2' }} TND</span>
         </div>
 
         <div class="row">
-          <span class="label">Total TTC</span>
+          <span class="label">{{ 'devisPublic.totalTTC' | translate }}</span>
           <span class="highlight">{{ devis.montantTotal | number:'1.2-2' }} TND</span>
         </div>
       </div>
@@ -125,21 +125,21 @@
       <!-- ACTIONS -->
       <div class="actions" *ngIf="devis.statut === 'EN_ATTENTE'">
         <p class="actions-hint">
-          Merci de valider ou refuser ce devis avant la poursuite des travaux.
+          {{ 'devisPublic.actionsHint' | translate }}
         </p>
         <div class="actions-buttons">
           <button class="btn-accept" [disabled]="responding" (click)="accept()">
-            <i class="bi bi-check-circle-fill"></i> Accepter le devis
+            <i class="bi bi-check-circle-fill"></i> {{ 'devisPublic.acceptBtn' | translate }}
           </button>
           <button class="btn-reject" [disabled]="responding" (click)="reject()">
-            <i class="bi bi-x-circle-fill"></i> Refuser le devis
+            <i class="bi bi-x-circle-fill"></i> {{ 'devisPublic.rejectBtn' | translate }}
           </button>
         </div>
       </div>
 
       <!-- MOTIF REFUS -->
       <div class="card motif-card" *ngIf="devis.statut === 'REFUSE' && devis.motifRefus">
-        <h3><i class="bi bi-chat-left-text"></i> Motif du refus</h3>
+        <h3><i class="bi bi-chat-left-text"></i> {{ 'devisPublic.motifRefus' | translate }}</h3>
         <p class="motif-text">{{ devis.motifRefus }}</p>
       </div>
 

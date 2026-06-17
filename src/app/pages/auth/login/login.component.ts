@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService, Role } from '../../../core/services/auth.service';
 
@@ -10,7 +12,8 @@ import { AuthService, Role } from '../../../core/services/auth.service';
   standalone: true,
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    TranslateModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -31,7 +34,8 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {}
 
   // ─────────────────────────────────────────
@@ -42,7 +46,7 @@ export class LoginComponent {
 
     // Validation basique côté client
     if (!this.loginData.login.trim() || !this.loginData.motDePasse.trim()) {
-      this.errorMessage = 'Veuillez remplir tous les champs.';
+      this.errorMessage = this.translate.instant('login.fillAllFields');
       return;
     }
 
@@ -77,7 +81,7 @@ export class LoginComponent {
       error: () => {
 
         this.loading = false;
-        this.errorMessage = 'Login ou mot de passe incorrect';
+        this.errorMessage = this.translate.instant('login.error');
 
       }
 
@@ -109,6 +113,60 @@ export class LoginComponent {
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  // ─────────────────────────────────────────
+  // Mot de passe oublié
+  // ─────────────────────────────────────────
+
+  forgotPassword(): void {
+    const t = (k: string) => this.translate.instant(k);
+    Swal.fire({
+      title: t('login.forgotTitle'),
+      text: t('login.forgotText'),
+      input: 'email',
+      inputValue: this.loginData.login,
+      inputPlaceholder: t('login.forgotPlaceholder'),
+      showCancelButton: true,
+      confirmButtonText: t('login.forgotSend'),
+      cancelButtonText: t('common.cancel'),
+      confirmButtonColor: '#2563eb',
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return t('login.forgotEmailRequired');
+        }
+        return null;
+      }
+    }).then((result) => {
+      if (!result.isConfirmed || !result.value) return;
+
+      const email = result.value.trim();
+
+      Swal.fire({
+        title: t('login.forgotSending'),
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      this.authService.forgotPassword(email).subscribe({
+        next: (res) => {
+          Swal.fire({
+            icon: 'success',
+            title: t('login.forgotSuccessTitle'),
+            text: res?.message || t('login.forgotSuccessText'),
+            confirmButtonColor: '#2563eb'
+          });
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: t('login.forgotErrorTitle'),
+            text: err?.error?.message || t('login.forgotErrorText'),
+            confirmButtonColor: '#dc3545'
+          });
+        }
+      });
+    });
   }
 
 }

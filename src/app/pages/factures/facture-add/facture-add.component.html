@@ -1,12 +1,12 @@
 <div class="container mt-4">
 
-  <h2>Ajouter Facture</h2>
+  <h2>{{ 'factureAdd.title' | translate }}</h2>
 
   <form (ngSubmit)="save()">
 
     <!-- Numéro -->
     <div class="mb-3">
-      <label>Numéro facture</label>
+      <label>{{ 'factureAdd.numero' | translate }}</label>
       <input
         type="text"
         class="form-control"
@@ -16,7 +16,7 @@
 
     <!-- Date -->
     <div class="mb-3">
-      <label>Date</label>
+      <label>{{ 'common.date' | translate }}</label>
       <input
         type="date"
         class="form-control"
@@ -26,7 +26,7 @@
 
     <!-- Montant HT -->
     <div class="mb-3">
-      <label>Montant HT</label>
+      <label>{{ 'factureAdd.montantHT' | translate }}</label>
       <input
         type="number"
         class="form-control"
@@ -36,7 +36,7 @@
 
     <!-- TVA -->
     <div class="mb-3">
-      <label>TVA</label>
+      <label>{{ 'factureAdd.tva' | translate }}</label>
       <input
         type="number"
         class="form-control"
@@ -46,7 +46,7 @@
 
     <!-- Timbre -->
     <div class="mb-3">
-      <label>Timbre fiscal</label>
+      <label>{{ 'factureAdd.timbreFiscal' | translate }}</label>
       <input
         type="number"
         class="form-control"
@@ -56,7 +56,7 @@
 
     <!-- Total -->
     <div class="mb-3">
-      <label>Montant Total</label>
+      <label>{{ 'factureAdd.montantTotal' | translate }}</label>
       <input
         type="number"
         class="form-control"
@@ -66,7 +66,7 @@
 
     <!-- Réparation -->
     <div class="mb-3">
-      <label>Réparation ID</label>
+      <label>{{ 'factureAdd.reparationId' | translate }}</label>
       <input
         type="number"
         class="form-control"
@@ -75,7 +75,7 @@
     </div>
 
     <button class="btn btn-success">
-      Enregistrer
+      {{ 'common.save' | translate }}
     </button>
 
   </form>

@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService,Role } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { LanguageService, Lang } from '../../core/services/language.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 
 
@@ -50,13 +52,13 @@ const NAV: Record<Role, NavItem[]> = {
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 userLogin = '';
-roleLabel = '';
+roleKey = '';
 clientName = '';
 
 notifications: any[] = [];
@@ -68,7 +70,9 @@ private notifPolling?: ReturnType<typeof setInterval>;
     private authService: AuthService,
     private router: Router,
     private themeService: ThemeService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private languageService: LanguageService,
+    private translate: TranslateService
   ) {}
 
 
@@ -76,7 +80,7 @@ private notifPolling?: ReturnType<typeof setInterval>;
         const role = (this.authService.getRole() ?? '') as Role;
 
     this.userLogin = this.authService.getUserLogin() ?? 'Utilisateur';
-        this.roleLabel = this.getRoleLabel(role);
+        this.roleKey = role ? 'roles.' + role : '';
   this.clientName = this.authService.getClientName() ?? '';
 
   this.loadUnreadCount();
@@ -86,17 +90,18 @@ private notifPolling?: ReturnType<typeof setInterval>;
   ngOnDestroy() {
     if (this.notifPolling) clearInterval(this.notifPolling);
   }
-   private getRoleLabel(role: Role): string {
-      const labels: Record<Role, string> = {
-        [Role.ADMIN]:                  'Administrateur',
-        [Role.CLIENT]:                 'Client',
-        [Role.RECEPTION]:  'Resp. Réception',
-        [Role.TECHNICIEN]:             'Technicien',
-        [Role.RESPONSABLE_REPARATION]: 'Resp. Réparation',
-        [Role.ACHAT_STOCK]:'Resp. Stock',
-      };
-      return labels[role] ?? role;
-    }
+
+  get currentLang(): Lang {
+    return this.languageService.getCurrent();
+  }
+
+  setLang(lang: Lang): void {
+    this.languageService.use(lang);
+  }
+
+  toggleLang(): void {
+    this.languageService.toggle();
+  }
   get displayName(): string {
     if (this.clientName) return this.clientName;
     const login = this.userLogin || '';
@@ -110,6 +115,10 @@ private notifPolling?: ReturnType<typeof setInterval>;
 
     this.router.navigate(['/']);
 
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 
   isDark(): boolean {
@@ -170,14 +179,14 @@ private notifPolling?: ReturnType<typeof setInterval>;
     const diffMs = Date.now() - new Date(date).getTime();
     const minutes = Math.floor(diffMs / 60000);
 
-    if (minutes < 1) return "à l'instant";
-    if (minutes < 60) return `il y a ${minutes} min`;
+    if (minutes < 1) return this.translate.instant('navbar.justNow');
+    if (minutes < 60) return this.translate.instant('navbar.minutesAgo', { value: minutes });
 
     const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `il y a ${hours} h`;
+    if (hours < 24) return this.translate.instant('navbar.hoursAgo', { value: hours });
 
     const days = Math.floor(hours / 24);
-    return `il y a ${days} j`;
+    return this.translate.instant('navbar.daysAgo', { value: days });
   }
 
 }
