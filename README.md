@@ -1,213 +1,381 @@
-# 🔧 Repair Management System — Frontend
+# 🛠️ Repair Management System
 
-A modern web application built with **Angular 17** for managing customer service and repair workshop operations.
+A modern **Repair Management System** designed to help repair workshops manage their daily operations, from customer requests and device management to repair tracking, planning, invoicing, spare parts, AI integration, and automated customer notifications.
 
-The platform provides a centralized interface for managing **customers, devices, repair requests, repair workflows, planning, labels, invoices, and workshop activities**.
-
-This repository contains the **Angular frontend** of the Repair Management System. The backend is maintained in a separate repository.
+The project combines a complete **Angular frontend**, **Node.js / Express backend**, **MySQL / MariaDB database**, **n8n automation workflows**, and an **AI layer powered by Ollama and MCP**.
 
 ---
 
-## 📌 About the Project
-
-The **Repair Management System** is a complete solution designed to digitalize and streamline repair workshop operations.
-
-The system covers the complete repair lifecycle, from registering a customer and their device to creating a repair request, tracking the repair process, generating labels and invoices, and completing the repair.
-
-The application was developed with a focus on **modularity, maintainability, authentication, and efficient communication between the frontend and backend**.
-
----
-
-## ✨ Main Features
+## ✨ Features
 
 ### 👥 Customer Management
 
-* Create and manage customers
-* View customer information
-* Access customer repair history
-* Associate customers with their devices and repair requests
+- Create and manage customers
+- View customer information
+- Update customer details
+- Track customer repair history
 
 ### 💻 Device Management
 
-* Register customer devices
-* Store device and technical information
-* Associate devices with customers
-* Track devices throughout the repair lifecycle
+- Register customer devices
+- Manage device information
+- Associate devices with customers
+- Track devices throughout the repair process
 
-### 🛠️ Repair Management
+### 📋 Repair Management
 
-* Create repair requests
-* Manage repair information
-* Track repair status
-* Follow the complete repair workflow
-* Manage repair-related data
+- Create repair requests
+- Manage repair records
+- Track repair status
+- Assign technicians
+- Manage repair details
+- Follow the complete repair lifecycle
 
-### 📅 Planning & Scheduling
+### 📅 Planning
 
-* Organize repair activities
-* Manage workshop planning
-* Schedule repair operations
-* Track planned activities
-
-### 🏷️ Labels & QR Codes
-
-* Generate repair labels
-* Generate QR codes
-* Facilitate device identification and tracking
+- Schedule repair operations
+- Manage start and end dates
+- Assign responsible users
+- Organize workshop activities
 
 ### 🧾 Invoice Management
 
-* Generate invoices
-* Display invoice information
-* Export invoices as PDF
-* Manage invoice-related data
+- Create and manage invoices
+- Calculate invoice amounts
+- Manage VAT and fiscal stamp
+- Associate invoices with repairs
+- Generate PDF invoices
+
+### 🔩 Spare Parts Management
+
+- Manage spare parts
+- Track stock quantities
+- Manage part prices
+- Associate spare parts with repairs
+- Manage repair line items
 
 ### 🔐 Authentication & Authorization
 
-* User authentication
-* JWT-based authentication
-* Protected routes
-* Role-based access control
-* Secure communication with backend APIs
-
-### 🤖 AI & Automation
-
-The Repair Management System also integrates AI-oriented features designed to improve workshop operations, including:
-
-* OCR-based invoice/document processing
-* AI-assisted data extraction
-* MCP-based AI integration
-* Automated workflows using n8n
+- JWT authentication
+- Protected routes
+- User management
+- Role-based access control
 
 ---
 
-## 🏗️ Architecture
+# ⚡ Workflow Automation with n8n
 
-The project follows a **client-server architecture** with separate frontend and backend repositories.
+The system integrates **n8n** to automate business workflows and customer communication.
+
+Instead of manually notifying customers when a repair is completed, the backend can trigger an **n8n webhook**, which processes the event and automatically sends a notification to the customer.
+
+## 📧 Email & 💬 WhatsApp Notifications
+
+The automation workflow can notify customers through:
+
+- 📧 Email
+- 💬 WhatsApp
+
+### Example Workflow
 
 ```text
-                    REPAIR MANAGEMENT SYSTEM
-                              │
-             ┌────────────────┴────────────────┐
-             │                                 │
-             ▼                                 ▼
-      Angular Frontend                  Node.js Backend
-       Repository                         Repository
-             │                                 │
-             │           REST API              │
-             └────────────────►◄──────────────┘
-                                               │
-                                               ▼
-                                      MySQL / MariaDB
+Repair Status Updated
+        ↓
+     Backend
+        ↓
+      Webhook
+        ↓
+       n8n
+        ↓
+ Check Repair Status
+        ↓
+   ┌────┴─────┐
+   │          │
+  DONE      Other
+   │          │
+   ▼          ▼
+Email +      Stop
+WhatsApp
+Notification
+   │
+   ▼
+  Client
 ```
 
-### Frontend
+When the repair reaches the **DONE / completed** status, the workflow automatically sends a notification to the customer informing them that their device is ready.
 
-The frontend is responsible for:
+This approach helps:
 
-* User interface
-* Navigation
-* Forms and validation
-* Authentication
-* Role-based access
-* API communication
-* Data visualization
-* PDF and QR code generation
-
-### Backend
-
-The backend provides:
-
-* REST APIs
-* Business logic
-* Authentication
-* Authorization
-* Database management
-* Repair management services
-* Invoice services
-* AI integrations
+- Reduce manual communication
+- Improve customer experience
+- Automate repetitive tasks
+- Provide faster repair-status notifications
+- Connect backend events with external communication services
 
 ---
 
-## 🛠️ Tech Stack
+# 🤖 AI Integration
 
-### Frontend
+The Repair Management System can be connected to an AI layer through a dedicated **Model Context Protocol (MCP) Server**.
 
-* **Angular 17**
-* **TypeScript**
-* **HTML5**
-* **CSS3**
-* **Bootstrap 5**
-* **RxJS**
-* **jsPDF**
-* **jsPDF-AutoTable**
-* **QRCode**
+The MCP server allows a local AI model powered by **Ollama** to interact with the repair management backend through structured tools.
 
-### Backend
+Instead of allowing the AI to directly access the database, all operations go through controlled MCP tools and the existing REST API.
 
-* **Node.js**
-* **Express.js**
-* **Sequelize**
-* **JWT**
-* **MySQL / MariaDB**
-* **Puppeteer**
-* **PDFKit**
-
-### AI & Automation
-
-* **OCR**
-* **Ollama**
-* **Model Context Protocol (MCP)**
-* **n8n**
-
-### Tools
-
-* **Git**
-* **GitHub**
-* **Postman**
-* **Docker**
-
----
-
-## 📂 Project Structure
+### AI Architecture
 
 ```text
-repair-management-system/
-│
-├── src/
-│   ├── app/
-│   │   ├── components/
-│   │   ├── services/
-│   │   ├── guards/
-│   │   ├── models/
-│   │   └── ...
-│   │
-│   ├── assets/
-│   └── environments/
-│
-├── angular.json
-├── package.json
-├── package-lock.json
-├── server.ts
-├── tsconfig.json
-├── netlify.toml
-└── README.md
+User
+ │
+ ▼
+Ollama / Local LLM
+ │
+ │ MCP
+ ▼
+MCP Server
+ │
+ │ REST / HTTP
+ ▼
+Repair Management API
+ │
+ ▼
+MySQL / MariaDB
+```
+
+The AI can interact with business operations such as:
+
+- Clients
+- Devices
+- Repairs
+- Repair requests
+- Invoices
+- Spare parts
+- Planning
+- Users
+- Repair lines
+
+---
+
+# 🏗️ Complete Architecture
+
+The project combines traditional web development, AI integration, and workflow automation.
+
+```text
+                         ┌───────────────────┐
+                         │       User        │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │   Angular App     │
+                         │     Frontend      │
+                         └─────────┬─────────┘
+                                   │
+                                   │ REST API
+                                   ▼
+                         ┌───────────────────┐
+                         │ Node.js / Express │
+                         │      Backend      │
+                         └───────┬─────┬─────┘
+                                 │     │
+                    ┌────────────┘     └─────────────┐
+                    │                                │
+                    ▼                                ▼
+             ┌─────────────┐                  ┌─────────────┐
+             │ MySQL /     │                  │     n8n     │
+             │ MariaDB     │                  │  Workflows  │
+             └─────────────┘                  └──────┬──────┘
+                                                     │
+                                             ┌───────┴────────┐
+                                             │                │
+                                             ▼                ▼
+                                         📧 Email        💬 WhatsApp
+                                             │                │
+                                             └───────┬────────┘
+                                                     │
+                                                     ▼
+                                                   Client
+
+
+                         ┌───────────────────┐
+                         │ Ollama / Local AI │
+                         │       LLM         │
+                         └─────────┬─────────┘
+                                   │
+                                   │ MCP
+                                   ▼
+                         ┌───────────────────┐
+                         │    MCP Server     │
+                         └─────────┬─────────┘
+                                   │
+                                   │ REST API
+                                   ▼
+                         ┌───────────────────┐
+                         │     Backend       │
+                         └───────────────────┘
 ```
 
 ---
 
-## ⚙️ Getting Started
+# 🔄 Repair Notification Workflow
 
-### Prerequisites
+A typical automated repair notification follows this process:
+
+```text
+1. Technician updates the repair status
+                 ↓
+2. Backend stores the new status
+                 ↓
+3. Backend triggers an n8n webhook
+                 ↓
+4. n8n receives the repair information
+                 ↓
+5. Workflow checks the repair status
+                 ↓
+6. Status = DONE
+                 ↓
+7. Customer contact information is retrieved
+                 ↓
+8. Email notification is sent
+                 ↓
+9. WhatsApp notification is sent
+                 ↓
+10. Customer is informed that the device is ready
+```
+
+This creates an **event-driven automation workflow** between the repair management application and external communication services.
+
+---
+
+# 🧩 Main Modules
+
+The application is organized around several business modules:
+
+| Module | Description |
+|---|---|
+| 👥 Clients | Customer management |
+| 💻 Devices | Customer device management |
+| 🛠️ Repairs | Repair management |
+| 📋 Repair Requests | Repair request tracking |
+| 🧾 Invoices | Invoice generation and management |
+| 🔩 Spare Parts | Inventory and repair parts |
+| 📅 Planning | Workshop planning |
+| 👤 Users | User and role management |
+| 🤖 AI | AI-powered interaction through MCP |
+| ⚡ Automation | n8n workflows |
+| 📧 Notifications | Email notifications |
+| 💬 WhatsApp | Customer WhatsApp notifications |
+
+---
+
+# 🛠️ Technologies
+
+## Frontend
+
+- **Angular**
+- **TypeScript**
+- **Bootstrap**
+- HTML
+- CSS
+
+## Backend
+
+- **Node.js**
+- **Express.js**
+- **Sequelize**
+- REST API
+- JWT Authentication
+
+## Database
+
+- **MySQL**
+- **MariaDB**
+
+## AI
+
+- **Ollama**
+- **Model Context Protocol (MCP)**
+- Local Large Language Models
+- Structured AI Tools
+
+## Automation
+
+- **n8n**
+- Webhooks
+- HTTP Requests
+- Email Automation
+- WhatsApp Notifications
+
+## PDF & Documents
+
+- **jsPDF**
+- **jsPDF-AutoTable**
+- **Puppeteer**
+- **QRCode**
+
+---
+
+# 🔐 Security
+
+The application uses JWT authentication to secure protected backend operations.
+
+The AI architecture also follows a controlled-access approach:
+
+```text
+❌ AI → Database
+
+✅ AI → MCP Tool → REST API → Database
+```
+
+This prevents the AI model from directly accessing the database.
+
+The MCP server acts as an intermediate layer between the local LLM and the business application.
+
+---
+
+# 📂 Project Ecosystem
+
+This project is part of a larger software ecosystem.
+
+```text
+                 Repair Management System
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+          ▼                ▼                ▼
+      Angular          Node.js          MCP Server
+      Frontend         Backend          + Ollama
+          │                │                │
+          │                │                │
+          └────────────────┼────────────────┘
+                           │
+                           ▼
+                          n8n
+                           │
+                    ┌──────┴──────┐
+                    ▼             ▼
+                  Email        WhatsApp
+```
+
+---
+
+# 🚀 Getting Started
+
+## Prerequisites
 
 Make sure you have installed:
 
-* Node.js
-* npm
-* Angular CLI
-* Git
+- Node.js
+- npm
+- Angular CLI
+- A running Repair Management backend
+- MySQL / MariaDB
+- n8n for workflow automation
+- Ollama for local AI integration
 
-### Clone the repository
+---
+
+## Clone the Repository
 
 ```bash
 git clone https://github.com/feeryel/repair-management-system.git
@@ -215,13 +383,17 @@ git clone https://github.com/feeryel/repair-management-system.git
 cd repair-management-system
 ```
 
-### Install dependencies
+---
+
+## Install Dependencies
 
 ```bash
 npm install
 ```
 
-### Start the development server
+---
+
+## Run the Angular Application
 
 ```bash
 ng serve
@@ -230,92 +402,162 @@ ng serve
 The application will be available at:
 
 ```text
-http://localhost:4200/
+http://localhost:4200
 ```
 
 ---
 
-## 🔗 Backend Repository
+# ⚡ n8n Integration
 
-The backend is maintained separately using **Node.js, Express, Sequelize, and MySQL/MariaDB**.
+The n8n workflow can be triggered using a webhook from the backend.
 
-👉 **Backend Repository:**
-`https://github.com/feeryel/Backend_pfe`
-
-Make sure the backend server is running and the frontend API configuration points to the correct backend URL.
-
----
-
-## 🔄 Repair Workflow
+A typical workflow can contain:
 
 ```text
-Customer
-   │
-   ▼
-Device Registration
-   │
-   ▼
-Repair Request
-   │
-   ▼
-Diagnosis
-   │
-   ▼
-Repair
-   │
-   ▼
-Planning & Tracking
-   │
-   ▼
-Repair Completed
-   │
-   ▼
-Invoice Generation
-   │
-   ▼
-Customer Delivery
+Webhook
+   ↓
+Receive Repair Data
+   ↓
+Check Repair Status
+   ↓
+Retrieve Customer Information
+   ↓
+Prepare Notification
+   ↓
+Send Email
+   ↓
+Send WhatsApp Message
+```
+
+The workflow can be extended with additional actions such as:
+
+- SMS notifications
+- Internal workshop notifications
+- Logging
+- Database updates
+- Customer feedback requests
+- Additional automation rules
+
+---
+
+# 🤖 MCP Integration
+
+The dedicated MCP server exposes structured tools that allow an AI assistant to interact with the Repair Management backend.
+
+Example:
+
+```text
+User:
+"Show me the repairs currently in progress."
+
+        ↓
+
+Ollama
+        ↓
+Select MCP Tool
+        ↓
+getReparations
+        ↓
+MCP Server
+        ↓
+REST API
+        ↓
+Database
+        ↓
+Repair Data
+        ↓
+Ollama
+        ↓
+Natural Language Response
 ```
 
 ---
 
-## 🤖 AI-Powered OCR
+# 🎯 Project Objectives
 
-One of the main objectives of the project is to integrate **Artificial Intelligence into the repair workflow**.
+The main objectives of the project are to:
 
-The system includes an OCR-oriented approach for extracting relevant information from invoices and documents, reducing manual data entry and improving processing efficiency.
-
-The project also explores the use of **Ollama, MCP, and n8n** to integrate AI capabilities and automate business workflows.
-
----
-
-## 🎯 Project Goals
-
-The main objectives of the Repair Management System are to:
-
-* Digitalize repair workshop operations
-* Centralize customer and device information
-* Improve repair tracking and traceability
-* Simplify workshop planning
-* Automate invoice generation
-* Generate repair labels and QR codes
-* Reduce manual administrative tasks
-* Introduce AI-assisted document processing
-* Provide a scalable architecture for future integrations
+- Digitize repair workshop management
+- Centralize customer and device information
+- Manage repair requests and repairs
+- Automate customer communication
+- Integrate email notifications
+- Integrate WhatsApp notifications
+- Use n8n for workflow automation
+- Integrate AI through MCP
+- Run local LLMs with Ollama
+- Provide secure API communication
+- Improve repair tracking
+- Improve customer experience
 
 ---
 
-## 👩‍💻 Author
+# 💡 Technical Highlights
 
-### Feryel Dadi
+### 🌐 Full-Stack Architecture
 
-**Software Engineer — Software Engineering**
+The project combines an Angular frontend with a Node.js / Express backend and a MySQL / MariaDB database.
+
+### ⚡ Event-Driven Automation
+
+n8n connects backend events with automated communication workflows.
+
+### 📧 Automated Email
+
+Customers can receive automated emails based on repair status.
+
+### 💬 WhatsApp Notifications
+
+Customers can also receive WhatsApp notifications when important repair events occur.
+
+### 🤖 Local AI
+
+Ollama enables local LLM execution without requiring every AI operation to rely on a cloud model.
+
+### 🔌 MCP Integration
+
+MCP provides a standardized tool-based interface between the AI layer and the repair management application.
+
+### 🔐 Controlled AI Access
+
+The AI interacts with the backend through MCP tools and REST APIs instead of directly accessing the database.
+
+---
+
+# 🔗 Related Repositories
+
+### Frontend — Angular
+
+https://github.com/feeryel/repair-management-system
+
+### Backend — Node.js / Express
+
+https://github.com/feeryel/Backend_pfe
+
+### MCP Server — Ollama + MCP
+
+https://github.com/feeryel/mcp_server_pfe
+
+---
+
+# 👩‍💻 Author
+
+## Feryel Dadi
+
+**Software Engineer**  
 **Master's Degree in Mobile Development Engineering**
 
-* 🌐 Portfolio: https://portfolio-feryel.vercel.app
-* 🐙 GitHub: https://github.com/feeryel
-* 💼 Linkedin: https://www.linkedin.com/in/feryeldadi/
+🌐 **Portfolio:**  
+https://portfolio-feryel.vercel.app
+
+💼 **LinkedIn:**  
+https://www.linkedin.com/in/feryeldadi
+
+🐙 **GitHub:**  
+https://github.com/feeryel
+
 ---
 
-## 📄 License
+# 📄 License
 
 This project was developed as part of an academic and professional software engineering project.
