@@ -311,9 +311,9 @@ The main objectives of the Repair Management System are to:
 **Software Engineer — Software Engineering**
 **Master's Degree in Mobile Development Engineering**
 
-* 💼 Portfolio: https://portfolio-feryel.vercel.app
+* 🌐 Portfolio: https://portfolio-feryel.vercel.app
 * 🐙 GitHub: https://github.com/feeryel
-* Linkedin: https://www.linkedin.com/in/feryeldadi/
+* 💼 Linkedin: https://www.linkedin.com/in/feryeldadi/
 ---
 
 ## 📄 License
